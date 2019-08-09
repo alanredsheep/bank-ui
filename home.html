@@ -11,74 +11,89 @@
     <link href="styles/main.css" rel="stylesheet">
 </head>
 <body id="top">
-<header>
-    <!-- Navbar-->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar" id="navbar">
-        <div class="container"><a class="navbar-brand" href="#"><strong>五仁银行</strong></a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent"
-                    aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation"><span
-                    class="navbar-toggler-icon"></span></button>
-            <div class="collapse navbar-collapse" id="navbarContent">
-                <ul class="navbar-nav ml-auto">
-<!--                    <li class="nav-item" style="margin-right: 10px"><a class="nav-link" href="#"></a></li>-->
-                    <li class="nav-item" style="margin-right: 10px"><a class="nav-link" href="#">登出</a></li>
-                    <li class="nav-item" style="margin-right: 10px"><a class="nav-link" href="#">首页</a></li>
-                    <li class="nav-item" style="margin-right: 10px"><a class="nav-link" href="#">大佬，欢迎您</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">消息 <span class="badge"
-                                                                               style="font-size: 15px">12</span></a>
-                    </li>
-                    <!--                    <li class="nav-item"><a class="nav-link" href="#">登录</a></li>-->
-                </ul>
-                <!--                <a class="btn btn-sm btn-primary btn-rounded my-0" style="font-size: medium" href="#" target="_blank">登录</a>-->
+<div id="app" style="height: 100%">
+    <header>
+        <!-- Navbar-->
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar" id="navbar">
+            <div class="container"><a class="navbar-brand" href="home.html"><strong>五仁银行</strong></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent"
+                        aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarContent">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item" style="margin-right: 10px"><a class="nav-link" href="#">登出</a></li>
+                        <li class="nav-item" style="margin-right: 10px"><a class="nav-link" href="personal_center.html">{{userName}}，欢迎您</a></li>
+                        <li class="nav-item"><a class="nav-link" href="message.html">消息 <span class="badge" style="font-size: 15px">112</span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- 背景图-->
+        <div class="view hm-gradient" id="intro">
+            <!-- 渐变色-->
+            <div class="full-bg-img d-flex align-items-center">
+                <div class="container main-container" style="margin-left: 100px">
+                    <div class="jumbotron row">
+                        <a href="transfer.html">单 次 转 账</a>
+                    </div>
+                    <div class="jumbotron row ">
+                        <a href="transfer_bulk.html">批 量 转 账</a>
+                    </div>
+                </div>
+                <div class="container main-container">
+                    <div class="jumbotron row">
+                        <a href="gathering_manage.html">主 动 收 款</a>
+                    </div>
+                    <div class="jumbotron row">
+                        <a href="fund_collection.html">资 金 归 集</a>
+                    </div>
+                </div>
+                <div class="container main-container">
+                    <div class="jumbotron row">
+                        <a href="transfe_record.html">转 账 记 录</a>
+                    </div>
+                    <div class="jumbotron row">
+                        <a href="bank_card_manage.html">银 行 卡 包</a>
+                    </div>
+                </div>
             </div>
         </div>
-    </nav>
-    <!-- 背景图-->
-    <div class="view hm-gradient" id="intro">
-        <!-- 渐变色-->
-        <div class="full-bg-img d-flex align-items-center">
-            <div class="container main-container" style="margin-left: 100px">
-                <div class="jumbotron row">
-                    <a href="#">单 次 转 账</a>
-                </div>
-                <div class="jumbotron row ">
-                    <a href="#">批 量 转 账</a>
-                </div>
-            </div>
-            <div class="container main-container">
-                <div class="jumbotron row">
-                    <a href="#">主 动 收 款</a>
-                </div>
-                <div class="jumbotron row">
-                    <a href="#">资 金 归 集</a>
-                </div>
-            </div>
-            <div class="container main-container">
-                <div class="jumbotron row">
-                    <a href="#">收 支 明 细</a>
-                </div>
-                <div class="jumbotron row">
-                    <a href="#">银 行 卡 包</a>
-                </div>
-            </div>
+    </header>
 
-
+    <footer class="page-footer indigo darken-2 center-on-small-only pt-0 mt-0">
+        <div class="footer-copyright">
+            <div class="container-fluid">
+                <p>&copy; Five Bank</p>
+            </div>
         </div>
-    </div>
-</header>
+    </footer>
+</div>
+</body>
+</html>
 
-<footer class="page-footer indigo darken-2 center-on-small-only pt-0 mt-0">
-    <div class="footer-copyright">
-        <div class="container-fluid">
-            <p>&copy; Five Bank</p>
-        </div>
-    </div>
-</footer>
 <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="js/popper.min.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/mdb.min.js"></script>
 <script type="text/javascript" src="scripts/main.js"></script>
-<script>new WOW().init();</script>
-</body>
-</html>
+<script type="text/javascript" src="js/axios-0.18.0.js"></script>
+<script type="text/javascript" src="js/vuejs-2.5.16.js"></script>
+<script type="text/javascript" src="js/api.1.js"></script>
+
+<script>
+    new Vue({
+        el: "#app",
+        data: {
+            userName: localStorage.getItem("userName"),
+
+        },
+        methods: {
+            login:function () {
+                var userName = "luwei"
+                localStorage.setItem("userName",userName);
+            }
+        },
+        created(){
+            this.login();
+        }
+    })
+</script>

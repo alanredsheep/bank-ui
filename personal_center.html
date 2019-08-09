@@ -1,74 +1,70 @@
 <!DOCTYPE html>
 <html class="full-height" lang="en-US">
-	<head>
-		<meta charset="UTF-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Material Landing</title>
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-		<link href="css/bootstrap.min.css" rel="stylesheet">
-		<link href="css/mdb.min.css" rel="stylesheet">
-		<link href="styles/main.css" rel="stylesheet">
-	</head>
-	<body>
-		<div id="app" style="background-image: url(./img/panorama-3094696_1920.jpg);height: 100%">
-			<header>
-				<!-- Navbar-->
-				<nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar" id="navbar">
-					<div class="container"><a class="navbar-brand" href="#"><strong>五仁银行</strong></a>
-						<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent"
-						 aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-						<div class="collapse navbar-collapse" id="navbarContent">
-							<ul class="navbar-nav ml-auto">
-								<li class="nav-item" style="margin-right: 10px"><a class="nav-link" href="#">登出</a></li>
-								<li class="nav-item" style="margin-right: 10px"><a class="nav-link" href="personal_center.html">个人中心</a></li>
-								<li class="nav-item"><a class="nav-link" href="#">消息 <span class="badge" style="font-size: 15px">112</span></a></li>
-							</ul>
-						</div>
-					</div>
-				</nav>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>个人中心</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/mdb.min.css" rel="stylesheet">
+    <link href="styles/main.css" rel="stylesheet">
+</head>
+<body>
+<div id="app" style="height: 100%">
+    <header>
+        <!-- Navbar-->
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar" id="navbar">
+            <div class="container"><a class="navbar-brand" href="home.html"><strong>五仁银行</strong></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent"
+                        aria-controls="navbarContent"
+                        aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarContent">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item" style="margin-right: 10px"><a class="nav-link" href="#">登出</a></li>
+                        <li class="nav-item" style="margin-right: 10px"><a class="nav-link" href="personal_center.html">{{userName}}，欢迎您</a>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="message.html">消息 <span class="badge"
+                                                                                              style="font-size: 15px">112</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
 
-				<!-- 背景图-->
-				<div class="view hm-gradient" id="intro">
-					<!-- 渐变色-->
-					<div class="full-bg-img d-flex align-items-center">
-						<div class="container main-container" style="margin-left: 100px">
-							<div class="jumbotron row">
-								<a href="identity.html">实 名 认 证</a>
-							</div>
-							<div class="jumbotron row ">
-								<a href="change_phone.html">修 改 手 机</a>
-							</div>
-						</div>
-						<div class="container main-container">
-							<div class="jumbotron row">
-								<a href="change_password.html">修 改 密 码</a>
-							</div>
-							<div class="jumbotron row">
-								<a href="#">银 行 卡 包</a>
-							</div>
-						</div>
-						<div class="container main-container">
-							<div class="jumbotron row">
-								<a href="#">查 看 信 息</a>
-							</div>
-							<div class="jumbotron row">
-								<a href="#">静 请 期 待</a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</header>
-			<footer class="page-footer indigo darken-2 center-on-small-only pt-0 mt-0" style="z-index: 99;">
-				<div class="footer-copyright">
-					<div class="container-fluid">
-						<p>&copy; Five Bank</p>
-					</div>
-				</div>
-			</footer>
-		</div>
+        <!-- 背景图-->
+        <div class="view hm-gradient" id="intro">
+            <!-- 渐变色-->
+            <div class="full-bg-img d-flex align-items-center">
+                <div class="container main-container" style="margin-left: 100px">
+                    <div class="jumbotron row">
+                        <a href="identity.html">实 名 认 证</a>
+                    </div>
+                </div>
+                <div class="container main-container">
+                    <div class="jumbotron row ">
+                        <a href="change_phone.html">修 改 手 机</a>
+                    </div>
+                </div>
+                <div class="container main-container">
+                    <div class="jumbotron row">
+                        <a href="change_password.html">修 改 密 码</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <footer class="page-footer indigo darken-2 center-on-small-only pt-0 mt-0" style="z-index: 99;">
+        <div class="footer-copyright">
+            <div class="container-fluid">
+                <p>&copy; Five Bank</p>
+            </div>
+        </div>
+    </footer>
+</div>
 
-	</body>
+</body>
 </html>
 
 <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
@@ -77,20 +73,16 @@
 <script type="text/javascript" src="js/mdb.min.js"></script>
 <script type="text/javascript" src="scripts/main.js"></script>
 <script>
-	new WOW().init();
+    new WOW().init();
 </script>
 
 <script type="text/javascript" src="js/axios-0.18.0.js"></script>
 <script type="text/javascript" src="js/vuejs-2.5.16.js"></script>
 <script type="text/javascript" src="js/api.1.js"></script>
 <script>
-	new Vue({
-		el: "#app",
-		data: {
-
-		},
-		methods: {
-
-		}
-	})
+    new Vue({
+        el: "#app",
+        data: {},
+        methods: {}
+    })
 </script>

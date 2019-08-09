@@ -11,190 +11,188 @@
     <link href="styles/main.css" rel="stylesheet">
 </head>
 <body id="top">
-<header>
-    <!-- Navbar-->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar" id="navbar">
-        <div class="container"><a class="navbar-brand" href="#"><strong>五仁银行</strong></a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent"
-                    aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation"><span
-                    class="navbar-toggler-icon"></span></button>
-            <div class="collapse navbar-collapse" id="navbarContent">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item" style="margin-right: 10px"><a class="nav-link" href="#">登出</a></li>
-                    <li class="nav-item" style="margin-right: 10px"><a class="nav-link" href="#">个人中心</a></li>
-                    <!--                    <li class="nav-item" style="margin-right: 10px"><a class="nav-link" href="#">首页</a></li>-->
-                    <li class="nav-item"><a class="nav-link" href="#">消息 <span class="badge"
-                                                                               style="font-size: 15px">112</span></a>
-                </ul>
+<div id="app" style="height: 100%">
+    <header>
+        <!-- Navbar-->
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar" id="navbar">
+            <div class="container"><a class="navbar-brand" href="home.html"><strong>五仁银行</strong></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent"
+                        aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navbarContent">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item" style="margin-right: 10px"><a class="nav-link" href="#">登出</a></li>
+                        <li class="nav-item" style="margin-right: 10px"><a class="nav-link" href="personal_center.html">{{userName}}，欢迎您</a></li>
+                        <li class="nav-item"><a class="nav-link" href="message.html">消息 <span class="badge" style="font-size: 15px">112</span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- 背景图-->
+        <div class="view hm-gradient" id="intro">
+            <!-- 渐变色-->
+            <div class="full-bg-img d-flex align-items-center">
+
+                <!--   主体内容    -->
+
+                <div class="col-md-10 col-lg-10" style="margin-left: 100px">
+                    <div class="text-center form-title">资 金 归 集</div>
+
+
+                    <div class="panel-body scroll-panel"
+                         style="height: 340px;width: 300px; overflow-y:scroll;float: left;margin-left: 200px">
+                        <div class=" col col-lg-12">
+                            <ul class="navbar-nav ml-auto payee-group-list-ul">
+                                <a>
+                                    <li>资金归集计划名称</li>
+                                </a>
+                                <a>
+                                    <li>资金归集计划名称</li>
+                                </a>
+                                <a>
+                                    <li>➕ 添加资金归集计划</li>
+                                </a>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="panel-body scroll-panel"
+                         style="height: 340px;width: 300px; overflow-y:scroll;float: left">
+                        <!--                        查看归集计划-->
+                        <div class="form-div font-bold">
+                            归集时间：
+                            <c>每月</c>
+                            <c>1号</c>
+                        </div>
+                        <div class="form-div font-bold">
+                            归集金额：￥
+                            <c>2000</c>
+                        </div>
+                        <div class="form-div font-bold">
+                            中心账户：
+                            <c>1234*********6789</c>
+                        </div>
+                        <div class="form-div font-bold">
+                            关联账户：
+                            <c>1234*********6789</c>
+                        </div>
+                        <button class="btn btn-danger" style="margin-left: 25%">
+                            终止归集计划
+                        </button>
+                        <button disabled class="btn btn-danger" style="margin-left: 31%">
+                            已终止
+                        </button>
+                        <button disabled class="btn btn-warning" style="margin-left: 31%">
+                            已取消
+                        </button>
+                        <div class="form-div font-bold">
+                            归集记录：
+                            <table>
+                                <tr>
+                                    <td style="width: 150px">时间</td>
+                                    <td style="width: 60px">金额</td>
+                                    <td>状态</td>
+                                </tr>
+                                <tr>
+                                    <td>2019-04-01 00:01:01</td>
+                                    <td class="font-bold">￥200</td>
+                                    <td style="color: #62cb2c">成功</td>
+                                </tr>
+                                <tr>
+                                    <td>2019-05-01 00:01:01</td>
+                                    <td class="font-bold">￥0</td>
+                                    <td style="color: #cb1426">失败</td>
+                                </tr>
+                                <tr>
+                                    <td>2019-05-01 00:01:01</td>
+                                    <td class="font-bold">￥0</td>
+                                    <td style="color: #cb1426">失败</td>
+                                </tr>
+                                <tr>
+                                    <td>2019-05-01 00:01:01</td>
+                                    <td class="font-bold">￥0</td>
+                                    <td style="color: #cb1426">失败</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+
+                    <!--                    添加归集计划-->
+
+                    <!--                <form style="float: left;margin-left: 20px;background-color: rgba(255,255,255,0.2);height: 340px;width: 300px">-->
+                    <!--                    <div class="form-div font-bold btn-group">-->
+                    <!--                        <div style="margin-top: 8px">归集时间：-->
+                    <!--                        </div>-->
+                    <!--                        <select class="form-control form-selection-bank col-lg-3" style="margin-left: 10px">-->
+                    <!--                            <option selected class="form-selection-option">每月</option>-->
+                    <!--                            <option class="form-selection-option">1月</option>-->
+                    <!--                            <option class="form-selection-option">2月</option>-->
+                    <!--                            <option class="form-selection-option">3月</option>-->
+                    <!--                            <option class="form-selection-option">4月</option>-->
+                    <!--                            <option class="form-selection-option">5月</option>-->
+                    <!--                            <option class="form-selection-option">6月</option>-->
+                    <!--                            <option class="form-selection-option">7月</option>-->
+                    <!--                            <option class="form-selection-option">8月</option>-->
+                    <!--                            <option class="form-selection-option">9月</option>-->
+                    <!--                            <option class="form-selection-option">10月</option>-->
+                    <!--                            <option class="form-selection-option">11月</option>-->
+                    <!--                            <option class="form-selection-option">12月</option>-->
+                    <!--                        </select>-->
+                    <!--                        <select class="form-control form-selection-bank col-lg-3" style="margin-left: 20px">-->
+                    <!--                            <option selected class="form-selection-option">1号</option>-->
+                    <!--                            <option class="form-selection-option">2号</option>-->
+                    <!--                            <option class="form-selection-option">3号</option>-->
+                    <!--                            <option class="form-selection-option">4号</option>-->
+                    <!--                            <option class="form-selection-option">5号</option>-->
+                    <!--                            <option class="form-selection-option">6号</option>-->
+                    <!--                            <option class="form-selection-option">7号</option>-->
+                    <!--                            <option class="form-selection-option">8号</option>-->
+                    <!--                            <option class="form-selection-option">9号</option>-->
+                    <!--                            <option class="form-selection-option">10号</option>-->
+                    <!--                            <option class="form-selection-option">11号</option>-->
+                    <!--                            <option class="form-selection-option">12号</option>-->
+                    <!--                        </select>-->
+                    <!--                    </div>-->
+                    <!--                    <div class="form-div font-bold">-->
+                    <!--                        归集金额：￥-->
+                    <!--                        <input class="col-md-10 col-lg-3" type="text">元-->
+                    <!--                    </div>-->
+                    <!--                    <div class="form-div font-bold">-->
+                    <!--                        中心账户：-->
+                    <!--                        <select class="form-control form-selection col-lg-11" style="margin: 10px">-->
+                    <!--                            <option class="form-selection-option">中国银行，1234***********6789</option>-->
+                    <!--                            <option class="form-selection-option">招商银行，1234***********6789</option>-->
+                    <!--                        </select>-->
+                    <!--                    </div>-->
+                    <!--                    <div class="form-div font-bold">-->
+                    <!--                        关联账户：-->
+                    <!--                        <select class="form-control form-selection col-lg-11" style="margin: 10px">-->
+                    <!--                            <option class="form-selection-option">中国银行，1234***********6789</option>-->
+                    <!--                            <option class="form-selection-option">招商银行，1234***********6789</option>-->
+                    <!--                        </select>-->
+                    <!--                    </div>-->
+                    <!--                    <button class="btn-sm btn btn-blue" style="font-size: medium;margin-left: 34%">确认</button>-->
+                    <!--                </form>-->
+
+
+                    <!--主体内容结束-->
+                </div>
             </div>
         </div>
-    </nav>
-    <!-- 背景图-->
-    <div class="view hm-gradient" id="intro">
-        <!-- 渐变色-->
-        <div class="full-bg-img d-flex align-items-center">
+    </header>
 
-            <!--   主体内容    -->
-
-            <div class="col-md-10 col-lg-10" style="margin-left: 100px">
-                <div class="text-center form-title">资 金 归 集</div>
-
-
-                <div class="panel-body scroll-panel"
-                     style="height: 340px;width: 300px; overflow-y:scroll;float: left;margin-left: 200px">
-                    <div class=" col col-lg-12">
-                        <ul class="navbar-nav ml-auto payee-group-list-ul">
-                            <a>
-                                <li>资金归集计划名称</li>
-                            </a>
-                            <a>
-                                <li>资金归集计划名称</li>
-                            </a>
-                            <a>
-                                <li>➕ 添加资金归集计划</li>
-                            </a>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="panel-body scroll-panel"
-                     style="height: 340px;width: 300px; overflow-y:scroll;float: left">
-                    <!--                        查看归集计划-->
-                    <div class="form-div font-bold">
-                        归集时间：
-                        <c>每月</c>
-                        <c>1号</c>
-                    </div>
-                    <div class="form-div font-bold">
-                        归集金额：￥
-                        <c>2000</c>
-                    </div>
-                    <div class="form-div font-bold">
-                        中心账户：
-                        <c>1234*********6789</c>
-                    </div>
-                    <div class="form-div font-bold">
-                        关联账户：
-                        <c>1234*********6789</c>
-                    </div>
-                    <button class="btn btn-danger" style="margin-left: 25%">
-                        终止归集计划
-                    </button>
-                    <button disabled class="btn btn-danger" style="margin-left: 31%">
-                        已终止
-                    </button>
-                    <button disabled class="btn btn-warning" style="margin-left: 31%">
-                        已取消
-                    </button>
-                    <div class="form-div font-bold">
-                        归集记录：
-                        <table>
-                            <tr>
-                                <td style="width: 150px">时间</td>
-                                <td style="width: 60px">金额</td>
-                                <td>状态</td>
-                            </tr>
-                            <tr>
-                                <td>2019-04-01 00:01:01</td>
-                                <td class="font-bold">￥200</td>
-                                <td style="color: #62cb2c">成功</td>
-                            </tr>
-                            <tr>
-                                <td>2019-05-01 00:01:01</td>
-                                <td class="font-bold">￥0</td>
-                                <td style="color: #cb1426">失败</td>
-                            </tr>
-                            <tr>
-                                <td>2019-05-01 00:01:01</td>
-                                <td class="font-bold">￥0</td>
-                                <td style="color: #cb1426">失败</td>
-                            </tr>
-                            <tr>
-                                <td>2019-05-01 00:01:01</td>
-                                <td class="font-bold">￥0</td>
-                                <td style="color: #cb1426">失败</td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-
-
-                <!--                    添加归集计划-->
-
-                <!--                <form style="float: left;margin-left: 20px;background-color: rgba(255,255,255,0.2);height: 340px;width: 300px">-->
-                <!--                    <div class="form-div font-bold btn-group">-->
-                <!--                        <div style="margin-top: 8px">归集时间：-->
-                <!--                        </div>-->
-                <!--                        <select class="form-control form-selection-bank col-lg-3" style="margin-left: 10px">-->
-                <!--                            <option selected class="form-selection-option">每月</option>-->
-                <!--                            <option class="form-selection-option">1月</option>-->
-                <!--                            <option class="form-selection-option">2月</option>-->
-                <!--                            <option class="form-selection-option">3月</option>-->
-                <!--                            <option class="form-selection-option">4月</option>-->
-                <!--                            <option class="form-selection-option">5月</option>-->
-                <!--                            <option class="form-selection-option">6月</option>-->
-                <!--                            <option class="form-selection-option">7月</option>-->
-                <!--                            <option class="form-selection-option">8月</option>-->
-                <!--                            <option class="form-selection-option">9月</option>-->
-                <!--                            <option class="form-selection-option">10月</option>-->
-                <!--                            <option class="form-selection-option">11月</option>-->
-                <!--                            <option class="form-selection-option">12月</option>-->
-                <!--                        </select>-->
-                <!--                        <select class="form-control form-selection-bank col-lg-3" style="margin-left: 20px">-->
-                <!--                            <option selected class="form-selection-option">1号</option>-->
-                <!--                            <option class="form-selection-option">2号</option>-->
-                <!--                            <option class="form-selection-option">3号</option>-->
-                <!--                            <option class="form-selection-option">4号</option>-->
-                <!--                            <option class="form-selection-option">5号</option>-->
-                <!--                            <option class="form-selection-option">6号</option>-->
-                <!--                            <option class="form-selection-option">7号</option>-->
-                <!--                            <option class="form-selection-option">8号</option>-->
-                <!--                            <option class="form-selection-option">9号</option>-->
-                <!--                            <option class="form-selection-option">10号</option>-->
-                <!--                            <option class="form-selection-option">11号</option>-->
-                <!--                            <option class="form-selection-option">12号</option>-->
-                <!--                        </select>-->
-                <!--                    </div>-->
-                <!--                    <div class="form-div font-bold">-->
-                <!--                        归集金额：￥-->
-                <!--                        <input class="col-md-10 col-lg-3" type="text">元-->
-                <!--                    </div>-->
-                <!--                    <div class="form-div font-bold">-->
-                <!--                        中心账户：-->
-                <!--                        <select class="form-control form-selection col-lg-11" style="margin: 10px">-->
-                <!--                            <option class="form-selection-option">中国银行，1234***********6789</option>-->
-                <!--                            <option class="form-selection-option">招商银行，1234***********6789</option>-->
-                <!--                        </select>-->
-                <!--                    </div>-->
-                <!--                    <div class="form-div font-bold">-->
-                <!--                        关联账户：-->
-                <!--                        <select class="form-control form-selection col-lg-11" style="margin: 10px">-->
-                <!--                            <option class="form-selection-option">中国银行，1234***********6789</option>-->
-                <!--                            <option class="form-selection-option">招商银行，1234***********6789</option>-->
-                <!--                        </select>-->
-                <!--                    </div>-->
-                <!--                    <button class="btn-sm btn btn-blue" style="font-size: medium;margin-left: 34%">确认</button>-->
-                <!--                </form>-->
-
-
-                <!--主体内容结束-->
+    <footer class="page-footer indigo darken-2 center-on-small-only pt-0 mt-0">
+        <div class="footer-copyright">
+            <div class="container-fluid">
+                <p>&copy; Five Bank</p>
             </div>
         </div>
-
-</header>
-
-<footer class="page-footer indigo darken-2 center-on-small-only pt-0 mt-0">
-    <div class="footer-copyright">
-        <div class="container-fluid">
-            <p>&copy; Five Bank</p>
-        </div>
-    </div>
-</footer>
-<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
-<script type="text/javascript" src="js/popper.min.js"></script>
-<script type="text/javascript" src="js/bootstrap.min.js"></script>
-<script type="text/javascript" src="js/mdb.min.js"></script>
-<script type="text/javascript" src="scripts/main.js"></script>
-<script>new WOW().init();</script>
+    </footer>
+    <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="js/popper.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/mdb.min.js"></script>
+    <script type="text/javascript" src="scripts/main.js"></script>
+    <script>new WOW().init();</script>
 </body>
 </html>
