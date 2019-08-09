@@ -1,139 +1,148 @@
 <!DOCTYPE html>
 <html class="full-height" lang="en-US">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>主动收款</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/mdb.min.css" rel="stylesheet">
-    <link href="styles/main.css" rel="stylesheet">
-</head>
-<body id="top">
-<header>
-    <!-- Navbar-->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar" id="navbar">
-        <div class="container"><a class="navbar-brand" href="#"><strong>五仁银行</strong></a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent"
-                    aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation"><span
-                    class="navbar-toggler-icon"></span></button>
-            <div class="collapse navbar-collapse" id="navbarContent">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item" style="margin-right: 10px"><a class="nav-link" href="#">登出</a></li>
-                    <li class="nav-item" style="margin-right: 10px"><a class="nav-link" href="#">个人中心</a></li>
-                    <!--                    <li class="nav-item" style="margin-right: 10px"><a class="nav-link" href="#">首页</a></li>-->
-                    <li class="nav-item"><a class="nav-link" href="#">消息 <span class="badge"
-                                                                               style="font-size: 15px">112</span></a>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <!-- 背景图-->
-    <div class="view hm-gradient" id="intro">
-        <!-- 渐变色-->
-        <div class="full-bg-img d-flex align-items-center">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>主动收款</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/mdb.min.css" rel="stylesheet">
+		<link href="styles/main.css" rel="stylesheet">
+	</head>
+	<body id="top">
+		<div id="app" style="background-image: url(img/backgroud.jpg);height: 100%">
+			<header>
+				<!-- Navbar-->
+				<nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar" id="navbar">
+					<div class="container"><a class="navbar-brand" href="#"><strong>五仁银行</strong></a>
+						<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent"
+						 aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+						<div class="collapse navbar-collapse" id="navbarContent">
+							<ul class="navbar-nav ml-auto">
+								<li class="nav-item" style="margin-right: 10px"><a class="nav-link" href="#">登出</a></li>
+								<li class="nav-item" style="margin-right: 10px"><a class="nav-link" href="#">个人中心</a></li>
+								<!--                    <li class="nav-item" style="margin-right: 10px"><a class="nav-link" href="#">首页</a></li>-->
+								<li class="nav-item"><a class="nav-link" href="#">消息 <span class="badge" style="font-size: 15px">112</span></a>
+							</ul>
+						</div>
+					</div>
+				</nav>
+				<!-- 背景图-->
+				<div class="view hm-gradient" id="intro">
+					<!-- 渐变色-->
+					<div class="full-bg-img d-flex align-items-center">
+						<!--   主体内容    -->
+						<div class="col-md-10 col-lg-10" style="margin-left: 100px">
+							<div class="text-center form-title">主 动 收 款</div>
+							<div class="panel-body scroll-panel" style="height: 300px;width: 300px; overflow-y:scroll;float: left;margin-left: 200px">
+								<div class=" col col-lg-12">
+									<ul class="navbar-nav ml-auto payee-group-list-ul">
+										<a>
+											<li>发往 <u>张磊</u> 的主动收款</li>
+										</a>
+										<a>
+											<li>发往 <u>张磊</u> 的主动收款</li>
+										</a>
+										<a>
+											<li>➕发起主动收款</li>
+										</a>
+									</ul>
+								</div>
+							</div>
 
-            <!--   主体内容    -->
+							<!--                发起主动付款-->
+							<form style="float: left;margin-left: 20px;background-color: rgba(255,255,255,0.2);height: 300px;width: 300px">
+								<div class="font-bold form-div">
+									<div style="float:left;margin-bottom: 10px">
+										选择收款银行卡：
+									</div>
+									<select class="form-control form-selection col-lg-11" style="margin-left: 8px">
+										<option class="form-selection-option">中国银行，1234***********6789</option>
+										<option class="form-selection-option">招商银行，1234***********6789</option>
+									</select>
+								</div>
 
-            <div class="col-md-10 col-lg-10" style="margin-left: 100px">
-                <div class="text-center form-title">主 动 收 款</div>
+								<div class="font-bold form-div">
+									付款人账户：
+									<input class="col-md-10 col-lg-10" type="text" style="margin-left: 8px" placeholder="输入付款人的手机或身份证">
+								</div>
+								<div class="font-bold form-div">
+									收款金额：
+									<input class="col-md-10 col-lg-3" type="text">元
+								</div>
+								<div class="font-bold form-div">
+									备注：
+									<input class="col-md-10 col-lg-8" type="text">
+								</div>
+								<div class="text-md-center">
+									<button class="btn btn-blue btn-sm" style="font-size: medium" type="submit">确认</button>
+									</button>
+								</div>
+							</form>
 
+							<!--                查看主动付款-->
+							<!--                <form style="float: left;margin-left: 20px;background-color: rgba(255,255,255,0.2);height: 300px;width: 300px">-->
+							<!--                    <div class="font-bold form-div">-->
+							<!--                        收款账户：-->
+							<!--                        <div>1234 **** **** 3849</div>-->
+							<!--                    </div>-->
+							<!--                    <div class="font-bold form-div">-->
+							<!--                        收款金额：-->
+							<!--                        <u>2000￥</u>-->
+							<!--                    </div>-->
+							<!--                    <div class="font-bold form-div">-->
+							<!--                        付款人：-->
+							<!--                        <u>潘德山</u>-->
+							<!--                    </div>-->
+							<!--                    <div class="font-bold form-div">-->
+							<!--                        付款人账号：-->
+							<!--                        <u>13423668045</u>-->
+							<!--                    </div>-->
+							<!--                    <div class="font-bold form-div">-->
+							<!--                        收款备注：-->
+							<!--                        <u>欠钱不还欠钱不还欠钱不还欠钱不还欠钱不还欠钱不还</u>-->
+							<!--                    </div>-->
+							<!--                    <button style="margin-left: 24%" class="btn btn-danger">取消主动收款</button>-->
+							<!--                    <button disabled style="margin-left: 30%" class="btn btn-success">已完成</button>-->
+							<!--                    <button disabled style="margin-left: 30%" class="btn btn-warning">被拒绝</button>-->
+							<!--                </form>-->
+							<!--主体内容结束-->
+						</div>
+					</div>
+			</header>
 
-                <div class="panel-body scroll-panel"
-                     style="height: 300px;width: 300px; overflow-y:scroll;float: left;margin-left: 200px">
-                    <div class=" col col-lg-12">
-                        <ul class="navbar-nav ml-auto payee-group-list-ul">
-                            <a>
-                                <li>发往 <u>张磊</u> 的主动收款</li>
-                            </a>
-                            <a>
-                                <li>发往 <u>张磊</u> 的主动收款</li>
-                            </a>
-                            <a>
-                                <li>➕发起主动收款</li>
-                            </a>
-                        </ul>
-                    </div>
-                </div>
+			<footer class="page-footer indigo darken-2 center-on-small-only pt-0 mt-0">
+				<div class="footer-copyright">
+					<div class="container-fluid">
+						<p>&copy; Five Bank</p>
+					</div>
+				</div>
+			</footer>
+		</div>
+	</body>
+</html>
 
-                <!--                发起主动付款-->
-                <form style="float: left;margin-left: 20px;background-color: rgba(255,255,255,0.2);height: 300px;width: 300px">
-                    <div class="font-bold form-div">
-                        <div style="float:left;margin-bottom: 10px">
-                            选择收款银行卡：
-                        </div>
-                        <select class="form-control form-selection col-lg-11" style="margin-left: 8px">
-                            <option class="form-selection-option">中国银行，1234***********6789</option>
-                            <option class="form-selection-option">招商银行，1234***********6789</option>
-                        </select>
-                    </div>
-
-                    <div class="font-bold form-div">
-                        付款人账户：
-                        <input class="col-md-10 col-lg-10" type="text" style="margin-left: 8px"
-                               placeholder="输入付款人的手机或身份证">
-                    </div>
-                    <div class="font-bold form-div">
-                        收款金额：
-                        <input class="col-md-10 col-lg-3" type="text">元
-                    </div>
-                    <div class="font-bold form-div">
-                        备注：
-                        <input class="col-md-10 col-lg-8" type="text">
-                    </div>
-                    <div class="text-md-center">
-                        <button class="btn btn-blue btn-sm" style="font-size: medium" type="submit">确认</button>
-                        </button>
-                    </div>
-                </form>
-
-                <!--                查看主动付款-->
-                <!--                <form style="float: left;margin-left: 20px;background-color: rgba(255,255,255,0.2);height: 300px;width: 300px">-->
-                <!--                    <div class="font-bold form-div">-->
-                <!--                        收款账户：-->
-                <!--                        <div>1234 **** **** 3849</div>-->
-                <!--                    </div>-->
-                <!--                    <div class="font-bold form-div">-->
-                <!--                        收款金额：-->
-                <!--                        <u>2000￥</u>-->
-                <!--                    </div>-->
-                <!--                    <div class="font-bold form-div">-->
-                <!--                        付款人：-->
-                <!--                        <u>潘德山</u>-->
-                <!--                    </div>-->
-                <!--                    <div class="font-bold form-div">-->
-                <!--                        付款人账号：-->
-                <!--                        <u>13423668045</u>-->
-                <!--                    </div>-->
-                <!--                    <div class="font-bold form-div">-->
-                <!--                        收款备注：-->
-                <!--                        <u>欠钱不还欠钱不还欠钱不还欠钱不还欠钱不还欠钱不还</u>-->
-                <!--                    </div>-->
-                <!--                    <button style="margin-left: 24%" class="btn btn-danger">取消主动收款</button>-->
-                <!--                    <button disabled style="margin-left: 30%" class="btn btn-success">已完成</button>-->
-                <!--                    <button disabled style="margin-left: 30%" class="btn btn-warning">被拒绝</button>-->
-                <!--                </form>-->
-
-
-                <!--主体内容结束-->
-            </div>
-        </div>
-
-</header>
-
-<footer class="page-footer indigo darken-2 center-on-small-only pt-0 mt-0">
-    <div class="footer-copyright">
-        <div class="container-fluid">
-            <p>&copy; Five Bank</p>
-        </div>
-    </div>
-</footer>
 <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="js/popper.min.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/mdb.min.js"></script>
 <script type="text/javascript" src="scripts/main.js"></script>
-<script>new WOW().init();</script>
-</body>
-</html>
+<script>
+	new WOW().init();
+</script>
+
+<script type="text/javascript" src="js/axios-0.18.0.js"></script>
+<script type="text/javascript" src="js/vuejs-2.5.16.js"></script>
+<script type="text/javascript" src="js/api.1.js"></script>
+<script>
+	new Vue({
+		el: "#app",
+		data: {
+
+		},
+		methods: {
+
+		}
+	})
+</script>

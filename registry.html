@@ -1,104 +1,123 @@
 <!DOCTYPE html>
 <html class="full-height" lang="en-US">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>注册</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/mdb.min.css" rel="stylesheet">
-    <link href="styles/main.css" rel="stylesheet">
-</head>
-<body id="top">
-<header>
-    <!-- Navbar-->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar" id="navbar">
-        <div class="container"><a class="navbar-brand" href="#"><strong>五仁银行</strong></a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent"
-                    aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation"><span
-                    class="navbar-toggler-icon"></span></button>
-            <div class="collapse navbar-collapse" id="navbarContent">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item"><a class="nav-link" href="registry.html">注册</a></li>
-                    <li class="nav-item"><a class="nav-link" href="login.html">登录</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <!-- Intro Section-->
-    <!-- 背景图-->
-    <div class="view hm-gradient" id="intro">
-        <!-- 渐变色-->
-        <div class="full-bg-img d-flex align-items-center">
-            <!-- 主体内容-->
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>注册</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/mdb.min.css" rel="stylesheet">
+		<link href="styles/main.css" rel="stylesheet">
+	</head>
+	<body id="top">
+		<div id="app" style="background-image: url(img/backgroud.jpg);height: 100%">
+			<header>
+				<!-- Navbar-->
+				<nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar" id="navbar">
+					<div class="container"><a class="navbar-brand" href="#"><strong>五仁银行</strong></a>
+						<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent"
+						 aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+						<div class="collapse navbar-collapse" id="navbarContent">
+							<ul class="navbar-nav ml-auto">
+								<li class="nav-item"><a class="nav-link" href="registry.html">注册</a></li>
+								<li class="nav-item"><a class="nav-link" href="login.html">登录</a></li>
+							</ul>
+						</div>
+					</div>
+				</nav>
+				<!-- Intro Section-->
+				<!-- 背景图-->
+				<div class="view hm-gradient" id="intro">
+					<!-- 渐变色-->
+					<div class="full-bg-img d-flex align-items-center">
+						<!-- 主体内容-->
 
-            <div class="container">
-                <div class="col-md-10 col-lg-5" style="margin-left: 330px">
+						<div class="container">
+							<div class="col-md-10 col-lg-5" style="margin-left: 330px">
 
-                    <!-- 注册表单-->
-                    <div class="text-center form-title">注 册</div>
-                    <form id="registry" class="">
-                        <div class="font-bold form-div">
-                            手机号：
-                            <div>
-                                <span class="input-group-addon" style="margin: 2px">+86</span>
-                                <input class="col-md-10 col-lg-10" type="text">
-                            </div>
-                        </div>
-                        <div class="font-bold form-div">
-                            密码：
-                            <div><input class="col-md-10 col-lg-11" type="password"></div>
-                        </div>
-                        <div class="font-bold form-div">
-                            确认密码：
-                            <div><input class="col-md-10 col-lg-11" type="password"></div>
-                        </div>
-                        <div class="font-bold form-auth-code">
-                            验证码：
-                            <div>
-                                <input class="col-md-10 col-lg-7" type="text">
-                                <button class="btn btn-sm btn-default auth-code" style="font-size: 12px">获取验证码
-                                </button>
-                            </div>
-                        </div>
-                        <div id="user-protocol">
-                            <input type="checkbox" checked value="true" style="margin-right: 5px;margin-left: 5px">
-                            <a><u>本人已阅读并同意《五仁银行个人用户注册协议》</u></a>
-                        </div>
-                        <div class="text-md-center">
-                            <button class="btn btn-blue btn-sm" style="font-size: medium" type="submit">下一步</button>
-                            </button>
-                        </div>
-                    </form>
+								<!-- 注册表单-->
+								<div class="text-center form-title">注 册</div>
+								<form id="registry" class="">
+									<div class="font-bold form-div">
+										手机号：
+										<div>
+											<span class="input-group-addon" style="margin: 2px">+86</span>
+											<input class="col-md-10 col-lg-10" type="text">
+										</div>
+									</div>
+									<div class="font-bold form-div">
+										密码：
+										<div><input class="col-md-10 col-lg-11" type="password"></div>
+									</div>
+									<div class="font-bold form-div">
+										确认密码：
+										<div><input class="col-md-10 col-lg-11" type="password"></div>
+									</div>
+									<div class="font-bold form-auth-code">
+										验证码：
+										<div>
+											<input class="col-md-10 col-lg-7" type="text">
+											<button class="btn btn-sm btn-default auth-code" style="font-size: 12px">获取验证码
+											</button>
+										</div>
+									</div>
+									<div id="user-protocol">
+										<input type="checkbox" checked value="true" style="margin-right: 5px;margin-left: 5px">
+										<a><u>本人已阅读并同意《五仁银行个人用户注册协议》</u></a>
+									</div>
+									<div class="text-md-center">
+										<button class="btn btn-blue btn-sm" style="font-size: medium" type="submit">下一步</button>
+										</button>
+									</div>
+								</form>
 
 
-                </div>
-                <!-- 主体内容结束 -->
-            </div>
-        </div>
-    </div>
-</header>
+							</div>
+							<!-- 主体内容结束 -->
+						</div>
+					</div>
+				</div>
+			</header>
 
-<footer class="page-footer indigo darken-2 center-on-small-only pt-0 mt-0">
-    <!--      <div class="container">-->
-    <!--        <div class="row">-->
-    <!--          <div class="col-md-12">-->
-    <!--            <div class="mb-5 flex-center"><a class="px-3"><i class="fa fa-facebook fa-lg white-text"></i></a><a class="px-3"><i class="fa fa-twitter fa-lg white-text"></i></a><a class="px-3"><i class="fa fa-google-plus fa-lg white-text"></i></a><a class="px-3"><i class="fa fa-linkedin fa-lg white-text"></i></a></div>-->
-    <!--          </div>-->
-    <!--        </div>-->
-    <!--      </div>-->
-    <div class="footer-copyright">
-        <div class="container-fluid">
-            <p>&copy; Five Bank</p>
-        </div>
-    </div>
-</footer>
+			<footer class="page-footer indigo darken-2 center-on-small-only pt-0 mt-0">
+				<!--      <div class="container">-->
+				<!--        <div class="row">-->
+				<!--          <div class="col-md-12">-->
+				<!--            <div class="mb-5 flex-center"><a class="px-3"><i class="fa fa-facebook fa-lg white-text"></i></a><a class="px-3"><i class="fa fa-twitter fa-lg white-text"></i></a><a class="px-3"><i class="fa fa-google-plus fa-lg white-text"></i></a><a class="px-3"><i class="fa fa-linkedin fa-lg white-text"></i></a></div>-->
+				<!--          </div>-->
+				<!--        </div>-->
+				<!--      </div>-->
+				<div class="footer-copyright">
+					<div class="container-fluid">
+						<p>&copy; Five Bank</p>
+					</div>
+				</div>
+			</footer>
+		</div>
+	</body>
+</html>
+
 <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="js/popper.min.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/mdb.min.js"></script>
 <script type="text/javascript" src="scripts/main.js"></script>
-<script>new WOW().init();</script>
-</body>
-</html>
+<script>
+	new WOW().init();
+</script>
+
+<script type="text/javascript" src="js/axios-0.18.0.js"></script>
+<script type="text/javascript" src="js/vuejs-2.5.16.js"></script>
+<script type="text/javascript" src="js/api.1.js"></script>
+<script>
+	new Vue({
+		el: "#app",
+		data: {
+
+		},
+		methods: {
+
+		}
+	})
+</script>
