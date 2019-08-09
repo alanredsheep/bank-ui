@@ -11,90 +11,113 @@
     <link href="styles/main.css" rel="stylesheet">
 </head>
 <body id="top">
-<header>
-    <!-- Navbar-->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar" id="navbar">
-        <div class="container"><a class="navbar-brand" href="home.html"><strong>五仁银行</strong></a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent"
-                    aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-            <div class="collapse navbar-collapse" id="navbarContent">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item" style="margin-right: 10px"><a class="nav-link" href="#">登出</a></li>
-                    <li class="nav-item" style="margin-right: 10px"><a class="nav-link" href="personal_center.html">{{userName}}，欢迎您</a></li>
-                    <li class="nav-item"><a class="nav-link" href="message.html">消息 <span class="badge" style="font-size: 15px">112</span></a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <!-- 背景图-->
-    <div class="view hm-gradient" id="intro">
-        <!-- 渐变色-->
-        <div class="full-bg-img d-flex align-items-center">
-
-            <!--   主体内容    -->
-
-            <div class="col-md-10 col-lg-10" style="margin-left: 100px">
-                <div class="text-center form-title">消 息 中 心</div>
-
-
-                <div class="panel-body scroll-panel"
-                     style="height: 300px;width: 300px; overflow-y:scroll;float: left;margin-left: 200px">
-                    <div class=" col col-lg-12">
-                        <ul class="navbar-nav ml-auto payee-group-list-ul">
-                            <a>
-                                <li>来自 <u>张磊</u> 的主动收款</li>
-                            </a>
-                            <a>
-                                <li>来自 <u>张磊</u> 的主动收款</li>
-                            </a>
-                        </ul>
-                    </div>
+<div id="app" tyle="height: 100%">
+    <header>
+        <!-- Navbar-->
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar" id="navbar">
+            <div class="container"><a class="navbar-brand" href="home.html"><strong>五仁银行</strong></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent"
+                        aria-controls="navbarContent"
+                        aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarContent">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item" style="margin-right: 10px"><a class="nav-link" href="#">登出</a></li>
+                        <li class="nav-item" style="margin-right: 10px"><a class="nav-link" href="personal_center.html">{{userName}}，欢迎您</a>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="message.html">消息 <span class="badge"
+                                                                                              style="font-size: 15px">112</span></a>
+                        </li>
+                    </ul>
                 </div>
-                <form style="float: left;margin-left: 20px;background-color: rgba(255,255,255,0.2);height: 300px;width: 300px">
-                    <div class="font-bold form-div">
-                        收款人：
-                        <u>潘德山</u>
+            </div>
+        </nav>
+        <!-- 背景图-->
+        <div class="view hm-gradient" id="intro">
+            <!-- 渐变色-->
+            <div class="full-bg-img d-flex align-items-center">
+
+                <!--   主体内容    -->
+
+                <div class="col-md-10 col-lg-10" style="margin-left: 100px">
+                    <div class="text-center form-title">消 息 中 心</div>
+
+
+                    <div class="panel-body scroll-panel"
+                         style="height: 300px;width: 300px; overflow-y:scroll;float: left;margin-left: 200px">
+                        <div class=" col col-lg-12">
+                            <ul class="navbar-nav ml-auto payee-group-list-ul">
+                                <a>
+                                    <li>来自 <u>张磊</u> 的主动收款</li>
+                                </a>
+                                <a>
+                                    <li>来自 <u>张磊</u> 的主动收款</li>
+                                </a>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="font-bold form-div">
-                        收款账户：
-                        <div>1234 5678 8989 3849</div>
-                    </div>
-                    <div class="font-bold form-div">
-                        付款金额：
-                        <u>2000￥</u>
-                    </div>
-                    <div class="font-bold form-div">
-<!--                        <div class="">-->
+                    <form style="float: left;margin-left: 20px;background-color: rgba(255,255,255,0.2);height: 300px;width: 300px">
+                        <div class="font-bold form-div">
+                            收款人：
+                            <u>潘德山</u>
+                        </div>
+                        <div class="font-bold form-div">
+                            收款账户：
+                            <div>1234 5678 8989 3849</div>
+                        </div>
+                        <div class="font-bold form-div">
+                            付款金额：
+                            <u>2000￥</u>
+                        </div>
+                        <div class="font-bold form-div">
+                            <!--                        <div class="">-->
                             选择付款银行卡：
-<!--                        </div>-->
-                        <select class="form-control form-selection col-lg-11" style="margin-left: 5px;margin-top: 10px">
-                            <option class="form-selection-option">中国银行，1234***********6789</option>
-                            <option class="form-selection-option">招商银行，1234***********6789</option>
-                        </select>
-                    </div>
-                    <button style="margin-left: 8%;margin-top: 20px" class="btn btn-danger">拒绝</button>
-                    <button style="margin-left: 8%;margin-top: 20px" class="btn btn-success">确认付款</button>
-                </form>
+                            <!--                        </div>-->
+                            <select class="form-control form-selection col-lg-11"
+                                    style="margin-left: 5px;margin-top: 10px">
+                                <option class="form-selection-option">中国银行，1234***********6789</option>
+                                <option class="form-selection-option">招商银行，1234***********6789</option>
+                            </select>
+                        </div>
+                        <button style="margin-left: 8%;margin-top: 20px" class="btn btn-danger">拒绝</button>
+                        <button style="margin-left: 8%;margin-top: 20px" class="btn btn-success">确认付款</button>
+                    </form>
 
 
-                <!--主体内容结束-->
+                    <!--主体内容结束-->
+                </div>
             </div>
         </div>
+    </header>
 
-</header>
-
-<footer class="page-footer indigo darken-2 center-on-small-only pt-0 mt-0">
-    <div class="footer-copyright">
-        <div class="container-fluid">
-            <p>&copy; Five Bank</p>
+    <footer class="page-footer indigo darken-2 center-on-small-only pt-0 mt-0">
+        <div class="footer-copyright">
+            <div class="container-fluid">
+                <p>&copy; Five Bank</p>
+            </div>
         </div>
-    </div>
-</footer>
+    </footer>
+</div>
+</body>
+</html>
+
 <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="js/popper.min.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/mdb.min.js"></script>
 <script type="text/javascript" src="scripts/main.js"></script>
-<script>new WOW().init();</script>
-</body>
-</html>
+
+<script type="text/javascript" src="js/axios-0.18.0.js"></script>
+<script type="text/javascript" src="js/vuejs-2.5.16.js"></script>
+<script type="text/javascript" src="js/api.1.js"></script>
+<script>
+    new Vue({
+        el: "#app",
+        data: {
+
+        },
+        methods: {
+
+        }
+    })
+</script>

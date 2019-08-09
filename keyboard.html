@@ -12,19 +12,26 @@
 </head>
 <body id="top">
 
-<div id="app" class="view  hm-gradient" style="background-image: url(/img/backgroud.jpg);height: 100%">
+<div id="app" class="view  hm-gradient" style="height: 100%">
 
     <header>
         <!-- Navbar-->
         <nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar" id="navbar">
             <div class="container"><a class="navbar-brand" href="home.html"><strong>五仁银行</strong></a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent"
-                        aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent"
+                        aria-controls="navbarContent"
+                        aria-expanded="false" aria-label="Toggle navigation"><span
+                        class="navbar-toggler-icon"></span>
+                </button>
                 <div class="collapse navbar-collapse" id="navbarContent">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item" style="margin-right: 10px"><a class="nav-link" href="#">登出</a></li>
-                        <li class="nav-item" style="margin-right: 10px"><a class="nav-link" href="personal_center.html">{{userName}}，欢迎您</a></li>
-                        <li class="nav-item"><a class="nav-link" href="message.html">消息 <span class="badge" style="font-size: 15px">112</span></a></li>
+                        <li class="nav-item" style="margin-right: 10px"><a class="nav-link"
+                                                                           href="personal_center.html">{{userName}}，欢迎您</a>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="message.html">消息 <span class="badge"
+                                                                                              style="font-size: 15px">112</span></a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -40,8 +47,14 @@
                     <div style="margin-bottom: 40px">
                         <input type="password" class="col-lg-2" style="text-align:center;margin-left: 36%">
                     </div>
-                    <button class="btn btn-danger btn-sm" style="margin-left: 30px;margin-top: 20px;font-size: medium">取消</button>
-                    <button class="btn btn-success btn-sm" style="margin-left: 60px;margin-top: 20px;font-size: medium">确认</button>
+                    <button class="btn btn-danger btn-sm"
+                            style="margin-left: 30px;margin-top: 20px;font-size: medium">
+                        取消
+                    </button>
+                    <button class="btn btn-success btn-sm"
+                            style="margin-left: 60px;margin-top: 20px;font-size: medium">
+                        确认
+                    </button>
                 </div>
 
 
@@ -49,8 +62,21 @@
 
             <!--   主体内容结束    -->
         </div>
+
+    </header>
+
+
+    <footer class="page-footer indigo darken-2 center-on-small-only pt-0 mt-0">
+        <div class="footer-copyright">
+            <div class="container-fluid">
+                <p>&copy; Five Bank</p>
+            </div>
+        </div>
+    </footer>
 </div>
-</header>
+
+</body>
+</html>
 
 
 <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
@@ -58,18 +84,18 @@
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/mdb.min.js"></script>
 <script type="text/javascript" src="scripts/main.js"></script>
-<script>new WOW().init();</script>
 
-</div>
+<script type="text/javascript" src="js/axios-0.18.0.js"></script>
+<script type="text/javascript" src="js/vuejs-2.5.16.js"></script>
+<script type="text/javascript" src="js/api.1.js"></script>
+<script>
+    new Vue({
+        el: "#app",
+        data: {
 
+        },
+        methods: {
 
-<footer class="page-footer indigo darken-2 center-on-small-only pt-0 mt-0">
-    <div class="footer-copyright">
-        <div class="container-fluid">
-            <p>&copy; Five Bank</p>
-        </div>
-    </div>
-</footer>
-</body>
-
-</html>
+        }
+    })
+</script>

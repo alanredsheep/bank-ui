@@ -10,129 +10,155 @@
     <link href="css/mdb.min.css" rel="stylesheet">
     <link href="styles/main.css" rel="stylesheet">
 </head>
+
 <body id="top">
-<header>
-    <!-- Navbar-->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar" id="navbar">
-        <div class="container"><a class="navbar-brand" href="home.html"><strong>五仁银行</strong></a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent"
-                    aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-            <div class="collapse navbar-collapse" id="navbarContent">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item" style="margin-right: 10px"><a class="nav-link" href="#">登出</a></li>
-                    <li class="nav-item" style="margin-right: 10px"><a class="nav-link" href="personal_center.html">{{userName}}，欢迎您</a></li>
-                    <li class="nav-item"><a class="nav-link" href="message.html">消息 <span class="badge" style="font-size: 15px">112</span></a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <!-- 背景图-->
-    <div class="view hm-gradient" id="intro">
-        <!-- 渐变色-->
-        <div class="full-bg-img d-flex align-items-center">
-            <!--  主题内容-->
-            <div class="container">
-                <div  style="margin: auto;width: 102%;">
-                    <div class="text-center form-title">转 账 记 录</div>
-
-                    <div style="margin-left: -25px">
-                        <nav style="top: auto;background-color: rgba(0,0,0,0)">
-                            <form class="form-inline" style="margin-bottom: 10px;margin-left: 30%;">
-                                <select class="form-control form-selection-bank col-lg-4" style="margin-bottom: 6px">
-                                    <option selected class="form-selection-option">全部账户</option>
-                                    <option class="form-selection-option">中国银行 1234***********6789</option>
-                                    <option class="form-selection-option">招商银行 1234*******6789</option>
-                                </select>
-                                <select class="form-control form-selection-bank col-lg-2" style="margin-bottom: 6px;margin-left: 30px">
-                                    <option disabled selected class="form-selection-option">选择月份</option>
-                                    <option class="form-selection-option">1月</option>
-                                    <option class="form-selection-option">2月</option>
-                                    <option class="form-selection-option">3月</option>
-                                    <option class="form-selection-option">4月</option>
-                                    <option class="form-selection-option">5月</option>
-                                    <option class="form-selection-option">6月</option>
-                                    <option selected class="form-selection-option">7月</option>
-                                    <option class="form-selection-option">8月</option>
-                                    <option class="form-selection-option">9月</option>
-                                    <option class="form-selection-option">10月</option>
-                                    <option class="form-selection-option">11月</option>
-                                    <option class="form-selection-option">12月</option>
-                                </select>
-                                <button class="btn btn-sm btn-default my-2 my-sm-0" type="submit"
-                                        style="color: #FFFFFF;font-size: 16px;margin-left: 30px">查询
-                                </button>
-                            </form>
-                        </nav>
-
-                        <table class="table table-striped text-center record-table">
-                            <tr>
-                                <td>收款人</td>
-                                <td>收款卡</td>
-                                <td>金额</td>
-                                <td>付款卡</td>
-                                <td>转账类型</td>
-                                <td>订单时间</td>
-                                <td>订单状态</td>
-                                <td>交易单号</td>
-                            </tr>
-                            <tr>
-                                <td>张纯杰</td>
-                                <td>建设银行 6217132334524852</td>
-                                <td class="font-weight-bold">-￥100.00</td>
-                                <td>建设银行 6217*******4852</td>
-                                <td>单次转账</td>
-                                <td>2018-01-01 00:00:00</td>
-                                <td  style="color: #00cb02">成功</td>
-                                <td>32425653526426248965235265485233</td>
-                            </tr>
-                            <tr>
-                                <td>张纯杰</td>
-                                <td>建设银行 6217133234524852</td>
-                                <td class="font-weight-bold">-￥100.00</td>
-                                <td>建设银行 6217*******4852</td>
-                                <td>主动收款</td>
-                                <td>2018-01-01 00:00:00</td>
-                                <td  style="color: #00cb02">成功</td>
-                                <td>32425653526426248965235265485233</td>
-                            </tr>
-                            <tr>
-                                <td>芦苇</td>
-                                <td>建设银行 6217312314524852</td>
-                                <td class="font-weight-bold">-￥100.00</td>
-                                <td>建设银行 6217*******4852</td>
-                                <td>单次转账</td>
-                                <td>2018-01-01 00:00:00</td>
-                                <td style="color: #cb0005">失败</td>
-                                <td>32425653526426248965235265485233</td>
-                            </tr>
-                        </table>
-                        <div class="" style="margin-left: 32%">
-                            <button class="btn btn-primary btn-sm" style=" color: #FFFFFF;font-size: 16px">首页</button>
-                            <button class="btn btn-primary btn-sm" style=" color: #FFFFFF;font-size: 16px">上一页</button>
-                            <button class="btn btn-primary btn-sm" style=" color: #FFFFFF;font-size: 16px">下一页</button>
-                            <button class="btn btn-primary btn-sm" style=" color: #FFFFFF;font-size: 16px">尾页</button>
-                        </div>
-                    </div>
-
+<div id="app" tyle="height: 100%">
+    <header>
+        <!-- Navbar-->
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar" id="navbar">
+            <div class="container"><a class="navbar-brand" href="home.html"><strong>五仁银行</strong></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent"
+                        aria-controls="navbarContent"
+                        aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarContent">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item" style="margin-right: 10px"><a class="nav-link" href="#">登出</a></li>
+                        <li class="nav-item" style="margin-right: 10px"><a class="nav-link" href="personal_center.html">{{userName}}，欢迎您</a>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="message.html">消息 <span class="badge"
+                                                                                              style="font-size: 15px">112</span></a>
+                        </li>
+                    </ul>
                 </div>
             </div>
-        </div>
-    </div>
+        </nav>
+        <!-- 背景图-->
+        <div class="view hm-gradient" id="intro">
+            <!-- 渐变色-->
+            <div class="full-bg-img d-flex align-items-center">
+                <!--  主题内容-->
+                <div class="container">
+                    <div style="margin: auto;width: 102%;">
+                        <div class="text-center form-title">转 账 记 录</div>
 
-</header>
+                        <div style="margin-left: -25px">
+                            <nav style="top: auto;background-color: rgba(0,0,0,0)">
+                                <form class="form-inline" style="margin-bottom: 10px;margin-left: 30%;">
+                                    <select class="form-control form-selection-bank col-lg-4"
+                                            style="margin-bottom: 6px">
+                                        <option selected class="form-selection-option">全部账户</option>
+                                        <option class="form-selection-option">中国银行 1234***********6789</option>
+                                        <option class="form-selection-option">招商银行 1234*******6789</option>
+                                    </select>
+                                    <select class="form-control form-selection-bank col-lg-2"
+                                            style="margin-bottom: 6px;margin-left: 30px">
+                                        <option disabled selected class="form-selection-option">选择月份</option>
+                                        <option class="form-selection-option">1月</option>
+                                        <option class="form-selection-option">2月</option>
+                                        <option class="form-selection-option">3月</option>
+                                        <option class="form-selection-option">4月</option>
+                                        <option class="form-selection-option">5月</option>
+                                        <option class="form-selection-option">6月</option>
+                                        <option selected class="form-selection-option">7月</option>
+                                        <option class="form-selection-option">8月</option>
+                                        <option class="form-selection-option">9月</option>
+                                        <option class="form-selection-option">10月</option>
+                                        <option class="form-selection-option">11月</option>
+                                        <option class="form-selection-option">12月</option>
+                                    </select>
+                                    <button class="btn btn-sm btn-default my-2 my-sm-0" type="submit"
+                                            style="color: #FFFFFF;font-size: 16px;margin-left: 30px">查询
+                                    </button>
+                                </form>
+                            </nav>
 
-<footer class="page-footer indigo darken-2 center-on-small-only pt-0 mt-0">
-    <div class="footer-copyright">
-        <div class="container-fluid">
-            <p>&copy; Five Bank</p>
+                            <table class="table table-striped text-center record-table">
+                                <tr>
+                                    <td>收款人</td>
+                                    <td>收款卡</td>
+                                    <td>金额</td>
+                                    <td>付款卡</td>
+                                    <td>转账类型</td>
+                                    <td>订单时间</td>
+                                    <td>订单状态</td>
+                                    <td>交易单号</td>
+                                </tr>
+                                <tr>
+                                    <td>张纯杰</td>
+                                    <td>建设银行 6217132334524852</td>
+                                    <td class="font-weight-bold">-￥100.00</td>
+                                    <td>建设银行 6217*******4852</td>
+                                    <td>单次转账</td>
+                                    <td>2018-01-01 00:00:00</td>
+                                    <td style="color: #00cb02">成功</td>
+                                    <td>32425653526426248965235265485233</td>
+                                </tr>
+                                <tr>
+                                    <td>张纯杰</td>
+                                    <td>建设银行 6217133234524852</td>
+                                    <td class="font-weight-bold">-￥100.00</td>
+                                    <td>建设银行 6217*******4852</td>
+                                    <td>主动收款</td>
+                                    <td>2018-01-01 00:00:00</td>
+                                    <td style="color: #00cb02">成功</td>
+                                    <td>32425653526426248965235265485233</td>
+                                </tr>
+                                <tr>
+                                    <td>芦苇</td>
+                                    <td>建设银行 6217312314524852</td>
+                                    <td class="font-weight-bold">-￥100.00</td>
+                                    <td>建设银行 6217*******4852</td>
+                                    <td>单次转账</td>
+                                    <td>2018-01-01 00:00:00</td>
+                                    <td style="color: #cb0005">失败</td>
+                                    <td>32425653526426248965235265485233</td>
+                                </tr>
+                            </table>
+                            <div class="" style="margin-left: 32%">
+                                <button class="btn btn-primary btn-sm" style=" color: #FFFFFF;font-size: 16px">首页
+                                </button>
+                                <button class="btn btn-primary btn-sm" style=" color: #FFFFFF;font-size: 16px">上一页
+                                </button>
+                                <button class="btn btn-primary btn-sm" style=" color: #FFFFFF;font-size: 16px">下一页
+                                </button>
+                                <button class="btn btn-primary btn-sm" style=" color: #FFFFFF;font-size: 16px">尾页
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
         </div>
-    </div>
-</footer>
+    </header>
+
+    <footer class="page-footer indigo darken-2 center-on-small-only pt-0 mt-0">
+        <div class="footer-copyright">
+            <div class="container-fluid">
+                <p>&copy; Five Bank</p>
+            </div>
+        </div>
+    </footer>
+
+</div>
+</body>
+</html>
+
 <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="js/popper.min.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/mdb.min.js"></script>
 <script type="text/javascript" src="scripts/main.js"></script>
-<script>new WOW().init();</script>
-</body>
-</html>
+
+<script type="text/javascript" src="js/axios-0.18.0.js"></script>
+<script type="text/javascript" src="js/vuejs-2.5.16.js"></script>
+<script type="text/javascript" src="js/api.1.js"></script>
+<script>
+    new Vue({
+        el: "#app",
+        data: {},
+        methods: {}
+    })
+</script>
