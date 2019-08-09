@@ -1,84 +1,105 @@
 <!DOCTYPE html>
 <html class="full-height" lang="en-US">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>银行卡管理</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/mdb.min.css" rel="stylesheet">
-    <link href="styles/main.css" rel="stylesheet">
-</head>
-<body id="top">
-<header>
-    <!-- Navbar-->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar" id="navbar">
-        <div class="container"><a class="navbar-brand" href="home.html"><strong>五仁银行</strong></a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent"
-                    aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-            <div class="collapse navbar-collapse" id="navbarContent">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item" style="margin-right: 10px"><a class="nav-link" href="#">登出</a></li>
-                    <li class="nav-item" style="margin-right: 10px"><a class="nav-link" href="personal_center.html">{{userName}}，欢迎您</a></li>
-                    <li class="nav-item"><a class="nav-link" href="message.html">消息 <span class="badge" style="font-size: 15px">112</span></a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <!-- 背景图-->
-    <div class="view hm-gradient" id="intro">
-        <!-- 渐变色-->
-        <div class="full-bg-img d-flex align-items-center">
-            <!-- 主体内容-->
-            <div class="col-md-10 col-lg-10" style="margin-left: 15%">
-                <div class="text-center form-title"style="margin-left: -13%">银 行 卡 管 理</div>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>银行卡管理</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/mdb.min.css" rel="stylesheet">
+		<link href="styles/main.css" rel="stylesheet">
+	</head>
+	<body id="top">
+		<div id="app" style="background-image: url(img/backgroud.jpg);height: 100%">
+			<header>
+				<!-- Navbar-->
+				<nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar" id="navbar">
+					<div class="container"><a class="navbar-brand" href="#"><strong>五仁银行</strong></a>
+						<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent"
+						 aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+						<div class="collapse navbar-collapse" id="navbarContent">
+							<ul class="navbar-nav ml-auto">
+								<!--                    <li class="nav-item" style="margin-right: 10px"><a class="nav-link" href="#"></a></li>-->
+								<li class="nav-item" style="margin-right: 10px"><a class="nav-link" href="#">登出</a></li>
+								<li class="nav-item" style="margin-right: 10px"><a class="nav-link" href="#">首页</a></li>
+								<li class="nav-item" style="margin-right: 10px"><a class="nav-link" href="#">大佬，欢迎您</a></li>
+								<li class="nav-item"><a class="nav-link" href="#">消息 <span class="badge" style="font-size: 15px">12</span></a>
+								</li>
+								<!--                    <li class="nav-item"><a class="nav-link" href="#">登录</a></li>-->
+							</ul>
+							<!--                <a class="btn btn-sm btn-primary btn-rounded my-0" style="font-size: medium" href="#" target="_blank">登录</a>-->
+						</div>
+					</div>
+				</nav>
+				<!-- 背景图-->
+				<div class="view hm-gradient" id="intro">
+					<!-- 渐变色-->
+					<div class="full-bg-img d-flex align-items-center">
+						<!-- 主体内容-->
+						<div class="col-md-10 col-lg-10" style="margin-left: 15%">
+							<div class="text-center form-title" style="margin-left: -13%">银 行 卡 管 理</div>
 
-                <div class="panel-body scroll-panel"
-                     style="width: 40%;height: 290px; overflow-y:scroll;margin-left: 12%;float: left">
-                    <div class="scroll-panel-div">
-                        <div class="container bank-card-container">
-                            <a>
-                                <div class="jumbotron row" style="background-image: url(img/gold.jpg);">
-                                    <p style="font-size: xx-large">中国银行</p>
-                                    <p style="font-size: x-large">1234***********6789</p>
-                                </div>
-                            </a>
-                            <a>
-                                <div class="jumbotron row" style="background-image: url(img/gold.jpg);">
-                                    <p style="font-size: xx-large">中国银行</p>
-                                    <p style="font-size: x-large">1234***********6789</p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4" style="float: left">
-                    <!--   他行银行卡只有解绑的功能   -->
+							<div class="panel-body scroll-panel" style="width: 40%;height: 290px; overflow-y:scroll;margin-left: 12%;float: left">
+								<div class="scroll-panel-div">
+									<div class="container bank-card-container">
+										<a>
+											<div class="jumbotron row" style="background-image: url(img/gold.jpg);">
+												<p style="font-size: xx-large">中国银行</p>
+												<p style="font-size: x-large">1234***********6789</p>
+											</div>
+										</a>
+										<a>
+											<div class="jumbotron row" style="background-image: url(img/gold.jpg);">
+												<p style="font-size: xx-large">中国银行</p>
+												<p style="font-size: x-large">1234***********6789</p>
+											</div>
+										</a>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-4" style="float: left">
+								<!--   他行银行卡只有解绑的功能   -->
+								<button name="addBankCard" class="btn btn-default bank-card-button">添加银行卡</button>
+								<button name="untieCard" class="btn btn-warning bank-card-button">解绑银行卡</button>
+								<button name="addLimit" class="btn btn-blue bank-card-button" disabled>提升限额</button>
+							</div>
+							<!--主体内容结束-->
+						</div>
+					</div>
+			</header>
 
-                    <button name="addBankCard" class="btn btn-default bank-card-button">添加银行卡</button>
-                    <button name="untieCard" class="btn btn-warning bank-card-button">解绑银行卡</button>
-                    <button name="addLimit" class="btn btn-blue bank-card-button" disabled>提升限额</button>
+			<footer class="page-footer indigo darken-2 center-on-small-only pt-0 mt-0">
+				<div class="footer-copyright">
+					<div class="container-fluid">
+						<p>&copy; Five Bank</p>
+					</div>
+				</div>
+			</footer>
+		</div>
+	</body>
+</html>
 
-                    <button name="freezeCard" class="btn btn-danger bank-card-button" disabled>冻结银行卡</button>
-                </div>
-                <!--主体内容结束-->
-            </div>
-        </div>
-</header>
-
-<footer class="page-footer indigo darken-2 center-on-small-only pt-0 mt-0">
-    <div class="footer-copyright">
-        <div class="container-fluid">
-            <p>&copy; Five Bank</p>
-        </div>
-    </div>
-</footer>
 <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="js/popper.min.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/mdb.min.js"></script>
 <script type="text/javascript" src="scripts/main.js"></script>
-<script>new WOW().init();</script>
-</body>
-</html>
+<script>
+	new WOW().init();
+</script>
+
+<script type="text/javascript" src="js/axios-0.18.0.js"></script>
+<script type="text/javascript" src="js/vuejs-2.5.16.js"></script>
+<script type="text/javascript" src="js/api.1.js"></script>
+<script>
+	new Vue({
+		el: "#app",
+		data: {
+
+		},
+		methods: {
+
+		}
+	})
+</script>

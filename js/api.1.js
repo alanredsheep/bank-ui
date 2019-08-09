@@ -9,7 +9,7 @@ axios.defaults.headers['Content-Type'] = 'application/json'
 // 设置前置拦截器->以后所有的AJAX都会自动添加上 Authorization:token 的协议头
 axios.interceptors.request.use(function (config) {
     // 判断如果用户登录了就把 token 配置上 axios 的协议头中
-    let token = localStorage.getItem('token')
+    var token = localStorage.getItem('token')
     if (token) {
         config.headers['Authorization'] = token
     }
