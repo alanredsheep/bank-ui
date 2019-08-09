@@ -1,0 +1,184 @@
+#intro {
+  background: url("../img/backgroud.jpg") no-repeat center center;
+  background-size: cover;
+}
+
+.top-nav-collapse {
+  background-color: #3949ab !important;
+}
+
+/*.navbar:not(.top-nav-collapse) {*/
+/*  background: transparent !important;*/
+/*}*/
+/*.tlinks{text-indent:-9999px;height:0;line-height:0;font-size:0;overflow:hidden;}*/
+/*@media (max-width: 768px) {*/
+/*  .navbar:not(.top-nav-collapse) {*/
+/*    background: #3949ab !important;*/
+/*  }*/
+/*}*/
+
+#intro .h6 {
+  font-weight: 300;
+  line-height: 1.7;
+}
+
+.hm-gradient .full-bg-img {
+  background: rgba(42, 27, 161, 0.7);
+  background: linear-gradient(45deg, rgba(42, 27, 161, 0.7), rgba(29, 210, 177, 0.7) 100%);
+}
+
+@media (max-width: 450px) {
+  .margins {
+    margin-right: 1rem;
+    margin-left: 1rem;
+  }
+}
+/*验证码*/
+.auth-code {
+  margin-left: 7px;
+  margin-bottom: 20px;
+}
+.form-auth-code {
+  color: #ffffff;
+  margin-left: 10px;
+}
+/*表格行*/
+.form-div {
+  color: #ffffff;
+  margin: 10px;
+}
+/*表格标题*/
+.form-title {
+  color: #ffffff;
+  font-size: xx-large;
+  margin-bottom: 20px;
+}
+/*用户协议*/
+#user-protocol {
+  margin-left: 12px;
+  color: #ffffff;
+  font-size: 17px;
+}
+/*主页面*/
+.main-container{
+  margin-top: 100px;
+}
+.main-container .jumbotron{
+  height: 160px;
+  width: 320px;
+  margin-bottom: 60px;
+  background-color:rgba(0,0,0,0);
+  font-size: 50px;
+  color: rgba(255, 255, 255, 0.5);
+}
+.main-container .jumbotron a{
+  color: rgba(255, 255, 255, 0.7);
+  margin: auto;
+}
+/*下拉框*/
+.form-selection {
+  color: #fdfdfd;
+  border-radius: 5px;
+  font-size: 15px;
+  background: rgba(255, 255, 255, 0);
+  margin-left: -15px;
+  margin-bottom: -10px;
+}
+.form-selection-bank {
+  color: #fdfdfd;
+  border-radius: 5px;
+  font-size: 15px;
+  background: rgba(255, 255, 255, 0);
+  margin-left: -25px;
+  margin-bottom: -10px;
+}
+.form-selection-option {
+  color: #686868;
+  margin-left: 20px;
+  font-size: medium;
+}
+.form-selection-btn {
+  border: 0px;
+  border-radius: 5px;
+  margin-left: 18px;
+  height: 40px;
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+/*滚动条*/
+.scroll-panel {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 5px;
+}
+.scroll-panel div{
+  border: 1px  #000000;
+  width: 95%;
+  color: #ffffff;
+  margin-left: 12px;
+}
+
+/*收款群组*/
+.payee-group-list {
+
+}
+.payee-group {
+
+}
+.payee-group-list a{
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+.payee-group-list-ul{
+  font-size: 20px;
+  color: #ffffff;
+}
+.payee-group-list-ul a {
+  margin-top: 12px;
+  margin-left: -12px;
+
+}
+/*银行卡管理*/
+.bank-card-container{
+  margin-top: 50px;
+  float: left;
+}
+.bank-card-container .jumbotron {
+  height: 190px;
+  width: 300px;
+  margin-bottom: 40px;
+  /*background-color:rgba(0,0,0,0);*/
+  font-size: 20px;
+  color: rgba(255, 255, 255, 1);
+}
+.bank-card-button {
+  height: 60px;
+  width: 200px;
+  font-size: medium;
+}
+
+/*转账记录*/
+.record-table {
+  color: #FFFFFF;
+  width: 100%;
+}
+.record-table tr td{
+  font-size: 14px;
+}
+.record-select {
+  color: #343434;
+  font-size: 14px;
+}
+.record-select option {
+  font-size: 14px;
+}
+
+/*支付密码*/
+.pay-keyboard {
+  height: 30px;
+  width: 20px;
+}
+
+/**消息中心*/
+.list-group-item-light {
+  width: 450px;
+}
