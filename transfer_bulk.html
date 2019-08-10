@@ -9,6 +9,12 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/mdb.min.css" rel="stylesheet">
     <link href="styles/main.css" rel="stylesheet">
+    <style>
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button{
+            -webkit-appearance: none !important;
+        }
+    </style>
 </head>
 <body id="top">
 <div id="app" style="height: 100%">
@@ -27,9 +33,19 @@
                     <div class="text-center form-title">批 量 转 账</div>
 
                     <form id="transfer" class="">
+                        <!--聪本地获取当前用户所有银行卡-->
                         <div class="font-bold form-div col-lg-12 btn-group">
                             <select class="form-control form-selection col-lg-9">
-                                <option disabled selected class="form-selection-option">选择收款群组</option>
+                                <option disabled class="form-selection-option">选择付款银行卡</option>
+                                <option class="form-selection-option">中国银行，1234***********6789</option>
+                                <option class="form-selection-option">招商银行，1234***********6789</option>
+                            </select>
+                            <button class="form-selection-btn"><a href="bank_card_manage.html">管理银行卡</a></button>
+                        </div>
+                        <!--根据用户id遍历群组-->
+                        <div class="font-bold form-div col-lg-12 btn-group">
+                            <select class="form-control form-selection col-lg-9" v-model="selectPayeeGroup">
+                                <option disabled selected class="form-selection-option" value="">选择收款群组</option>
                                 <option class="form-selection-option">发工资（10人）</option>
                                 <option class="form-selection-option">发零花钱（2人）</option>
                             </select>
@@ -37,24 +53,10 @@
                         </div>
 
                         <div class="panel-body scroll-panel" style="height: 200px; overflow-y:scroll">
-                            <div class="scroll-panel-div">
-                                <div><span>收款人1，中国银行，1234***********6789，转</span><input type="text" class="col-md-10"
-                                                                                        style="width: 40px">元
-                                </div>
-                                <div><span>收款人1，中国银行，1234***********6789，转</span><input type="text" class="col-md-10"
-                                                                                        style="width: 40px">元
-                                </div>
-                                <div><span>收款人1，中国银行，1234***********6789，转</span><input type="text" class="col-md-10"
-                                                                                        style="width: 40px">元
-                                </div>
-                                <div><span>收款人1，中国银行，1234***********6789，转</span><input type="text" class="col-md-10"
-                                                                                        style="width: 40px">元
-                                </div>
-                                <div><span>收款人1，中国银行，1234***********6789，转</span><input type="text" class="col-md-10"
-                                                                                        style="width: 40px">元
-                                </div>
-                                <div><span>收款人叁，中国银行，1234***********6789，转</span><input type="text" class="col-md-10"
-                                                                                        style="width: 40px">元
+                            <!--根据群组遍历转账用户-->
+                            <div class="scroll-panel-div" v-for="payee in payees">
+                                <div><span> {{payee.payeeName}}，{{payee.bankName}}，{{payee.payeeBankCard}}，转账：</span><input type="number" class="col-md-10"
+                                                                                        style="width: 95px"  @blur="ismoney()">元
                                 </div>
                             </div>
                         </div>
@@ -104,7 +106,16 @@
 <script>
     new Vue({
         el: "#app",
-        data: {},
-        methods: {}
+        data: {
+            selectPayeeGroup:"",
+            payees:[{
+                payeeName:"张三",
+                bankName:"垃圾银行",
+                payeeBankCard:"123456"
+            }],
+        },
+        methods: {
+
+        }
     })
 </script>
