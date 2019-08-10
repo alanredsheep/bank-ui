@@ -103,7 +103,10 @@
                         </div>
                     </div>
                 </div>
-
+                <a href="transfer_bulk.html">
+                <button class="btn btn-blue btn-sm" @click="showChangeOpen()" v-show="!showChange" style="margin-top: 20px;font-size: medium" >
+                    返回批量转账
+                </button ></a>
 
                 <!--  主体内容结束  -->
             </div>
@@ -140,8 +143,11 @@
             payeeGroup:[
             ],
             //根据收款群组id查询出来的所有收款人
-            payees:[
-            ],
+            payees:[{
+                payeeName:"张三",
+                bankName:"垃圾银行",
+                payeeBankCard:"123456"
+             }],
             showInput: false,
             inputPayee: "",
             showChange: false,
