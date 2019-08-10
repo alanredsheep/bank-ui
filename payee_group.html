@@ -13,16 +13,19 @@
         ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
             color: #c6c4cd;
         }
+
         :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
             color: #c6c4cd;
-            opacity:  1;
+            opacity: 1;
         }
+
         ::-moz-placeholder { /* Mozilla Firefox 19+ */
-            color:  #c6c4cd;
-            opacity:  1;
+            color: #c6c4cd;
+            opacity: 1;
         }
+
         :-ms-input-placeholder { /* Internet Explorer 10-11 */
-            color:  #c6c4cd;
+            color: #c6c4cd;
         }
     </style>
 </head>
@@ -41,7 +44,7 @@
                     <div class="panel-body scroll-panel"
                          style="height: 300px;width: 300px; overflow-y:scroll;float: left;margin-left: 100px">
                         <div class=" col col-lg-12">
-                            <ul class="navbar-nav ml-auto payee-group-list-ul" >
+                            <ul class="navbar-nav ml-auto payee-group-list-ul">
                                 <a>
                                     <li>收款群组名称</li>
                                 </a>
@@ -51,8 +54,9 @@
                                 </li>
                                 <!--添加群组-->
                                 <li v-show="showInput">
-                                    <input type="text"  v-model="inputPayee" placeholder="请输入新的群组姓名">
-                                    <button class="btn btn-blue btn-sm" @click="addPayee()" style="margin-top: 20px;font-size: medium">
+                                    <input type="text" v-model="inputPayee" placeholder="请输入新的群组姓名">
+                                    <button class="btn btn-blue btn-sm" @click="addPayee()"
+                                            style="margin-top: 20px;font-size: medium">
                                         添加
                                     </button>
                                 </li>
@@ -67,7 +71,7 @@
                     <div class="panel-body scroll-panel"
                          style="height: 300px;width: 570px; overflow-y:scroll;float: left">
                         <div class=" col col-lg-12">
-                            <ul class="navbar-nav ml-auto payee-group-list-ul" >
+                            <ul class="navbar-nav ml-auto payee-group-list-ul">
 
                                 <!--遍历出收款群组所有收款人-->
                                 <div style="width: 100%" v-for="payee in payees">
@@ -77,39 +81,48 @@
                                     </li>
                                 </div>
 
-                                <div class="btn-group" v-show="showChange"  >
+                                <div class="btn-group" v-show="showChange">
                                     <input type="text"
                                            style="margin-left: 2px;width: 70px;background-color: rgba(255,255,255,0)"
                                            placeholder="收款人" v-model="payee.payeeName">
-                                    <select class="form-control form-selection-bank col-lg-3" style="margin-left: 10px" v-model="payee.payeeBankIdentification">
+                                    <select class="form-control form-selection-bank col-lg-3" style="margin-left: 10px"
+                                            v-model="payee.payeeBankIdentification">
                                         <option disabled selected class="form-selection-option" value="">选择银行</option>
                                         <option class="form-selection-option" value="">中国银行</option>
                                         <option class="form-selection-option">招商银行</option>
                                     </select>
-                                    <input type="text" style="width: 280px;margin-left: 10px" placeholder="收款账户" v-model="payee.payeeBankCard" />
+                                    <input type="text" style="width: 280px;margin-left: 10px" placeholder="收款账户"
+                                           v-model="payee.payeeBankCard"/>
 
                                 </div>
 
                                 <div style="margin-left: 140px;margin-top: 16px;width: 300px;" v-show="showChange">
-                                    <button class="btn btn-sm btn-warning" style="font-size: medium" @click="showChangeOpen()">取消</button>
+                                    <button class="btn btn-sm btn-warning" style="font-size: medium"
+                                            @click="showChangeOpen()">取消
+                                    </button>
                                     <button class="btn btn-sm btn-success" style="font-size: medium">保存</button>
                                 </div>
-                                <button class="btn btn-blue btn-sm" @click="showChangeOpen()" v-show="!showChange" style="margin-top: 20px;font-size: medium" >
+                                <button class="btn btn-blue btn-sm" @click="showChangeOpen()" v-show="!showChange"
+                                        style="margin-top: 20px;font-size: medium">
                                     添加
-                                </button   >
+                                </button>
 
 
                             </ul>
                         </div>
                     </div>
+                    <div style="width: 200px;margin-left: 450px">
+                        <a href="transfer_bulk.html">
+                            <button class="btn btn-sm btn-warning" style="margin-top: 20px;font-size: medium">
+                                返回批量转账
+                            </button>
+                        </a>
+                    </div>
                 </div>
-                <a href="transfer_bulk.html">
-                <button class="btn btn-blue btn-sm" @click="showChangeOpen()" v-show="!showChange" style="margin-top: 20px;font-size: medium" >
-                    返回批量转账
-                </button ></a>
 
                 <!--  主体内容结束  -->
             </div>
+
         </div>
 
     </header>
@@ -140,50 +153,50 @@
         el: "#app",
         data: {
             //查询出来的该用户所有收款群组名字
-            payeeGroup:[
-            ],
+            payeeGroup: [],
             //根据收款群组id查询出来的所有收款人
-            payees:[{
-                payeeName:"张三",
-                bankName:"垃圾银行",
-                payeeBankCard:"123456"
-             }],
+            payees: [{
+                payeeName: "张三",
+                bankName: "垃圾银行",
+                payeeBankCard: "123456"
+            }],
             showInput: false,
             inputPayee: "",
             showChange: false,
-            payee:{
-                payeeBankIdentification:"",
+            payee: {
+                payeeBankIdentification: "",
             },
         },
         methods: {
-            selectAllPayeeGroup: function(){
+            selectAllPayeeGroup: function () {
                 //查询该用户所有 收款群组显示
 
             },
-            selectPayeeById: function(id){
+            selectPayeeById: function (id) {
                 //根据 收款群组id获取所有收款人
 
             },
-            addPayeeGroup:function(){
+            addPayeeGroup: function () {
                 console.log("iiiii")
                 this.showInput = true;
             },
-            addPayee:function(){
-              if(this.inputPayee != ""){
-                  //添加一条收款群组到
-                  var payyeGroup = {};
-                  this.payeeGroup.push(payyeGroup);
-                  this.inputPayee="";
-                  this.showInput=false;
-              }
+            addPayee: function () {
+                if (this.inputPayee != "") {
+                    //添加一条收款群组到
+                    var payyeGroup = {};
+                    this.payeeGroup.push(payyeGroup);
+                    this.inputPayee = "";
+                    this.showInput = false;
+                }
             },
-            showChangeOpen: function(){
+            showChangeOpen: function () {
                 console.log(this.showChange)
-                if(this.showChange){
-                    this.showChange=false;
+                if (this.showChange) {
+                    this.showChange = false;
                     console.log(this.showChange)
-                }else{
-                this.showChange=true;}
+                } else {
+                    this.showChange = true;
+                }
             },
 
         }
