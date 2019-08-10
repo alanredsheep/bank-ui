@@ -9,6 +9,22 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/mdb.min.css" rel="stylesheet">
     <link href="styles/main.css" rel="stylesheet">
+    <style>
+        ::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+            color: #c6c4cd;
+        }
+        :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+            color: #c6c4cd;
+            opacity:  1;
+        }
+        ::-moz-placeholder { /* Mozilla Firefox 19+ */
+            color:  #c6c4cd;
+            opacity:  1;
+        }
+        :-ms-input-placeholder { /* Internet Explorer 10-11 */
+            color:  #c6c4cd;
+        }
+    </style>
 </head>
 <body id="top">
 <div id="app" style="height: 100%">
@@ -25,17 +41,24 @@
                     <div class="panel-body scroll-panel"
                          style="height: 300px;width: 300px; overflow-y:scroll;float: left;margin-left: 100px">
                         <div class=" col col-lg-12">
-                            <ul class="navbar-nav ml-auto payee-group-list-ul">
+                            <ul class="navbar-nav ml-auto payee-group-list-ul" >
                                 <a>
                                     <li>收款群组名称</li>
                                 </a>
-                                <a>
-                                    <li>收款群组名称</li>
-                                </a>
-                                <a>
-                                    <li>默认群组</li>
-                                </a>
-                                <a>
+                                <!-- 遍历出该用户所有的收款群组-->
+                                <li v-for="group in payeeGroup">
+                                    <div @click="selectPayeeById(group.payeeGroupId)">{{group.payeeGroupName}}</div>
+                                </li>
+                                <!--添加群组-->
+                                <li v-show="showInput">
+                                    <input type="text"  v-model="inputPayee" placeholder="请输入新的群组姓名">
+                                    <button class="btn btn-blue btn-sm" @click="addPayee()" style="margin-top: 20px;font-size: medium">
+                                        添加
+                                    </button>
+                                </li>
+
+                                <!--添加群组-->
+                                <a @click="addPayeeGroup()">
                                     ➕创建群组
                                 </a>
                             </ul>
@@ -44,40 +67,37 @@
                     <div class="panel-body scroll-panel"
                          style="height: 300px;width: 570px; overflow-y:scroll;float: left">
                         <div class=" col col-lg-12">
-                            <ul class="navbar-nav ml-auto payee-group-list-ul">
-                                <div style="width: 100%">
-                                    <li>农*名，中国银行，1234**************6789<input style="margin: 8px" type="checkbox">
-                                        <button class="btn btn-danger btn-sm">删除</button>
+                            <ul class="navbar-nav ml-auto payee-group-list-ul" >
+
+                                <!--遍历出收款群组所有收款人-->
+                                <div style="width: 100%" v-for="payee in payees">
+                                    <li>
+                                        {{payee.payeeName}}，{{payee.bankName}}，{{payee.payeeBankCard}}
+                                        <button class="btn btn-danger btn-sm" @click="">删除</button>
                                     </li>
                                 </div>
-                                <div style="width: 100%">
-                                    <li>农*名，中国银行，1234**************6789<input style="margin: 8px" type="checkbox">
-                                        <button class="btn btn-danger btn-sm">删除</button>
-                                    </li>
-                                </div>
-                                <div style="width: 100%">
-                                    <li>农*名，中国银行，1234**************6789<input style="margin: 8px" type="checkbox">
-                                        <button class="btn btn-danger btn-sm">删除</button>
-                                    </li>
-                                </div>
-                                <div class="btn-group">
+
+                                <div class="btn-group" v-show="showChange"  >
                                     <input type="text"
                                            style="margin-left: 2px;width: 70px;background-color: rgba(255,255,255,0)"
-                                           placeholder="收款人">
-                                    <select class="form-control form-selection-bank col-lg-3" style="margin-left: 10px">
-                                        <option disabled selected class="form-selection-option">选择银行</option>
-                                        <option class="form-selection-option">中国银行</option>
+                                           placeholder="收款人" v-model="payee.payeeName">
+                                    <select class="form-control form-selection-bank col-lg-3" style="margin-left: 10px" v-model="payee.payeeBankIdentification">
+                                        <option disabled selected class="form-selection-option" value="">选择银行</option>
+                                        <option class="form-selection-option" value="">中国银行</option>
                                         <option class="form-selection-option">招商银行</option>
                                     </select>
-                                    <input type="text" style="width: 280px;margin-left: 10px" placeholder="收款账户">
+                                    <input type="text" style="width: 280px;margin-left: 10px" placeholder="收款账户" v-model="payee.payeeBankCard" />
+
                                 </div>
-                                <button class="btn btn-blue btn-sm" style="margin-top: 20px;font-size: medium">
-                                    添加
-                                </button>
-                                <div style="margin-left: 140px;margin-top: 16px;width: 300px">
-                                    <button class="btn btn-sm btn-warning" style="font-size: medium">取消</button>
+
+                                <div style="margin-left: 140px;margin-top: 16px;width: 300px;" v-show="showChange">
+                                    <button class="btn btn-sm btn-warning" style="font-size: medium" @click="showChangeOpen()">取消</button>
                                     <button class="btn btn-sm btn-success" style="font-size: medium">保存</button>
                                 </div>
+                                <button class="btn btn-blue btn-sm" @click="showChangeOpen()" v-show="!showChange" style="margin-top: 20px;font-size: medium" >
+                                    添加
+                                </button   >
+
 
                             </ul>
                         </div>
@@ -115,7 +135,51 @@
 <script>
     new Vue({
         el: "#app",
-        data: {},
-        methods: {}
+        data: {
+            //查询出来的该用户所有收款群组名字
+            payeeGroup:[
+            ],
+            //根据收款群组id查询出来的所有收款人
+            payees:[
+            ],
+            showInput: false,
+            inputPayee: "",
+            showChange: false,
+            payee:{
+                payeeBankIdentification:"",
+            },
+        },
+        methods: {
+            selectAllPayeeGroup: function(){
+                //查询该用户所有 收款群组显示
+
+            },
+            selectPayeeById: function(id){
+                //根据 收款群组id获取所有收款人
+
+            },
+            addPayeeGroup:function(){
+                console.log("iiiii")
+                this.showInput = true;
+            },
+            addPayee:function(){
+              if(this.inputPayee != ""){
+                  //添加一条收款群组到
+                  var payyeGroup = {};
+                  this.payeeGroup.push(payyeGroup);
+                  this.inputPayee="";
+                  this.showInput=false;
+              }
+            },
+            showChangeOpen: function(){
+                console.log(this.showChange)
+                if(this.showChange){
+                    this.showChange=false;
+                    console.log(this.showChange)
+                }else{
+                this.showChange=true;}
+            },
+
+        }
     })
 </script>
