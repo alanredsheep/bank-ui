@@ -26,7 +26,14 @@ axios.interceptors.request.use(function (config) {
 function updatePhoneSms(params){
 	return axios.post("/web-service/updatePhoneSms",params);
 }
-
+//修改手机号----验证验证码是否正确
+function updatePhoneVerify(params){
+	return axios.post("/web-service/updatePhoneVerify",params);
+}
+//修改手机号----修改手机
+function updatePhone(params){
+	return axios.post("/web-service/updatePhone",params);
+}
 //---------------------chang_phone.html  end--------------------
 
 //---------------------chang_password.html  start--------------------

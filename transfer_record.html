@@ -15,24 +15,7 @@
 <div id="app" style="height: 100%">
     <header>
         <!-- Navbar-->
-        <nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar" id="navbar">
-            <div class="container"><a class="navbar-brand" href="home.html"><strong>五仁银行</strong></a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent"
-                        aria-controls="navbarContent"
-                        aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarContent">
-                    <ul class="navbar-nav ml-auto">
-                        <li class="nav-item" style="margin-right: 10px"><a class="nav-link" href="#">登出</a></li>
-                        <li class="nav-item" style="margin-right: 10px"><a class="nav-link" href="personal_center.html">{{user.userName}}，欢迎您</a>
-                        </li>
-                        <li class="nav-item"><a class="nav-link" href="message.html">消息 <span class="badge"
-                                                                                              style="font-size: 15px">112</span></a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+        <topnav></topnav>
         <!-- 背景图-->
         <div class="view hm-gradient" id="intro">
             <!-- 渐变色-->
@@ -72,7 +55,8 @@
                                         <option value="12" class="form-selection-option">12月</option>
                                     </select>
                                     <button class="btn btn-sm btn-default my-2 my-sm-0" type="submit"
-                                            style="color: #FFFFFF;font-size: 16px;margin-left: 30px" @click="listTransferRecords()">查询
+                                            style="color: #FFFFFF;font-size: 16px;margin-left: 30px"
+                                            @click="listTransferRecords()">查询
                                     </button>
                                 </form>
                             </nav>
@@ -114,7 +98,8 @@
                                 >上一页
                                 </button>
                                 <button class="btn btn-primary btn-sm" style="color: #FFFFFF;font-size: 16px"
-                                        v-bind:disabled="page.pageNum==page.totalPage?true:false" @click="pageNext()">下一页
+                                        v-bind:disabled="page.pageNum==page.totalPage?true:false" @click="pageNext()">
+                                    下一页
                                 </button>
                                 <button class="btn btn-primary btn-sm" style="color: #FFFFFF;font-size: 16px"
                                         @click="pageLast()">尾页
@@ -150,6 +135,7 @@
 <script type="text/javascript" src="js/axios-0.18.0.js"></script>
 <script type="text/javascript" src="js/vuejs-2.5.16.js"></script>
 <script type="text/javascript" src="js/api.1.js"></script>
+<script type="text/javascript" src="components/topNav.js"></script>
 <script>
     new Vue({
         el: "#app",
@@ -198,26 +184,26 @@
         methods: {
 
 // 换页相关的函数
-            pageFirst() {
+            pageFirst: function () {
                 this.page.pageNum = 1;
                 // this.listTransferRecords();
             },
-            pageLast() {
+            pageLast: function () {
                 this.page.pageNum = this.page.totalPage;
                 this.listTransferRecords();
             },
-            pagePre() {
+            pagePre: function () {
                 this.page.pageNum -= 1;
                 // this.listTransferRecords();
             },
-            pageNext() {
+            pageNext: function () {
                 this.page.pageNum += 1;
                 this.listTransferRecords();
             },
 // 转账记录的列表渲染
             listTransferRecords: function () {
                 var _this = this;
-                if (this.recordSelection.cardId=="") {
+                if (this.recordSelection.cardId == "") {
                     getTransferRecord({
                         "pageNum": this.page.pageNum,
                         "month": this.recordSelection.month,
@@ -233,12 +219,12 @@
                 }
             },
 // 获取当前日期，赋值初始化recordSelection.month
-            addDate() {
+            addDate: function () {
                 nowDate = new Date();
                 this.recordSelection.month = nowDate.getMonth() + 1;
             },
         },
-        created() {
+        created: function () {
             this.addDate();
             this.listTransferRecords();
         }
