@@ -106,7 +106,7 @@ function findPurchasesByid(params){
 }
 //查询正在进行的采购信息
 function findBystate(curr){
-   
+
     return axios.get("/web-service/findBystate/"+curr);
 }
 //查询结束的采购信息
@@ -160,4 +160,14 @@ function saveQuotation(params) {
 //
 function findCommoditityById(params) {
     return axios.post("/web-service/findCommoditityById",params);
+}
+
+
+// -----------------transfer_record.html    start--------------
+function getTransferRecord(params) {
+    return axios.get("/web-service/getTransferRecordList",params);
+}
+
+function getTransferRecordByBankCard(params) {
+    return axios.get("/web-service/getTransferRecordByBankCard",params);
 }

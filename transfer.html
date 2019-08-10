@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="full-height" lang="en-US">
+<html class="full-height" lang="en-US" xmlns:v-on="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,6 +11,7 @@
     <link href="styles/main.css" rel="stylesheet">
 </head>
 <body id="top">
+
 <div id="app" style="height: 100%">
     <header>
         <!-- Navbar-->
@@ -29,7 +30,7 @@
                                 <option class="form-selection-option">中国银行，1234***********6789</option>
                                 <option class="form-selection-option">招商银行，1234***********6789</option>
                             </select>
-                            <button class="form-selection-btn"><a>管理银行卡</a></button>
+                            <button class="form-selection-btn"><a href="bank_card_manage.html" >管理银行卡</a></button>
                         </div>
 
                         <div class="font-bold form-div">
@@ -47,7 +48,7 @@
                         </div>
                         <div class="font-bold form-div">
                             收款人姓名：
-                            <input class="col-md-10 col-lg-3" type="text">
+                            <input class="col-md-10 col-lg-3" type="text" @click="">
                         </div>
                         <div class="font-bold form-div">
                             转账金额：
