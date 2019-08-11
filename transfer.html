@@ -9,6 +9,7 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/mdb.min.css" rel="stylesheet">
     <link href="styles/main.css" rel="stylesheet">
+
 </head>
 <body id="top">
 
@@ -23,41 +24,62 @@
                 <!--   主体内容    -->
                 <div class="col-md-10 col-lg-5" style="margin-left: 360px">
                     <div class="text-center form-title">单 次 转 账</div>
-                    <form id="transfer" class="">
+                    <!--转账方式选择栏-->
+                    <nav class="navbar navbar-expand-lg navbar-light col-md-10 col-lg-9" style="margin-bottom: 20px">
+                        <div class="collapse navbar-collapse" id="navbarNav">
+                            <ul class="navbar-nav">
+                                <!--默认选中银行卡转账-->
+                                <li id="li-password-login" class="nav-item active text-center col-lg-7">
+                                    <a class="nav-link " style="color: #ffffff;font-size: x-large"
+                                       @click="changeBankCardTransfer()" href="#">银行卡转账</a>
+                                </li>
+                                <li id="li-auth-code-login" class="nav-item text-center col-lg-8">
+                                    <a class="nav-link" style="color: #ffffff;font-size: x-large"
+                                       @click="changePhoneTransfer()" href="#">手机号转账</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                    <!--银行卡转账表单-->
+                    <form id="bankCardTransfer" class="" v-show="!transferMethod" >
                         <div class="font-bold form-div col-lg-12 btn-group">
                             <select class="form-control form-selection col-lg-9" v-model="transferValue.outBankCard">
                                 <option disabled value="" class="form-selection-option">选择付款银行卡</option>
                                 <option class="form-selection-option">中国银行，1234***********6789</option>
                                 <option class="form-selection-option">招商银行，1234***********6789</option>
                             </select>
-                            <button class="form-selection-btn"><a href="bank_card_manage.html">管理银行卡</a></button>
+                            <button class="form-selection-btn"><a href="bank_card_manage.html" style="color: #ffffff">管理银行卡</a>
+                            </button>
                         </div>
 
                         <div class="font-bold form-div">
                             收款人账户：
                             <div class="font-bold form-div col-lg-8 btn-group">
-                                <select class="form-control form-selection-bank col-lg-4"  v-model="transferValue.inBank">
-                                    <option disabled  class="form-selection-option" value="">选择银行</option>
+                                <select class="form-control form-selection-bank col-lg-4"
+                                        v-model="transferValue.inBank">
+                                    <option disabled class="form-selection-option" value="">选择银行</option>
                                     <option class="form-selection-option">中国银行</option>
                                     <option class="form-selection-option">招商银行</option>
                                 </select>
                                 <div style="margin-left: 20px">
-                                    <input v-model="transferValue.inBankCard" class="col-md-10" style="width: 228px" type="text" @blur="selectBankCard()">
+                                    <input v-model="transferValue.inBankCard" class="col-md-10" style="width: 228px"
+                                           type="text" @blur="selectBankCard()">
                                 </div>
                             </div>
                         </div>
                         <div class="font-bold form-div">
                             收款人姓名：
-                            <input class="col-md-10 col-lg-3"v-model="transferValue.inBankName"  type="text" >
+                            <input class="col-md-10 col-lg-3" v-model="transferValue.inBankName" type="text">
                         </div>
                         <div class="font-bold form-div">
                             转账金额：
-                            <input class="col-md-10 col-lg-4"v-model="transferValue.muchMoney"  type="text">元
+                            <input class="col-md-10 col-lg-4" v-model="transferValue.muchMoney" type="text">元
                         </div>
                         <div class="font-bold form-div">
                             预约到账时间：
                             <div class="font-bold form-div col-lg-8 btn-group">
-                                <select class="form-control form-selection-bank col-lg-5" v-model="transferValue.transferTime" @blur="opp()" >
+                                <select class="form-control form-selection-bank col-lg-5"
+                                        v-model="transferValue.transferTime" @blur="opp()">
                                     <option value="0" class="form-selection-option">马上到账</option>
                                     <option value="2" class="form-selection-option">2小时后到账</option>
                                     <option value="4" class="form-selection-option">4小时后到账</option>
@@ -67,7 +89,7 @@
                         </div>
                         <div class="font-bold form-div">
                             备注：
-                            <input class="col-md-10 col-lg-11" type="text" v-model="transferValue.transferRemarks" >
+                            <input class="col-md-10 col-lg-11" type="text" v-model="transferValue.transferRemarks">
                         </div>
                         <!--                    <div class="font-bold form-div">-->
                         <!--                        支付密码：-->
@@ -78,6 +100,62 @@
                             </button>
                         </div>
                     </form>
+                    <!--手机号转账表单-->
+                    <form id="phoneTransfer" class=""  v-show="transferMethod" >
+                        <div class="font-bold form-div col-lg-12 btn-group">
+                            <select class="form-control form-selection col-lg-9" v-model="transferValue.outBankCard">
+                                <option disabled value="" class="form-selection-option">选择付款银行卡</option>
+                                <option class="form-selection-option">中国银行，1234***********6789</option>
+                                <option class="form-selection-option">招商银行，1234***********6789</option>
+                            </select>
+                            <button class="form-selection-btn"><a href="bank_card_manage.html" style="color: #ffffff">管理银行卡</a>
+                            </button>
+                        </div>
+
+                        <div class="font-bold form-div">
+                            收款人手机号：
+                            <div class="font-bold form-div col-lg-8 btn-group">
+                                <div style="margin-left: 20px">
+                                    <input  class="col-md-10" style="width: 228px"
+                                           type="text">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="font-bold form-div">
+                            收款人姓名：
+                            <input class="col-md-10 col-lg-3" v-model="transferValue.inBankName" type="text">
+                        </div>
+                        <div class="font-bold form-div">
+                            转账金额：
+                            <input class="col-md-10 col-lg-4" v-model="transferValue.muchMoney" type="text">元
+                        </div>
+                        <div class="font-bold form-div">
+                            预约到账时间：
+                            <div class="font-bold form-div col-lg-8 btn-group">
+                                <select class="form-control form-selection-bank col-lg-5"
+                                        v-model="transferValue.transferTime" @blur="opp()">
+                                    <option value="0" class="form-selection-option">马上到账</option>
+                                    <option value="2" class="form-selection-option">2小时后到账</option>
+                                    <option value="4" class="form-selection-option">4小时后到账</option>
+                                </select>
+                            </div>
+
+                        </div>
+                        <div class="font-bold form-div">
+                            备注：
+                            <input class="col-md-10 col-lg-11" type="text" v-model="transferValue.transferRemarks">
+                        </div>
+                        <!--                    <div class="font-bold form-div">-->
+                        <!--                        支付密码：-->
+                        <!--                        <div><input class="col-md-10 col-lg-11" type="password"></div>-->
+                        <!--                    </div>-->
+                        <div class="text-md-center">
+                            <button class="btn btn-blue btn-sm" style="font-size: medium" type="submit">确认转账</button>
+                            </button>
+                        </div>
+                    </form>
+
+
                 </div>
 
             </div>
@@ -112,40 +190,48 @@
             //转账信息
             transferValue: {
                 //付款银行卡
-                outBankCard:"",
+                outBankCard: "",
                 //收款的银行
-                inBank:"",
+                inBank: "",
                 //收款的银行卡号
-                inBankCard:"",
+                inBankCard: "",
                 //收款人姓名
-                inBankName:"",
+                inBankName: "",
                 //转账金额
-                muchMoney:"",
+                muchMoney: "",
                 //转账时间,0,代表即时转账，2代表2小时转账，4代表4小时转账
-                transferTime:"0",
+                transferTime: "0",
                 //转账备注
-                transferRemarks:""
-            }
+                transferRemarks: ""
+            },
+            //转账方式选择，false为银行卡转账，true为手机号转账
+            transferMethod: false,
 
         },
         methods: {
-            selectBankCard: function(){
-                if(this.inBankCard!=""){
+            selectBankCard: function () {
+                if (this.inBankCard != "") {
                     //调用查询银行卡归属银行方法
-                    selectBankCard(this.inBankCard).then(res=>{
-                        this.inBank=res.data.data;
+                    selectBankCard(this.inBankCard).then(res => {
+                        this.inBank = res.data.data;
 
                     })
 
                 }
             },
-            selectUserAllBankCard(){
+            selectUserAllBankCard: function() {
                 //条用根据用户ID查询所有用户银行卡的方法
+            },
+            changeBankCardTransfer:function(){
+                this.transferMethod=false;
+            },
+            changePhoneTransfer:function(){
+                this.transferMethod=true;
             }
         },
-        create(){
+        create() {
             //加载页面是调用查询用户所有银行卡方法
-           this.selectBankCard();
+            this.selectBankCard();
         }
     })
 </script>
