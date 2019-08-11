@@ -198,6 +198,10 @@ function getFundCollectionRecordByInCardAndOutCard(params) {
 
 
 //----------------bank_card_manage.html   start---------------
-function getBankCardList() {
+function upgradeBankCard() {
+    return axios.post("/web-service/upgradeBankCard", params);
+}
 
+function untiedBankCard() {
+    return axios.post("",params);
 }
