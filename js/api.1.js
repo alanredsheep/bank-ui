@@ -21,7 +21,25 @@ axios.interceptors.request.use(function (config) {
 });
 
 
-//---------------------chang_phone.html  start--------------------
+
+//--------------------- login.html  start --------------------
+//登录----发送验证码
+function loginSms(params){
+	return axios.post("/web-service/sendSms",params);
+}
+//登录----通过密码登录
+function loginByPassword(params){
+	return axios.post("/auth-service/login",params);
+}
+//登录----通过验证码登录
+function loginByAuthCode(params){
+	return axios.post("/auth-service/loginBySendSms",params);
+}
+
+//--------------------- login.html  end --------------------
+
+
+//--------------------- chang_phone.html  start --------------------
 //修改手机号----发送验证码
 function updatePhoneSms(params){
 	return axios.post("/web-service/updatePhoneSms",params);
@@ -34,9 +52,9 @@ function updatePhoneVerify(params){
 function updatePhone(params){
 	return axios.post("/web-service/updatePhone",params);
 }
-//---------------------chang_phone.html  end--------------------
+//--------------------- chang_phone.html  end --------------------
 
-//---------------------chang_password.html  start--------------------
+//--------------------- chang_password.html  start --------------------
 //修改密码----发送验证码
 function updatePasswordSms(params){
 	return axios.post("/web-service/updatePasswordSms",params);
@@ -51,7 +69,7 @@ function updatePasswordVerify(params){
 function updateBankUserPassword(params){
 	return axios.post("/web-service/updateBankUserPassword",params);
 }
-//---------------------chang_password.html  end--------------------
+//--------------------- chang_password.html  end --------------------
 
 
 

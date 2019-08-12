@@ -1,109 +1,123 @@
 <!DOCTYPE html>
 <html class="full-height" lang="en-US">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>登录</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/mdb.min.css" rel="stylesheet">
-    <link href="styles/main.css" rel="stylesheet">
-</head>
-<body id="top">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>登录</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/mdb.min.css" rel="stylesheet">
+		<link href="styles/main.css" rel="stylesheet">
+		<style>
+			::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+		    color: #c6c4cd;
+		}
+		:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+		    color: #c6c4cd;
+		    opacity:  1;
+		}
+		::-moz-placeholder { /* Mozilla Firefox 19+ */
+		    color:  #c6c4cd;
+		    opacity:  1;
+		}
+		:-ms-input-placeholder { /* Internet Explorer 10-11 */
+		    color:  #c6c4cd;
+		}
+	</style>
+	</head>
+	<body id="top">
 
-<div id="app" class="view  hm-gradient" style="height: 100%">
-    <header>
-        <!-- Navbar-->
-        <nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar" id="navbar">
-            <div class="container"><a class="navbar-brand" href="login.html"><strong>五仁银行</strong></a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent"
-                        aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation"><span
-                        class="navbar-toggler-icon"></span></button>
-                <div class="collapse navbar-collapse" id="navbarContent">
-                    <ul class="navbar-nav ml-auto">
-                        <li class="nav-item"><a class="nav-link" href="registry.html">注册</a></li>
-                        <li class="nav-item"><a class="nav-link" href="login.html">登录</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-        <!-- Intro Section-->
-        <!-- 背景图-->
-        <div class="view hm-gradient" id="intro">
-            <!-- 渐变色-->
-            <div class="full-bg-img d-flex align-items-center">
-                <div class="container">
-                    <div class="col-md-10 col-lg-5" style="margin-left: 330px">
-                        <!--                    <div class="">-->
-                        <!-- 登录组件-->
-                        <div class="login">
-                            <!-- 登录导航栏-->
-                            <nav class="navbar navbar-expand-lg navbar-light" style="margin-bottom: 30px">
-                                <div class="collapse navbar-collapse" id="navbarNav">
-                                    <ul class="navbar-nav">
-                                        <!--默认选中密码登录-->
-                                        <li id="li-password-login" class="nav-item active text-center col-lg-7">
-                                            <a class="nav-link " style="color: #ffffff;font-size: x-large"
-                                               onclick="passwordLogin()" href="#">密码登录</a>
-                                        </li>
-                                        <li id="li-auth-code-login" class="nav-item text-center col-lg-8">
-                                            <a class="nav-link" style="color: #ffffff;font-size: x-large"
-                                               onclick="authLogin()" href="#">验证码登录</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </nav>
-                            <!-- 密码登录表单-->
-                            <form id="form-password-login" class="">
-                                <div class="font-bold form-div">
-                                    手机号/身份证号：<input class="col-md-10 col-lg-11" type="text"></div>
-                                <div class="font-bold form-div">
-                                    密码：<input class="col-md-10 col-lg-11" type="password"></div>
-                                <div class="text-center">
-                                    <button class="btn btn-blue btn-sm" style="font-size: medium" type="submit">登录
-                                    </button>
-                                </div>
-                            </form>
-                            <!-- 验证码登录表单-->
-                            <form id="form-auth-code-login" class="hiddendiv">
-                                <div class="font-bold form-div">
-                                    手机号：
-                                    <div><input class="col-md-10 col-lg-11" type="text"></div>
-                                </div>
-                                <div class="font-bold form-auth-code">
-                                    验证码：
-                                    <div>
-                                        <input class="col-md-10 col-lg-7" type="text">
-                                        <button class="btn btn-sm btn-default auth-code" style="font-size: 12px">获取验证码
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="text-center">
-                                    <button class="btn btn-blue btn-sm" style="font-size: medium" type="submit">登录
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
+		<div id="app" class="view  hm-gradient" style="height: 100%">
+			<header>
+				<!-- Navbar-->
+				<nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar" id="navbar">
+					<div class="container"><a class="navbar-brand" href="login.html"><strong>五仁银行</strong></a>
+						<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent"
+						 aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+						<div class="collapse navbar-collapse" id="navbarContent">
+							<ul class="navbar-nav ml-auto">
+								<li class="nav-item"><a class="nav-link" href="registry.html">注册</a></li>
+								<li class="nav-item"><a class="nav-link" href="login.html">登录</a></li>
+							</ul>
+						</div>
+					</div>
+				</nav>
+				<!-- Intro Section-->
+				<!-- 背景图-->
+				<div class="view hm-gradient" id="intro">
+					<!-- 渐变色-->
+					<div class="full-bg-img d-flex align-items-center">
+						<div class="container">
+							<div class="col-md-10 col-lg-5" style="margin-left: 330px">
+								<!-- 登录组件-->
+								<div class="login">
+									<!-- 登录导航栏-->
+									<nav class="navbar navbar-expand-lg navbar-light" style="margin-bottom: 30px">
+										<div class="collapse navbar-collapse" id="navbarNav">
+											<ul class="navbar-nav">
+												<!--默认选中密码登录-->
+												<li id="li-password-login" class="nav-item active text-center col-lg-7">
+													<a class="nav-link " style="color: #ffffff;font-size: x-large" @click="changeLoginType()" href="javaScript:;">密码登录</a>
+												</li>
+												<li id="li-auth-code-login" class="nav-item text-center col-lg-8">
+													<a class="nav-link" style="color: #ffffff;font-size: x-large" @click="changeLoginType()" href="javaScript:;">验证码登录</a>
+												</li>
+											</ul>
+										</div>
+									</nav>
+									<!-- 密码登录表单-->
+									<form id="form-password-login" v-show="loginType">
+										<div class="font-bold form-div">
+											手机号/身份证号：
+											<input v-model="loginAccount" class="col-md-10 col-lg-11" type="text" placeholder="请输入手机号或身份证号">
+										</div>
+										<div class="font-bold form-div">
+											密码：
+											<input v-model="user.userPassword" class="col-md-10 col-lg-11" type="password" placeholder="请输入密码">
+										</div>
+										<div class="text-center">
+											<button @click.prevent="loginByPassword()" class="btn btn-blue btn-sm" style="font-size: medium">登录</button>
+										</div>
+									</form>
+									<!-- 验证码登录表单-->
+									<form id="form-auth-code-login" v-show="!loginType">
+										<div class="font-bold form-div">
+											手机号：
+											<div>
+												<input v-model="user.userPhone" class="col-md-10 col-lg-11" type="text" placeholder="请输入手机号">
+											</div>
+										</div>
+										<div class="font-bold form-auth-code">
+											验证码：
+											<div>
+												<input v-model="user.code" class="col-md-10 col-lg-6" type="text" placeholder="请输入验证码">
+												<button class="btn btn-sm btn-default auth-code" style="font-size: 12px">获取验证码</button>
+											</div>
+										</div>
+										<div class="text-center">
+											<button @click.prevent="loginByAuthCode()" class="btn btn-blue btn-sm" style="font-size: medium" type="submit">登录</button>
+										</div>
+									</form>
+								</div>
 
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
+							</div>
+						</div>
+					</div>
+				</div>
+			</header>
 
-    <footer class="page-footer indigo darken-2 center-on-small-only pt-0 mt-0">
-        <div class="footer-copyright">
-            <div class="container-fluid">
-                <p>&copy; Five Bank</p>
-            </div>
-        </div>
-    </footer>
-</div>
+			<footer class="page-footer indigo darken-2 center-on-small-only pt-0 mt-0">
+				<div class="footer-copyright">
+					<div class="container-fluid">
+						<p>&copy; Five Bank</p>
+					</div>
+				</div>
+			</footer>
+		</div>
 
-</body>
+	</body>
 </html>
-
 
 <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="js/popper.min.js"></script>
@@ -115,9 +129,188 @@
 <script type="text/javascript" src="js/vuejs-2.5.16.js"></script>
 <script type="text/javascript" src="js/api.1.js"></script>
 <script>
-    new Vue({
-        el: "#app",
-        data: {},
-        methods: {}
-    })
+	new Vue({
+		el: "#app",
+		data: {
+			user: {
+				userId: "",
+				userName: "",
+				userPhone: "",
+				userPassword: "",
+				idCard: "",
+				code: ""
+			},
+			//用于接收使用密码登录的手机或身份证
+			loginAccount: "",
+			loginType: true,
+			disabled: false,
+			// 倒计时秒数
+			time: 60,
+			// 按钮上的文字
+			codeMsg: '获取验证码',
+			// 定时器
+			timer: null
+		},
+		methods: {
+			//动态显示使用密码登录或使用验证码登录
+			changeLoginType: function() {
+				if (this.loginType) {
+					this.loginType = false;
+				} else {
+					this.loginType = true;
+				}
+			},
+			//根据手机号获取验证码
+			loginSms: function() {
+				var _this = this;
+				console.log(_this.user)
+				if (_this.user.userPhone == "") {
+					alert("请先输入手机号")
+					return
+				}
+				var patrn = /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/;
+				if (!patrn.exec(_this.user.userPhone)) {
+					alert("请输入正确的手机号码")
+					return
+				}
+				loginSms(_this.user).then(res => {
+					var d = res.data.data;
+					if (d.errno == 0) {
+						alert("发送成功,请注意查收")
+						//成功
+						//按钮不可以
+						_this.disabled = true
+						//倒计时
+						//验证码60秒倒计时
+						if (!_this.timer) {
+							_this.timer = setInterval(() => {
+								if (_this.time > 0 && _this.time <= 60) {
+									_this.time--;
+									if (_this.time !== 1) {
+										_this.codeMsg = "重新发送(" + _this.time + ")秒";
+									} else {
+										clearInterval(_this.timer);
+										//重置按钮内容
+										_this.codeMsg = "获取验证码";
+										//重置倒计时
+										_this.time = 60;
+										//重置定时器
+										_this.timer = null;
+										//恢复按钮状态
+										_this.disabled = false;
+									}
+								}
+							}, 1000)
+						}
+					} else {
+						//失败
+						alert(d.errmsg)
+					}
+				})
+			},
+			//使用密码登录
+			loginByPassword: function() {
+				var _this = this
+
+				if (_this.loginAccount == "") {
+					alert("账号不能为空")
+					return
+				}
+				if (_this.user.userPassword == "") {
+					alert("密码不能为空")
+					return
+				}
+				console.log(_this.loginAccount)
+
+				//手机验证表达式
+				var phonPeatrn = /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/;
+				//身份证验证表达式
+				var idCardPeatrn = /^(\d{15}$|^\d{18}$|^\d{17}(\d|X|x))$/;
+				//验证是否是手机
+				if (phonPeatrn.exec(_this.loginAccount)) {
+					_this.user.userPhone = _this.loginAccount;
+					//_this.loginAccount = "";
+					console.log("phone")
+					//验证是否是身份证,身份证有15位的和18位的
+				} else if (idCardPeatrn.exec(_this.loginAccount)) {
+					_this.user.idCard = _this.loginAccount;
+					//_this.loginAccount = "";
+					console.log("idCard")
+					//如果两者都不是,则提示输入的账号不正确
+				} else {
+					alert("输入的账号不正确")
+					return;
+				}
+
+				console.log(_this.user)
+				//执行使用密码登录的方法
+				loginByPassword(_this.user).then(res => {
+					var result = res.data.data;
+					console.log(result)
+					if (result.errno == 0) {
+						var token = result.token;
+						var user = result.user;
+						console.log(token)
+						console.log(user)
+						localStorage.setItem("token", token);
+						sessionStorage.setItem("user", user)
+						window.location.href = "home.html"
+					} else {
+						alert(result.errmsg)
+					}
+				})
+			},
+			//使用验证码登录
+			loginByAuthCode: function() {
+				var _this = this
+
+				if (_this.user.userPhone == "") {
+					alert("手机号不能为空")
+					return
+				}
+				if (_this.user.code == "") {
+					alert("验证码不能为空")
+					return
+				}
+				//手机验证表达式
+				var phonPeatrn = /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/;
+				if (!phonPeatrn.exec(_this.user.userPhone)) {
+					alert("手机号不正确")
+					return
+				}
+
+				console.log(_this.user)
+				loginByPassword(_this.user).then(res => {
+					var result = res.data.data;
+					console.log(result)
+					if (result.errno == 0) {
+						var token = result.token;
+						var user = result.user;
+						console.log(token)
+						console.log(user)
+						localStorage.setItem("token", token);
+						sessionStorage.setItem("user", user)
+						window.location.href = "home.html"
+					} else {
+						alert(result.errmsg)
+					}
+				})
+			},
+			//当点击选择银行时调用，查询所有合作银行
+			selectSubordinateBank: function() {
+				var _this = this;
+				//调用api.1.js中方法查询
+				selectSubordinateBank().then(res => {
+					// 讲查询出来的值放入
+					_this.subordinateBank = res.data.data.data;
+					//测试
+					// console.log(res);
+					// console.log(_this.subordinateBank);
+				})
+			},
+		},
+		created() {
+			//this.selectSubordinateBank();
+		}
+	})
 </script>
