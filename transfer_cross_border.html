@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html class="full-height" lang="en-US" xmlns:v-on="http://www.w3.org/1999/xhtml">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,114 +12,121 @@
     <link href="styles/main.css" rel="stylesheet">
 
 </head>
+
 <body id="top">
 
-<div id="app" style="height: 100%">
-    <header>
-        <!-- Navbar-->
-        <topnav></topnav>
-        <!-- 背景图-->
-        <div class="view hm-gradient" id="intro">
-            <!-- 渐变色-->
-            <div class="full-bg-img d-flex align-items-center">
-                <!--   主体内容    -->
-                <div class="col-md-10 col-lg-5" style="margin-left: 360px">
-                    <div class="text-center form-title">跨 境 转 账</div>
+    <div id="app" style="height: 100%">
+        <header>
+            <!-- Navbar-->
+            <topnav></topnav>
+            <!-- 背景图-->
+            <div class="view hm-gradient" id="intro">
+                <!-- 渐变色-->
+                <div class="full-bg-img d-flex align-items-center">
+                    <!--   主体内容    -->
+                    <div class="col-md-10 col-lg-5" style="margin-left: 360px">
+                        <div class="text-center form-title">跨 境 转 账</div>
 
-                    <!--跨境转账表单-->
-                    <form id="bankCardTransfer" class="">
-                        <div class="font-bold form-div col-lg-12 btn-group">
-                            <select class="form-control form-selection col-lg-9"
-                                    v-model="crossBorderTransferForm.bankOutCardId">
-                                <option disabled value="" class="form-selection-option">选择付款银行卡</option>
-                                <template v-for="bankCard in bankCards">
-                                    <option :value="bankCard.bankCardId" class="form-selection-option">
-                                        {{bankCard.bank}}，{{bankCard.bankCardNum}}
-                                    </option>
-                                </template>
-                            </select>
-                            <button class="form-selection-btn"><a href="bank_card_manage.html" style="color: #ffffff">管理银行卡</a>
-                            </button>
-                        </div>
-                        <div class="font-bold form-div">
-                            收款人姓名：
-                            <input class="col-md-10 col-lg-6" v-model="crossBorderTransferForm.inCardUserName"
-                                   type="text">
-                        </div>
-                        <div class="font-bold form-div">
-                            收款人账户：
-                            <div class="btn-group">
-                                <!--                                <select class="form-control form-selection-bank col-lg-4"-->
-                                <!--                                        v-model="transferValue.inBank">-->
-                                <!--                                    <option disabled class="form-selection-option" value="">选择银行</option>-->
-                                <!--                                    <option class="form-selection-option">中国银行</option>-->
-                                <!--                                    <option class="form-selection-option">招商银行</option>-->
-                                <!--                                </select>-->
-                                <div>
-                                    <input v-model="crossBorderTransferForm.bankInCard" class="col-md-10"
-                                           style="width: 257px"
-                                           type="text">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="font-bold form-div">
-                            币种选择：
-                            <div class="font-bold form-div col-lg-5 btn-group">
-                                <select class="form-control form-selection-bank col-lg-5"
-                                        v-model="crossBorderTransferForm.currencyType">
-                                    <option value="USD" class="form-selection-option">美元</option>
-                                    <option value="HKD" class="form-selection-option">港元</option>
-                                    <option value="EUR" class="form-selection-option">欧元</option>
-                                    <option value="JPY" class="form-selection-option">日元</option>
-                                    <option value="GBP" class="form-selection-option">英镑</option>
+                        <!--跨境转账表单-->
+                        <form id="bankCardTransfer" class="">
+                            <div class="font-bold form-div col-lg-12 btn-group">
+                                <select class="form-control form-selection col-lg-9"
+                                    v-model="crossBorderTransferForm.bankOutCardId" @click="getBankCardByUser()">
+                                    <option disabled value="" class="form-selection-option">选择付款银行卡</option>
+                                    <template v-for="bankCard in bankCards">
+                                        <option :value="bankCard.bankCardId" class="form-selection-option">
+                                            {{bankCard.bank}}，{{bankCard.bankCardNumber}}
+                                        </option>
+                                    </template>
                                 </select>
-                                <div style="margin-left: 30px">
-                                    汇率：{{exchangeRate}}
+                                <button class="form-selection-btn"><a href="bank_card_manage.html"
+                                        style="color: #ffffff">管理银行卡</a>
+                                </button>
+                            </div>
+                            <div class="font-bold form-div">
+                                收款人姓名：
+                                <input class="col-md-10 col-lg-6" v-model="crossBorderTransferForm.inCardUserName"
+                                    type="text">
+                            </div>
+                            <div class="font-bold form-div">
+                                收款人账户：
+                                <div class="btn-group">
+                                    <!--                                <select class="form-control form-selection-bank col-lg-4"-->
+                                    <!--                                        v-model="transferValue.inBank">-->
+                                    <!--                                    <option disabled class="form-selection-option" value="">选择银行</option>-->
+                                    <!--                                    <option class="form-selection-option">中国银行</option>-->
+                                    <!--                                    <option class="form-selection-option">招商银行</option>-->
+                                    <!--                                </select>-->
+                                    <div>
+                                        <input v-model="crossBorderTransferForm.bankInCard" class="col-md-10"
+                                            style="width: 257px" type="text">
+                                    </div>
                                 </div>
                             </div>
+                            <div class="font-bold form-div">
+                                币种选择：
+                                <div class="font-bold form-div col-lg-5 btn-group">
+                                    <select class="form-control form-selection-bank col-lg-5"
+                                        v-model="crossBorderTransferForm.currencyType" @click="getExchangeRate()">
+                                        <option value="" class="form-selection-option" selected="selected">请选择</option>
+                                        <option value="USD" class="form-selection-option">美元</option>
+                                        <option value="HKD" class="form-selection-option">港元</option>
+                                        <option value="EUR" class="form-selection-option">欧元</option>
+                                        <option value="JPY" class="form-selection-option">日元</option>
+                                        <option value="GBP" class="form-selection-option">英镑</option>
+                                    </select>
+                                    <div style="margin-left: 30px" v-if="crossBorderTransferForm.currencyType == ''">
+
+                                        <font color="red">请选择币种</font>
+                                    </div>
+                                    <div style="margin-left: 30px" v-if="crossBorderTransferForm.currencyType != ''">
+
+                                        汇率：{{exchangeRate}}
+                                    </div>
+                                </div>
 
 
-                        </div>
-                        <div class="font-bold form-div">
-                            转账金额（人民币）：
-                            <input class="col-md-10 col-lg-4" v-model="transferRecordAmountFrom"
-                                   type="number">元
-                        </div>
-                        <div class="font-bold form-div">
-                            转账金额（外币）：
-                            <input class="col-md-10 col-lg-4" v-model="transferRecordAmountTo"
-                                   type="number">元
-                        </div>
-                        <div class="font-bold form-div">
-                            备注：
-                            <input class="col-md-10 col-lg-11" type="text"
-                                   v-model="crossBorderTransferForm.transferNote">
-                        </div>
-                        <!--                    <div class="font-bold form-div">-->
-                        <!--                        支付密码：-->
-                        <!--                        <div><input class="col-md-10 col-lg-11" type="password"></div>-->
-                        <!--                    </div>-->
-                        <div class="text-md-center">
-                            <button class="btn btn-blue btn-sm" style="font-size: medium" type="submit">确认转账</button>
-                            </button>
-                        </div>
-                    </form>
+                            </div>
+                            <div class="font-bold form-div">
+                                转账金额（人民币）：
+                                <input class="col-md-10 col-lg-4" v-model="transferRecordAmountFrom" type="number">元
+                            </div>
+                            <div class="font-bold form-div">
+                                转账金额（外币）：
+                                <input class="col-md-10 col-lg-4" v-model="transferRecordAmountTo" type="number">元
+                            </div>
+                            <div class="font-bold form-div">
+                                备注：
+                                <input class="col-md-10 col-lg-11" type="text"
+                                    v-model="crossBorderTransferForm.transferNote">
+                            </div>
+                            <!--                    <div class="font-bold form-div">-->
+                            <!--                        支付密码：-->
+                            <!--                        <div><input class="col-md-10 col-lg-11" type="password"></div>-->
+                            <!--                    </div>-->
+                            <div class="text-md-center">
+                                <button class="btn btn-blue btn-sm" style="font-size: medium" type="submit"
+                                    @click.prevent="CrossBorderTransfer()">确认转账</button>
+                                </button>
+                            </div>
+                        </form>
+
+                    </div>
 
                 </div>
-
             </div>
-        </div>
-    </header>
+        </header>
 
-    <footer class="page-footer indigo darken-2 center-on-small-only pt-0 mt-0">
-        <div class="footer-copyright">
-            <div class="container-fluid">
-                <p>&copy; Five Bank</p>
+        <footer class="page-footer indigo darken-2 center-on-small-only pt-0 mt-0">
+            <div class="footer-copyright">
+                <div class="container-fluid">
+                    <p>&copy; Five Bank</p>
+                </div>
             </div>
-        </div>
-    </footer>
-</div>
+        </footer>
+    </div>
 </body>
+
 </html>
 
 <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
@@ -137,60 +145,118 @@
         data: {
             transferRecordAmountFrom: 0,
             transferRecordAmountTo: 0,
-// 跨境转账表单
+            // 跨境转账表单
             crossBorderTransferForm: {
                 // transferRecordAmountFrom: undefined,
                 // transferRecordAmountTo: undefined,
-                currencyType: "USD",
+                currencyType: "",
                 transferNote: "",
                 bankOutCardId: "",
                 inCardUserName: "",
                 bankInCard: "",
             },
-// 用户所有的本行卡
-            bankCards: [{
-                bankCardId: "1",
-                bankCardNum: "2341**8432",
-                bank: "五仁银行",
-                bankCardType: "黑卡",
-            }, {
-                bankCardId: "2",
-                bankCardNum: "2341**8432",
-                bank: "五仁银行",
-                bankCardType: "钻石卡",
-            }],
-// 实时汇率
-            exchangeRate: 7.12,
-        },
-        methods: {},
-        watch: {
-            transferRecordAmountFrom: function (val) {
-                this.transferRecordAmountFrom = val;
-                this.transferRecordAmountTo = this.transferRecordAmountFrom * this.exchangeRate;
-                if (this.transferRecordAmountFrom == '0.00') {
-                    this.transferRecordAmountFrom = '';
-                } else {
-                    this.transferRecordAmountFrom = this.transferRecordAmountFrom.replace(/\.000/, '').replace(/(\.\d)0/, '$1');
-                }
-                if (this.transferRecordAmountTo == '0.00') {
-                    this.transferRecordAmountTo = '';
-                } else {
-                    this.transferRecordAmountTo = this.transferRecordAmountTo.replace(/\.000/, '').replace(/(\.\d)0/, '$1');
-                }
+            // 用户所有的本行卡
+            bankCards: [],
+
+            // 实时汇率
+            exchangeRate: 0.00,
+            user: {
+                userId: "2",
+                userName: "啊啊啊啊啊",
+                userPhone: "235456",
+                userPassword: "123123",
 
             },
-            transferRecordAmountTo: function (val) {
-                this.transferRecordAmountTo = val;
-                this.transferRecordAmountFrom = this.transferRecordAmountTo / this.exchangeRate;
-                if (this.transferRecordAmountFrom == '0.00') {
-                    this.transferRecordAmountFrom = '';
-                } else {
-                    this.transferRecordAmountFrom = this.transferRecordAmountFrom.replace(/\.000/, '').replace(/(\.\d)0/, '$1');
+        },
+        methods: {
+            //查询实时汇率
+            getExchangeRate: function () {
+                getExchangeRate(this.crossBorderTransferForm).then(res => {
+                    //判断是否成功
+                    if (res.data.data.errno == 0) {
+                        //成功赋值
+                        this.exchangeRate = res.data.data.data.rate;
+                        console.log(this.exchangeRate)
+
+                    }
+                })
+            },
+            //保留两位小数,不四舍五入
+            numFilter(value) {
+                // 截取当前数据到小数点后三位
+                let tempVal = parseFloat(value).toFixed(3)
+                let realVal = tempVal.substring(0, tempVal.length - 1)
+                return realVal
+            },
+            //获取用户所持银行卡信息
+            getBankCardByUser: function () {
+                //获取用户信息
+                //this.user = JSON.parse(sessionStorage.getItem("user"));
+                //根据用户信息查询银行卡
+                getBankCardByUser(this.user).then(res => {
+                    if (res.data.data.errno == 0) {
+                        this.bankCards = res.data.data.data;
+
+                    }
+                })
+
+            },
+            //转账
+            CrossBorderTransfer: function () {
+
+                //校验付款卡
+                if (this.crossBorderTransferForm.bankOutCardId != "") {
+                    //校验收款人名字
+                    if (!/^[A-Za-z]/.test(this.crossBorderTransferForm.inCardUserName)) {
+                        CrossBorderTransfer(this.crossBorderTransferForm).then(res =>{
+                            //成功
+                            if(res.data.data.errno == 0){
+                                alert("转账成功")
+                            }
+                        })
+                    }
                 }
-                if (this.transferRecordAmountTo == '0.00') {
-                    this.transferRecordAmountTo = '';
+            }
+
+        },
+
+        watch: {
+            transferRecordAmountFrom: function (val) {
+                if (this.crossBorderTransferForm.bankCardType != "" && this.crossBorderTransferForm.bankCardType != null) {
+                    this.transferRecordAmountFrom = val;
+                    this.transferRecordAmountTo = this.transferRecordAmountFrom * this.exchangeRate;
+                    if (this.transferRecordAmountFrom == '0.00') {
+                        this.transferRecordAmountFrom = '';
+                    } else {
+                        this.transferRecordAmountFrom = numFilter(this.transferRecordAmountFrom);
+                    }
+                    if (this.transferRecordAmountTo == '0.00') {
+                        this.transferRecordAmountTo = '';
+                    } else {
+                        this.transferRecordAmountTo = numFilter(this.transferRecordAmountTo);
+                    }
+
                 } else {
-                    this.transferRecordAmountTo = this.transferRecordAmountTo.replace(/\.000/, '').replace(/(\.\d)0/, '$1');
+                    this.transferRecordAmountFrom = 0
+                }
+            },
+            transferRecordAmountTo: function (val) {
+                if (this.crossBorderTransferForm.bankCardType != "" && this.crossBorderTransferForm.bankCardType != null) {
+                    this.transferRecordAmountTo = val;
+                    this.transferRecordAmountFrom = this.transferRecordAmountTo / this.exchangeRate;
+                    if (this.transferRecordAmountFrom == '0.00') {
+                        this.transferRecordAmountFrom = '';
+                    } else {
+                        this.transferRecordAmountFrom = numFilter(this.transferRecordAmountFrom);
+                    }
+                    if (this.transferRecordAmountTo == '0.00') {
+                        this.transferRecordAmountTo = '';
+                    } else {
+                        this.transferRecordAmountTo = numFilter(this.transferRecordAmountTo);
+                    }
+                } else {
+
+                    this.transferRecordAmountTo = 0
                 }
             }
         },
