@@ -296,21 +296,21 @@
 					}
 				})
 			},
-			//当点击选择银行时调用，查询所有合作银行
+			//获取所有的银行的基本信息
 			selectSubordinateBank: function() {
-				var _this = this;
 				//调用api.1.js中方法查询
 				selectSubordinateBank().then(res => {
-					// 讲查询出来的值放入
-					_this.subordinateBank = res.data.data.data;
+					// 获取返回的所有银行
+					var subordinateBank = res.data.data.data;
 					//测试
-					// console.log(res);
-					// console.log(_this.subordinateBank);
+					console.log(res);
+					console.log(subordinateBank);
+					sessionStorage.setItem("subordinateBank",subordinateBank);
 				})
 			},
 		},
 		created() {
-			//this.selectSubordinateBank();
+			this.selectSubordinateBank();
 		}
 	})
 </script>
