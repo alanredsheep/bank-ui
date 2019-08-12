@@ -26,7 +26,8 @@
                 <div class="col-md-10 col-lg-3" style="margin: auto">
                     <div class="text-center form-title">支 付 密 码</div>
                     <div style="margin-bottom: 40px">
-                        <input type="password" class="col-lg-2" style="text-align:center;margin-left: 36%">
+                        <input type="password" class="col-lg-2" maxlength="6"
+                               style="text-align:center;margin-left: 36%" οnkeyup="value=value.replace(/[^\d\.{6}]/g,'')"/>
                     </div>
                     <button class="btn btn-danger btn-sm"
                             style="margin-left: 30px;margin-top: 20px;font-size: medium">
@@ -73,11 +74,7 @@
 <script>
     new Vue({
         el: "#app",
-        data: {
-
-        },
-        methods: {
-
-        }
+        data: {},
+        methods: {}
     })
 </script>

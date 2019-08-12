@@ -28,8 +28,8 @@
                     <div class="panel-body scroll-panel"
                          style="width: 40%;height: 290px; overflow-y:scroll;margin-left: 12%;float: left">
                         <div class="scroll-panel-div">
-                            <div class="container bank-card-container" v-for="bankCard in bankCards">
-                                <a @click="selectBankCard(bankCard.bankCardType)">
+                            <div class="container bank-card-container" v-for="(bankCard,index) in bankCards">
+                                <a @click="selectBankCard(index)">
                                     <div class="jumbotron row"
                                          v-bind:style='bankCard.bankCardType == "钻石卡"?{"background-image":diamondCardImage}:
                                          bankCard.bankCardType == "普通卡"?{"background-image":goldCardImage}:
@@ -48,11 +48,14 @@
                         <a href="bank_card_add.html">
                             <button @click="addBankCard()" class="btn btn-default bank-card-button">添加银行卡</button>
                         </a>
-                        <button v-bind:disabled="bankCardSelected" @click="untiedBankCard()"
-                                class="btn btn-warning bank-card-button">解绑银行卡
-                        </button>
                         <button v-bind:disabled="otherBankCardSelected" @click="upgradeBankCard()"
                                 class="btn btn-blue bank-card-button">升级银行卡
+                        </button>
+                        <button v-bind:disabled="!otherBankCardSelected" @click="untiedBankCard()"
+                                class="btn btn-warning bank-card-button">解绑银行卡
+                        </button>
+                        <button v-bind:disabled="otherBankCardSelected" @click="reportBankCard()"
+                                class="btn btn-danger bank-card-button">挂失银行卡
                         </button>
                     </div>
                     <!--主体内容结束-->
@@ -86,17 +89,22 @@
     new Vue({
         el: "#app",
         data: {
-            bankCardSelected: true,
-            otherBankCardSelected: true,
+            otherBankCardSelected: false,
+            bankCardSelected: {
+                bankCardId: "",
+            },
             bankCards: [{
+                bankCardId: "1",
                 bankCardNum: "2341**8432",
                 bank: "五仁银行",
                 bankCardType: "黑卡",
             }, {
+                bankCardId: "2",
                 bankCardNum: "2341**8432",
                 bank: "五仁银行",
                 bankCardType: "钻石卡",
             }, {
+                bankCardId: "3",
                 bankCardNum: "2341**8432",
                 bank: "中国银行",
                 bankCardType: "",
@@ -107,14 +115,14 @@
         },
         methods: {
 // 点击某张银行卡
-            selectBankCard: function (bankCardType) {
-                this.bankCardSelected = false;
-                // this.otherBankCardSelected = false;
-                if (bankCardType == "") {
+            selectBankCard: function (index) {
+                if (this.bankCards[index].bankCardType == "") {
                     this.otherBankCardSelected = true;
                 } else {
                     this.otherBankCardSelected = false;
                 }
+                this.bankCardSelected.bankCardId = this.bankCards[index].bankCardId;
+                // console.log(this.bankCardSelected.bankCardId);
             },
             untiedBankCard: function () {
                 var _this = this;

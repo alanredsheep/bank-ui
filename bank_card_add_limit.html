@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>提升转账限额</title>
+    <title>升级银行卡</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/mdb.min.css" rel="stylesheet">
@@ -18,7 +18,7 @@
     <header>
         <!-- Navbar-->
         <topnav></topnav>
-		
+
         <!-- 背景图-->
         <div class="view hm-gradient" id="intro">
             <!-- 渐变色-->
@@ -30,24 +30,20 @@
                 <div class="container">
                     <div class="col-md-10 col-lg-5" style="margin-left: 330px">
 
-                        <div class="text-center form-title">提 升 转 帐 限 额</div>
+                        <div class="text-center form-title">升 级 银 行 卡</div>
                         <form id="registry" class="">
                             <div class="font-bold form-div">
                                 银行卡号：1344 **** **** 1234 123
                             </div>
-                            <div class="font-bold form-div">
-                                当前额度：20000 元
+                            <div class="font-bold form-div btn-group">
+                                升级为：
+                                <select class="form-control form-selection-bank" style="width: 150px;margin-left: 10px">
+                                    <option>钻石卡</option>
+                                    <option>黑卡</option>
+                                </select>
                             </div>
                             <div class="font-bold form-div">
-                                <div style="float: left;margin-top: 4px">
-                                    提升额度：
-                                </div>
-                                <div>
-                                    <input class="col-md-10 col-lg-3" type="text" style="margin-right: 10px">元
-                                </div>
-                            </div>
-                            <div class="font-bold form-div">
-                                提额原因：
+                                升级原因：
                                 <input class="col-md-10 col-lg-10" type="text">
                             </div>
                             <div class="font-bold form-div">
@@ -57,7 +53,7 @@
                                     134****8045
                                 </div>
                             </div>
-<!--                            查到银行预留手机号码，自动填上-->
+                            <!--银行预留手机号码，自动填上-->
                             <div class="font-bold form-auth-code">
                                 验证码：
                                 <div>
@@ -105,11 +101,7 @@
 <script>
     new Vue({
         el: "#app",
-        data: {
-
-        },
-        methods: {
-
-        }
+        data: {},
+        methods: {}
     })
 </script>
