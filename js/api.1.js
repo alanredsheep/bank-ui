@@ -205,3 +205,15 @@ function upgradeBankCard() {
 function untiedBankCard() {
     return axios.post("",params);
 }
+
+
+//----------------transfer.html   start-------单次转账页面--------
+//查询出所有所属银行的方法
+function selectSubordinateBank(){
+     return axios.get("/web-service/getAllSubordinateBank")
+}
+// selectBankCardAttribution
+
+
+
+//----------------transfer.html   end---------------
