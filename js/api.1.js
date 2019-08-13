@@ -1,8 +1,8 @@
 //用于编写AJAX(更加利于路径的处理)
 /* 所有ajax的代码写到这里 */
-axios.defaults.baseURL = 'http://localhost:10010/v1'
+axios.defaults.baseURL = 'http://127.0.0.1:10010/v1'
 // 设置AJAX超时时间
-axios.defaults.timeout = 3000
+axios.defaults.timeout = 30000
 // 设置提交数据时的格式
 axios.defaults.headers['Content-Type'] = 'application/json'
 
@@ -110,3 +110,19 @@ function selectSubordinateBank(){
 
 
 //----------------transfer.html   end---------------
+
+//----------------transfer_cross_border.html   start-------跨境转账页面--------
+//查询汇率
+function getExchangeRate(params){
+    return axios.post("/web-service/getExchangeRate",params)
+}
+//查询用户所持有的本行卡
+function getBankCardByUser(params){
+    return axios.post("/web-service/getBankCardByUser",params)
+}
+function CrossBorderTransfer(params){
+    return axios.post("/web-service/CrossBorderTransfer",params)
+}
+
+//----------------transfer_cross_border.html   end---------------
+
