@@ -11,20 +11,23 @@
 		<link href="styles/main.css" rel="stylesheet">
 		<style>
 			::-webkit-input-placeholder { /* WebKit, Blink, Edge */
-		    color: #c6c4cd;
-		}
-		:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-		    color: #c6c4cd;
-		    opacity:  1;
-		}
-		::-moz-placeholder { /* Mozilla Firefox 19+ */
-		    color:  #c6c4cd;
-		    opacity:  1;
-		}
-		:-ms-input-placeholder { /* Internet Explorer 10-11 */
-		    color:  #c6c4cd;
-		}
-	</style>
+				color: #c6c4cd;
+			}
+			:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+				color: #c6c4cd;
+				opacity:  1;
+			}
+			::-moz-placeholder { /* Mozilla Firefox 19+ */
+				color:  #c6c4cd;
+				opacity:  1;
+			}
+			:-ms-input-placeholder { /* Internet Explorer 10-11 */
+				color:  #c6c4cd;
+			}
+			.input-border{
+				border: #BF360C;
+			}
+		</style>
 	</head>
 	<body id="top">
 
@@ -68,13 +71,14 @@
 									</nav>
 									<!-- 密码登录表单-->
 									<form id="form-password-login" v-show="loginType">
+										<div>用户名或密码有误，请重新输入或<a href="javaScript:;">找回密码</a></div>
 										<div class="font-bold form-div">
 											手机号/身份证号：
 											<input v-model="loginAccount" class="col-md-10 col-lg-11" type="text" placeholder="请输入手机号或身份证号">
 										</div>
 										<div class="font-bold form-div">
 											密码：
-											<input v-model="user.userPassword" class="col-md-10 col-lg-11" type="password" placeholder="请输入密码">
+											<input v-model="user.userPassword" class="col-md-10 col-lg-11" type="password" :placeholder="passwordPlaceholder">
 										</div>
 										<div class="text-center">
 											<button @click.prevent="loginByPassword()" class="btn btn-blue btn-sm" style="font-size: medium">登录</button>
@@ -92,7 +96,7 @@
 											验证码：
 											<div>
 												<input v-model="user.code" class="col-md-10 col-lg-6" type="text" placeholder="请输入验证码">
-												<button class="btn btn-sm btn-default auth-code" style="font-size: 12px">获取验证码</button>
+												<button @click.prevent="loginSms()" class="btn btn-sm btn-default auth-code" style="font-size: 12px">获取验证码</button>
 											</div>
 										</div>
 										<div class="text-center">
@@ -143,6 +147,7 @@
 			//用于接收使用密码登录的手机或身份证
 			loginAccount: "",
 			loginType: true,
+			passwordPlaceholder: "请输入密码",
 			disabled: false,
 			// 倒计时秒数
 			time: 60,
@@ -202,7 +207,8 @@
 								}
 							}, 1000)
 						}
-					} else {
+					} 
+					else {
 						//失败
 						alert(d.errmsg)
 					}
@@ -253,9 +259,13 @@
 						console.log(token)
 						console.log(user)
 						localStorage.setItem("token", token);
-						sessionStorage.setItem("user", user)
+						sessionStorage.setItem("user", JSON.stringify(user))
 						window.location.href = "home.html"
-					} else {
+					} else if(result.errno == 1){
+						alert(result.errmsg)
+					} else if(result.errno == 2){
+						alert(result.errmsg)
+					} else if(result.errno == 3){
 						alert(result.errmsg)
 					}
 				})
@@ -289,7 +299,7 @@
 						console.log(token)
 						console.log(user)
 						localStorage.setItem("token", token);
-						sessionStorage.setItem("user", user)
+						sessionStorage.setItem("user", JSON.stringify(user))
 						window.location.href = "home.html"
 					} else {
 						alert(result.errmsg)
@@ -303,8 +313,8 @@
 					// 获取返回的所有银行
 					var subordinateBank = res.data.data.data;
 					//测试
-					console.log(res);
-					console.log(subordinateBank);
+					//console.log(res);
+					//console.log(subordinateBank);
 					sessionStorage.setItem("subordinateBank",subordinateBank);
 				})
 			},
