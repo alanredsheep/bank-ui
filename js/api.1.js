@@ -120,9 +120,17 @@ function getExchangeRate(params){
 function getBankCardByUser(params){
     return axios.post("/web-service/getBankCardByUser",params)
 }
+//转账
 function CrossBorderTransfer(params){
     return axios.post("/web-service/CrossBorderTransfer",params)
 }
-
+//根据人民币查询外币
+function getExchangeRatePrice(price,type){
+    return axios.get("/web-service/getExchangeRatePrice/"+price+"/"+type)
+}
+//根据外币查询人民币getExchangeRateCNY
+function getExchangeRateCNY(price,type){
+    return axios.get("/web-service/getExchangeRateCNY/"+price+"/"+type)
+}
 //----------------transfer_cross_border.html   end---------------
 
