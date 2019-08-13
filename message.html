@@ -30,9 +30,9 @@
                     <div class="panel-body scroll-panel"
                          style="height: 300px;width: 300px; overflow-y:scroll;float: left;margin-left: 200px">
                         <div class=" col col-lg-12">
-                            <ul class="navbar-nav ml-auto payee-group-list-ul" v-for="tf in transferRecords">
-                                <a @click="transfer(tf.transferRecordId)">
-                                    <li>来自 {{tf.userName}} 的主动收款</li>
+                            <ul class="navbar-nav ml-auto payee-group-list-ul" v-for="active in activeGatherings">
+                                <a @click="clickPayment(active.activeId)">
+                                    <li>来自 {{active.inUserName}} 的主动收款</li>
                                 </a>
                             </ul>
                             <ul class="navbar-nav ml-auto payee-group-list-ul" v-for="mt in managerTranscations">
@@ -43,37 +43,36 @@
                         </div>
                     </div>
                     <!--展示主动收款通知-->
-                    <form style="float: left;margin-left: 20px;background-color: rgba(255,255,255,0.2);height: 300px;width: 300px" v-if="flag==0">
+                    <form    v-for="active in activeById()"  :key="transferRecordId" @submit.prevent="onSubmit" style="float: left;margin-left: 20px;background-color: rgba(255,255,255,0.2);height: 300px;width: 300px" v-if="flag==0">
                         <div class="font-bold form-div">
-                            收款人 ：{{transferRecord.userName}}
+                            收款人 ：{{active.inUserName}}
                         </div>
                         <div class="font-bold form-div">
-                            收款账户：{{transferRecord.bankOutCard}}
+                            收款账户：{{active.inBankCard}}
                         </div>
                         <div class="font-bold form-div">
-                            付款金额：{{transferRecord.transferRecordAmount}}
+                            付款金额：{{active.muchMoney}}
                             <u>￥</u>
                         </div>
                         <div class="font-bold form-div">
-                            备注: {{transferRecord.transferRecordAmount}}
+                            备注: {{active.transferRemarks}}
                         </div>
                         <div class="font-bold form-div">
                             <select class="form-control form-selection col-lg-11"
-                                    style="margin-left: 5px;margin-top: 10px" @change="bank" v-model="bankId">
-                                <option  class="form-selection-option" v-for="bank in bankCards" :value="bank.bankCardId" >
-                                   {{bank.bankName}},{{bank.bankCardNumber}}
+                                    style="margin-left: 5px;margin-top: 10px"  v-model="userBankId">
+                                <option  class="form-selection-option" v-for="banks in bankCards" :value="banks.bankCardId" >
+                                   {{banks.bank}},{{banks.bankCardNumber}}
                                 </option>
                             </select>
                         </div>
-                        <div class="font-bold form-div" v-if="bankFlag==1">
-                            单笔限额: {{bankCard.bankCardTransferLimit}}
-                            <u>￥</u>
+                        <div class="font-bold form-div" v-for="banks in bankById()" :key="userBankId">
+                            单笔限额:{{banks.bankCardType}}
                         </div>
-                        <button style="margin-left: 8%;margin-top: 20px" class="btn btn-danger" >拒绝</button>
-                        <button style="margin-left: 8%;margin-top: 20px" class="btn btn-success"  >确认付款</button>
+                        <button style="margin-left: 8%;margin-top: 20px" class="btn btn-danger" @click="userfalse(active.activeId)" >拒绝</button>
+                        <button style="margin-left: 8%;margin-top: 20px" class="btn btn-success"  @click="usertrue(active.activeId)">确认付款</button>
                     </form>
                     <!--展示提额通知-->
-                    <form style="float: left;margin-left: 20px;background-color: rgba(255,255,255,0.2);height: 300px;width: 300px" v-else>
+                    <form   v-for="managerTranscation in managerById()" :key="managerId" @submit.prevent="onSubmit"  style="float: left;margin-left: 20px;background-color: rgba(255,255,255,0.2);height: 300px;width: 300px" v-else>
                         <div class="font-bold form-div">
                             申请卡号 ：{{managerTranscation.bankCard}}
                         </div>
@@ -98,6 +97,7 @@
                 </div>
             </div>
         </div>
+
     </header>
 
     <footer class="page-footer indigo darken-2 center-on-small-only pt-0 mt-0">
@@ -126,48 +126,74 @@
         el: "#app",
         data: {
             /*获取所有相关主动收款通知*/
-            transferRecords:[
-                {   //订单id
-                    transferRecordId: "11",
-                    //收款人id
-                    userId: "11",
-                    //收款人姓名
-                    userName: "11",
+            activeGatherings:[
+                {
+                    inUserId:"A1",
+                    //主动收款人姓名
+                    inUserName:"A1",
+                    //收款人银行卡归属行
+                    inBank:"A1",
                     //收款人卡号
-                    bankOutCard:"11",
-                    //交易额
-                    transferRecordAmount: "11",
-                    //交易备注
-                    transferNote: "11"
+                    inBankCard:"A1",
+                    //付款人id
+                    outUserId:"A1",
+                    //付款人姓名
+                    outUserName:"A1",
+                    //付款人银行卡归属行
+                    outBank:"A1",
+                    //付款人卡号
+                    outBankCard:"A1",
+                    //订单id
+                    activeId:"A1",
+                    //订单金额
+                    muchMoney:"A1",
+                    //订单备注
+                    transferRemarks:"A1",
+                    //订单类型
+                    activeType:"A1",
+                    //订单状态
+                    /**
+                     * 交易状态
+                     * 110 交易中
+                     * 120 成功
+                     * 130 失败
+                     */
+                    activestate:"110"
                 },
-                {   //订单id
-                    transferRecordId: "22",
-                    //收款人id
-                    userId: "22",
-                    //收款人姓名
-                    userName: "22",
+                {
+                    inUserId:"b1",
+                    //主动收款人姓名
+                    inUserName:"b1",
+                    //收款人银行卡归属行
+                    inBank:"b1",
                     //收款人卡号
-                    bankOutCard:"22",
-                    //交易额
-                    transferRecordAmount: "22",
-                    //交易备注
-                    transferNote: "22"
+                    inBankCard:"b1",
+                    //付款人id
+                    outUserId:"b1",
+                    //付款人姓名
+                    outUserName:"b1",
+                    //付款人银行卡归属行
+                    outBank:"b1",
+                    //付款人卡号
+                    outBankCard:"b1",
+                    //订单id
+                    activeId:"b1",
+                    //订单金额
+                    muchMoney:"b1",
+                    //订单备注
+                    transferRemarks:"b1",
+                    //订单类型
+                    activeType:"b1",
+                    //订单状态
+                    /**
+                     * 交易状态
+                     * 110 交易中
+                     * 120 成功
+                     * 130 失败
+                     */
+                    activestate:"120"
                 }
             ],
-            /*展示单个收款通知*/
-            transferRecord:{   //订单id
-                transferRecordId: "",
-                //收款人id
-                userId: "",
-                //收款人姓名
-                userName: "",
-                //收款人卡号
-                bankOutCard:"",
-                //交易额
-                transferRecordAmount: "",
-                //交易备注
-                transferNote: ""
-            },
             /*提额申请通知*/
             managerTranscations:[
                 {
@@ -191,17 +217,6 @@
                     transcationMsg: "22"
                 }
             ],
-            /*展示单个提额申请通知*/
-            managerTranscation:{
-                //订单id
-                transcationId: "",
-                //订单卡号
-                bankCard: "",
-                //订单状态
-                transcationStatus: "",
-                //申请备注
-                transcationMsg: ""
-            },
             /*获取用户名下所有银行卡*/
             bankCards:[
                 {
@@ -209,89 +224,93 @@
                     bankCardId:"11",
                     //银行卡号
                     bankCardNumber:"11",
-                    //所属银行
-                    bankName:"11",
-                    //当日交易限额
-                    bankCardTransferLimit:"11"
+                    //银行卡所属银行
+                    bank:"11",
+                    //银行卡类型
+                    bankCardType:"普通卡"
                 },
                 {
                     //银行卡id
                     bankCardId:"22",
                     //银行卡号
                     bankCardNumber:"22",
-                    //所属银行
-                    bankName:"22",
-                    //当日交易限额
-                    bankCardTransferLimit:"22"
-                }
+                    //银行卡所属银行
+                    bank:"22",
+                    //银行卡类型
+                    bankCardType:"钻石卡"
+                },
             ],
-            /*获取用户所选卡信息*/
-            bankCard:{
-                //银行卡id
-                bankCardId:"",
-                //银行卡号
-                bankCardNumber:"",
-                //所属银行
-                bankName:"",
-                //当日交易限额
-                bankCardTransferLimit:""
-            },
             /*判断用户点了提额通知还是收款通知(0:收款通知,1提额通知)*/
             flag:"0",
             /*获取用户所选卡id*/
-            bankId:"",
-            bankFlag:'0',
-
-
-
+            userBankId:"",
+            //获取所选银行卡的支付密码
+            userBankPassword:"",
+            //根据用户点击展示收款信息的key
+            transferRecordId:"",
+            //根据用户点击提额通知id展示信息的key
+            managerId:""
         },
         methods: {
-            /*页面加载完成执行的方法*/
-
-
             /*点击主动收款通知执行的方法*/
-            transfer: function(obj){
-                alert(obj)
-                    this.transferRecords.forEach( g => {
-                        if(g.transferRecordId==obj){
-                        this.transferRecord=g;
-                    }
-                });
+            clickPayment: function(obj){
+                this.transferRecordId=obj;
+                this.userBankId=null;
                 this.flag="0";
+            },
+            /*根据id展示收款信息*/
+            activeById(){
+                    return this.activeGatherings.filter(item =>{
+                        if(item.activeId==this.transferRecordId){
+                        return true
+                    }
+                })
             },
             /*点击提额申请通知执行的方法*/
             manager: function(obj){
-                alert(obj)
-                    this.managerTranscations.forEach( g => {
-                        if(g.transcationId==obj){
-                        this.managerTranscation=g;
+                this.managerId=obj;
+                this.flag="1";
+            },
+            /*根据id展示提额通知*/
+            managerById(){
+                    return this.managerTranscations.filter(item =>{
+                        if(item.transcationId==this.managerId){
+                        return true
+                    }
+                })
+            },
+            /*根据银行卡id展示该卡交易限额*/
+            bankById(){
+                    return this.bankCards.filter(item =>{
+                        if(item.bankCardId==this.userBankId){
+                            if(item.bankCardType.indexOf("普") != -1){
+                                item.bankCardType="￥1500,000"
+                            }else if(item.bankCardType.indexOf("黑") != -1){
+                                item.bankCardType="￥2500,000"
+                            }else if(item.bankCardType.indexOf("钻") != -1){
+                                item.bankCardType="￥3500,000"
+                            }
+                            else if(item.bankCardType.indexOf("企") != -1){
+                                item.bankCardType="￥4500,000"
+                            }
+                        return true
                     }
                 });
-                this.flag="1";
 
             },
-            /*选择了银行卡执行的方法*/
-            bank: function(){
-                alert(this.bankId)
-                this.bankCards.forEach( g => {
-                    if(g.bankCardId==this.bankId){
-                    this.bankCard=g;
-                    this.bankFlag="1";
-                    }
-            });
-
-            },
-            /*用户点击拒绝意执行的方法*/
-            userfalse:function(){
+            /*用户点击拒绝付款执行的方法*/
+            userfalse:function(obj){
 
             },
 
-            /*用户同意执行的方法*/
-            usertrue:function(){
+            /*用户同意付款执行的方法*/
+            usertrue:function(obj){
 
-            }
+            },
+            /*取消表单的默认提交*/
+            onSubmit:function(){return false;},
             /*页面加载完成事件*/
-            ,created: function () {
+            created: function () {
 
             }
 
