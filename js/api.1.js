@@ -22,6 +22,17 @@ axios.interceptors.request.use(function (config) {
 
 
 
+//--------------------- registry.html  start --------------------
+//注册----获取验证码
+function registrySms(phone){
+	return axios.get("/web-service/registrySms/"+phone);
+}
+//注册----注册
+function registry(params){
+	return axios.post("/auth-service/registry",params);
+}
+//--------------------- registry.html  end --------------------
+
 //--------------------- login.html  start --------------------
 //登录----发送验证码
 function loginSms(params){
@@ -104,8 +115,14 @@ function untiedBankCard() {
 function selectSubordinateBank(){
      return axios.get("/web-service/getAllSubordinateBank")
 }
-// selectBankCardAttribution
-
+//根据他行银行卡号查询出所属银行标识
+function selectBankCardAttribution(params){
+    return axios.post("/web-service/selectSubordinateBankByNum", params);
+}
+//单次转账提交
+function submitTransfer(params) {
+    return axios.post("/web-service/verifyBankCardForVo", params);
+}
 
 
 //----------------transfer.html   end---------------
@@ -133,6 +150,38 @@ function getExchangeRateCNY(price,type){
 }
 //----------------transfer_cross_border.html   end---------------
 
+//----------------payee_group.html   start-------收款群组页面--------
+//根据用户查询出所有收款群组
+function selectPayeeGroupByUid(params){
+    return axios.post("/web-service/selectPayeeGroupByUid",params)
+}
+//根据收款群组id查询所属收款人
+function selectPayeeById(params) {
+    return axios.post("/web-service/selectPayeeById",params)
+}
+//添加一条收款群组
+function addPayeeGroup(params){
+    return axios.post("/web-service/addPayeeGroup",params)
+}
+// 根据id删除群组用户
+function deletePayeeById(params){
+    return axios.post("/web-service/deletePayeeById",params)
+}
+//----------------payee_group.html   end---------------
+
+//----------------bank_card_add_limit.html   start-------升级卡类型--------
+//通过银行卡id查询银行卡信息
+function getBankCardBybankCardId(bankCardId){
+    return axios.get("/web-service/getBankCardBybankCardId/"+bankCardId)
+}
+//发短信
+function sendUpgradeCard(bankCardId){
+    return axios.get("/web-service/sendUpgradeCard/"+bankCardId)
+}
+//申请
+function UpgradeCard(params){
+    return axios.post("/web-service/UpgradeCard",params)
+}
 
 //----------------bank_card_add.html    start------------------
 // 绑定银行卡
@@ -149,3 +198,10 @@ function findBankCardIdentification(bankCard) {
 }
 
 //----------------bank_card_add.html    end------------------
+
+
+//----------------bank_card_add_limit.html   end---------------
+//根据用户id获取该用户的其他银行的银行卡
+function getOtherBankCardByUserId(params){
+	return axios.get("/web-service/getOtherBankCardByUserId/"+params)
+}
