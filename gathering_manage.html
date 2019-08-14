@@ -33,9 +33,9 @@
                     <div class="panel-body scroll-panel"
                          style="height: 400px;width: 300px; overflow-y:scroll;float: left;margin-left: 200px">
                         <div class=" col col-lg-12">
-                            <ul class="navbar-nav ml-auto payee-group-list-ul" v-for="transferRecord in transferRecords">
-                                <a @click="clickHistory(transferRecord.transferRecordId)">
-                                    <li>发往 {{transferRecord.inCardUserName}}的主动收款</li>
+                            <ul class="navbar-nav ml-auto payee-group-list-ul" v-for="active in activeGatherings">
+                                <a @click="clickHistory(active.activeId)">
+                                    <li>发往 {{active.outUserName}}的主动收款</li>
                                 </a>
                             </ul>
                             <ul class="navbar-nav ml-auto payee-group-list-ul">
@@ -43,50 +43,45 @@
                                     <li>➕发起主动收款</li>
                                 </a>
                             </ul>
-
                         </div>
                     </div>
                     <!--                查看历史收款记录-->
-                    <form v-for="transferRecord in transferRecordsByID()" :key="transferRecordId" @submit.prevent="onSubmit" v-show="flag==0" style="float: left;margin-left: 20px;background-color: rgba(255,255,255,0.2);height: 400px;width: 300px"    >
+                    <form v-for="active in transferRecordsByID()" :key="transferRecordId" @submit.prevent="onSubmit" v-show="flag==0" style="float: left;margin-left: 20px;background-color: rgba(255,255,255,0.2);height: 400px;width: 300px"    >
                         <div class="font-bold form-div"  >
-                            收款银行卡：{{transferRecord.bankOutCard}}
-                        </div>
-        <!--                <div style="float:left;margin-bottom: 10px">
-
-                        </div>-->
-                        <div class="font-bold form-div">
-                            付款人：{{transferRecord.inCardUserName}}
+                            收款银行卡：{{active.inBank}}{{active.inBankCard}}
                         </div>
                         <div class="font-bold form-div">
-                            收款金额：{{transferRecord.transferRecordAmount}}
+                            付款人：{{active.outUserName}}
+                        </div>
+                        <div class="font-bold form-div">
+                            收款金额：{{active.muchMoney}}
                             元
                         </div>
                         <div class="font-bold form-div">
-                            备注：{{transferRecord.transferNote}}
+                            备注：{{active.transferRemarks}}
                         </div>
-                       <div class="font-bold form-div" v-show="transferRecord.transferStatus==0">
+                       <div class="font-bold form-div" v-show="active.activestate==110">
                             订单状态：处理中
                         </div>
-                        <div class="font-bold form-div" v-show="transferRecord.transferStatus==1">
+                        <div class="font-bold form-div" v-show="active.activestate==120">
                             订单状态：已完成
                         </div>
-                        <div class="font-bold form-div" v-show="transferRecord.transferStatus==2">
+                        <div class="font-bold form-div" v-show="active.activestate==130">
                             订单状态：已取消
                         </div>
-                        <div class="text-md-center" v-show="transferRecord.transferStatus==0">
+                        <div class="text-md-center" v-show="active.activestate==110">
                            <button @click="abolishGathering()">取消收款</button>
                         </div>
                     </form>
-
                     <form style="float: left;margin-left: 20px;background-color: rgba(255,255,255,0.2);height: 400px;width: 300px" v-show="flag==1" @submit.prevent="onSubmit">
                         <div class="font-bold form-div" >
                             <div style="float:left;margin-bottom: 10px">
                                 选择收款银行卡：
                             </div>
                             <select class="form-control form-selection col-lg-11"
-                                    style="margin-left: 5px;margin-top: 10px"  v-model="transfer.bankCardId">
-                                <option  class="form-selection-option" v-for="bank in bankCards" :value="bank.bankCardId" >
-                                    {{bank.bankName}},{{bank.bankCardNumber}}
+                                    style="margin-left: 5px;margin-top: 10px"  v-model="userBankId">
+                                <option  class="form-selection-option" v-for="banks in bankCards" :value="banks.bankCardId" >
+                                    {{banks.bank}},{{banks.bankCardNumber}}
                                 </option>
                             </select>
                         </div>
@@ -94,7 +89,7 @@
                         <div class="font-bold form-div">
                             付款人姓名：
                             <input class="col-md-10 col-lg-10" type="text" style="margin-left: 8px"
-                                   placeholder="输入付款人姓名" v-model="transfer.inCardUserName">
+                                   placeholder="输入付款人姓名" v-model="activeGathering.outUserName">
                         </div>
                         <div class="font-bold form-div">
                             付款人手机号：
@@ -103,11 +98,11 @@
                         </div>
                         <div class="font-bold form-div">
                             收款金额：
-                            <input class="col-md-10 col-lg-3" type="text" v-model="transfer.transferRecordAmount">元
+                            <input class="col-md-10 col-lg-3" type="text" v-model="activeGathering.muchMoney">元
                         </div>
                         <div class="font-bold form-div">
                             备注：
-                            <input class="col-md-10 col-lg-8" type="text" v-model="transfer.transferNote">
+                            <input class="col-md-10 col-lg-8" type="text" v-model="activeGathering.transferRemarks">
                         </div>
                         <div class="text-md-center" >
                             <button class="btn btn-blue btn-sm" style="font-size: medium" @click="upSubmit()">确认</button>
@@ -147,68 +142,85 @@
         el: "#app",
         data: {
             /*历史主动收款记录*/
-            transferRecords:[
+            activeGatherings:[
                     {
-                    //发起人
-                    userId: "111",
-                    //发起人卡号
-                    bankOutCard: "111",
-                    //收款金额
-                    transferRecordAmount: "111",
-                    //订单备注
-                    transferNote: "111",
-                    //响应人姓名
-                    inCardUserName: "111",
-                    //订单唯一标识
-                    transferRecordId:"1",
-                    //订单状态(处理中,交易成功,交易失败)
-                    transferStatus: "0"
+                         inUserId:"A1",
+                        //主动收款人姓名
+                        inUserName:"A1",
+                        //收款人银行卡归属行
+                        inBank:"A1",
+                        //收款人卡号
+                        inBankCard:"A1",
+                        //付款人id
+                        outUserId:"A1",
+                        //付款人姓名
+                        outUserName:"A1",
+                        //付款人银行卡归属行
+                        outBank:"A1",
+                        //付款人卡号
+                        outBankCard:"A1",
+                        //订单id
+                        activeId:"A1",
+                        //订单金额
+                        muchMoney:"A1",
+                        //订单备注
+                        transferRemarks:"A1",
+                        //订单类型
+                        activeType:"A1",
+                        //订单状态
+                        /**
+                         * 交易状态
+                         * 110 交易中
+                         * 120 成功
+                         * 130 失败
+                         */
+                        activestate:"110"
                 },
                 {
-                    //发起人
-                    userId: "3",
-                    //发起人卡号
-                    bankOutCard: "222",
-                    //收款金额
-                    transferRecordAmount: "222",
+                    inUserId:"b1",
+                    //主动收款人姓名
+                    inUserName:"b1",
+                    //收款人银行卡归属行
+                    inBank:"b1",
+                    //收款人卡号
+                    inBankCard:"b1",
+                    //付款人id
+                    outUserId:"b1",
+                    //付款人姓名
+                    outUserName:"b1",
+                    //付款人银行卡归属行
+                    outBank:"b1",
+                    //付款人卡号
+                    outBankCard:"b1",
+                    //订单id
+                    activeId:"b1",
+                    //订单金额
+                    muchMoney:"b1",
                     //订单备注
-                    transferNote: "222",
-                    //响应人姓名
-                    inCardUserName: "222",
-                    //订单唯一标识
-                    transferRecordId:"2",
-                    //订单状态(处理中,交易成功,交易失败)
-                    transferStatus: "1"
-                },
-                {
-                    //发起人
-                    userId: "333",
-                    //发起人卡号
-                    bankOutCard: "333",
-                    //收款金额
-                    transferRecordAmount: "333",
-                    //订单备注
-                    transferNote: "333",
-                    //响应人姓名
-                    inCardUserName: "33",
-                    //订单唯一标识
-                    transferRecordId:"33",
-                    //订单状态(处理中,交易成功,交易失败)
-                    transferStatus: "2"
+                    transferRemarks:"b1",
+                    //订单类型
+                    activeType:"b1",
+                    //订单状态
+                    /**
+                     * 交易状态
+                     * 110 交易中
+                     * 120 成功
+                     * 130 失败
+                     */
+                    activestate:"120"
                 }
             ],
             /*获取用户新增主动收款的信息*/
-            transfer:{
-                //收款卡id
-                bankCardId:"",
-                //收款卡卡号
-                bankOutCard:"",
-                //收款金额
-                transferRecordAmount:"",
-                //交易备注
-                transferNote: "",
+            activeGathering:{
+                //收款人卡号
+                inBankCard:"A1",
                 //付款人姓名
-                inCardUserName: ""
+                outUserName:"A1",
+                //订单金额
+                muchMoney:"A1",
+                //订单备注
+                transferRemarks:"A1",
+
             },
             /*获取用户名下所有银行卡*/
             bankCards:[
@@ -217,24 +229,22 @@
                     bankCardId:"11",
                     //银行卡号
                     bankCardNumber:"11",
-                    //所属银行
-                    bankName:"11",
-                    //当日交易限额
-                    bankCardTransferLimit:"11"
+                    //银行卡所属银行
+                    bank:"11"
                 },
                 {
                     //银行卡id
                     bankCardId:"22",
                     //银行卡号
                     bankCardNumber:"22",
-                    //所属银行
-                    bankName:"22",
-                    //当日交易限额
-                    bankCardTransferLimit:"22"
-                }
+                    //银行卡所属银行
+                    bank:"22"
+                },
             ],
             //付款人手机号
-            userPhone: "",
+            userPhone: "18100000",
+            //选择的收款银行卡id
+            userBankId:"",
             /*记录用户点击的是新增收款记录还是查询历史收款记录*/
             flag: "0",
             //根据用户点击展示历史记录的key
@@ -251,8 +261,8 @@
             },
             /*根据id查询历史记录*/
             transferRecordsByID(){
-                    return this.transferRecords.filter(item =>{
-                        if(item.transferRecordId==this.transferRecordId){
+                    return this.activeGatherings.filter(item =>{
+                        if(item.activeId==this.transferRecordId){
                         return true
                     }
                 })
@@ -265,18 +275,24 @@
             abolishGathering:function() {
                 //状态修改为取消的订单id
                 this.transferRecordId
-                //修改状态为已取消
+                //修改状态为已取消此订单id发送到后台修改订单状态为取消
              },
             /*取消表单默认提交*/
             onSubmit:function(){return false;},
             /*提交主动收款*/
             upSubmit:function () {
-                    this.transfer.bankCardId=this.bankId;
+                //收款信息
+                   this.activeGathering
+                //付款人手机号
+                this.userPhone
+                //选择的收款银行卡id
+                this.userBankId
+
             },
 
         },
         created:function(){
-            console.log(this.transferRecords[0])
+
         }
 
     })
