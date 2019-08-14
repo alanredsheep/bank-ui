@@ -1,102 +1,153 @@
 <!DOCTYPE html>
 <html class="full-height" lang="en-US">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>注册</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/mdb.min.css" rel="stylesheet">
-    <link href="styles/main.css" rel="stylesheet">
-</head>
-<body id="top">
-<div id="app" style="height: 100%">
-    <header>
-        <!-- Navbar-->
-        <nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar" id="navbar">
-            <div class="container"><a class="navbar-brand" href="login.html"><strong>五仁银行</strong></a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent"
-                        aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation"><span
-                        class="navbar-toggler-icon"></span></button>
-                <div class="collapse navbar-collapse" id="navbarContent">
-                    <ul class="navbar-nav ml-auto">
-                        <li class="nav-item"><a class="nav-link" href="registry.html">注册</a></li>
-                        <li class="nav-item"><a class="nav-link" href="login.html">登录</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-        <!-- Intro Section-->
-        <!-- 背景图-->
-        <div class="view hm-gradient" id="intro">
-            <!-- 渐变色-->
-            <div class="full-bg-img d-flex align-items-center">
-                <!-- 主体内容-->
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>注册</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/mdb.min.css" rel="stylesheet">
+		<link href="styles/main.css" rel="stylesheet">
+		<style>
+			.msg{
+				color: red;
+				font-size: 10px;
+			}
+			::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+			    color: #c6c4cd;
+			}
+			:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+			    color: #c6c4cd;
+			    opacity:  1;
+			}
+			::-moz-placeholder { /* Mozilla Firefox 19+ */
+			    color:  #c6c4cd;
+			    opacity:  1;
+			}
+			:-ms-input-placeholder { /* Internet Explorer 10-11 */
+			    color:  #c6c4cd;
+			}
+		</style>
+	</head>
+	<body id="top">
+		<div id="app" style="height: 100%">
+			<header>
+				<!-- Navbar-->
+				<nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar" id="navbar">
+					<div class="container"><a class="navbar-brand" href="login.html"><strong>五仁银行</strong></a>
+						<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent"
+						 aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+						<div class="collapse navbar-collapse" id="navbarContent">
+							<ul class="navbar-nav ml-auto">
+								<li class="nav-item"><a class="nav-link" href="registry.html">注册</a></li>
+								<li class="nav-item"><a class="nav-link" href="login.html">登录</a></li>
+							</ul>
+						</div>
+					</div>
+				</nav>
+				<!-- Intro Section-->
+				<!-- 背景图-->
+				<div class="view hm-gradient" id="intro">
+					<!-- 渐变色-->
+					<div class="full-bg-img d-flex align-items-center">
+						<!-- 主体内容-->
 
-                <div class="container">
-                    <div class="col-md-10 col-lg-5" style="margin-left: 330px">
+						<div class="container">
+							<div class="col-md-10 col-lg-5" style="margin-left: 330px">
 
-                        <!-- 注册表单-->
-                        <div class="text-center form-title">注 册</div>
-                        <form id="registry" class="">
-                            <div class="font-bold form-div">
-                                手机号：
-                                <div>
-                                    <span class="input-group-addon" style="margin: 2px">+86</span>
-                                    <input class="col-md-10 col-lg-10" type="text">
-                                </div>
-                            </div>
-                            <div class="font-bold form-div">
-                                密码：
-                                <div><input class="col-md-10 col-lg-11" type="password"></div>
-                            </div>
-                            <div class="font-bold form-div">
-                                确认密码：
-                                <div><input class="col-md-10 col-lg-11" type="password"></div>
-                            </div>
-                            <div class="font-bold form-auth-code">
-                                验证码：
-                                <div>
-                                    <input class="col-md-10 col-lg-7" type="text">
-                                    <button class="btn btn-sm btn-default auth-code" style="font-size: 12px">获取验证码
-                                    </button>
-                                </div>
-                            </div>
-                            <div id="user-protocol">
-                                <input type="checkbox" checked value="true" style="margin-right: 5px;margin-left: 5px">
-                                <a><u>本人已阅读并同意《五仁银行个人用户注册协议》</u></a>
-                            </div>
-                            <div class="text-md-center">
-                                <button class="btn btn-blue btn-sm" style="font-size: medium" type="submit">下一步</button>
-                                </button>
-                            </div>
-                        </form>
+								<!-- 注册表单-->
+								<div class="text-center form-title">注 册</div>
+								<form id="registry" class="">
+									<div class="font-bold form-div" v-show="errorMsgHidden">
+										<span class="msg">{{errorMsg}}</span>
+									</div>
+									<div class="font-bold form-div">
+										手机号：
+										<div>
+											<span class="input-group-addon" style="margin: 2px">+86</span>
+											<input v-model="user.userPhone" placeholder="请输入手机号" class="col-md-10 col-lg-10" type="text">
+										</div>
+									</div>
+									<div class="font-bold form-div" id="userPhoneMsgId" hidden="hidden">
+										<span class="msg">{{userPhoneMsg}}</span>
+									</div>
+									<div class="font-bold form-div">
+										密码：
+										<div>
+											<input v-model="user.userPassword" placeholder="密码格式为6-20位的数字和英文" class="col-md-10 col-lg-11" type="password">
+										</div>
+									</div>
+									<div class="font-bold form-div" id="userPasswordMsgId" hidden="hidden">
+										<span class="msg">{{userPasswordMsg}}</span>
+									</div>
+									<div class="font-bold form-div">
+										确认密码：
+										<div>
+											<input v-model="user.passwordConfig" placeholder="请再次确认密码" class="col-md-10 col-lg-11" type="password">
+										</div>
+									</div>
+									<div class="font-bold form-div" id="passwordConfigMsgId" hidden="hidden">
+										<span class="msg">{{passwordConfigMsg}}</span>
+									</div>
+									<div class="font-bold form-auth-code">
+										验证码：
+										<div>
+											<input v-model="user.code" placeholder="请输入验证码" class="col-md-10 col-lg-6" type="text">
+											<button @click.prevent="registrySms()" class="btn btn-sm btn-default auth-code" style="font-size: 12px">{{codeMsg}}</button>
+										</div>
+									</div>
+									<div id="user-protocol">
+										<input type="checkbox" checked value="true" style="margin-right: 5px;margin-left: 5px">
+										<a><u>本人已阅读并同意《五仁银行个人用户注册协议》</u></a>
+									</div>
+									<div class="text-md-center">
+										<a href="login.html" style="font-size: 0.5rem;float: left;margin-top: 15px;color: #bdaf07;">已有账号，去登录</a>
+										<button @click.prevent="registry()" class="btn btn-blue btn-sm" style="font-size: medium" type="submit">注册</button>
+									</div>
+								</form>
+							</div>
+							<!-- 主体内容结束 -->
+						</div>
+					</div>
+				</div>
+			</header>
 
-
-                    </div>
-                    <!-- 主体内容结束 -->
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <footer class="page-footer indigo darken-2 center-on-small-only pt-0 mt-0">
-        <!--      <div class="container">-->
-        <!--        <div class="row">-->
-        <!--          <div class="col-md-12">-->
-        <!--            <div class="mb-5 flex-center"><a class="px-3"><i class="fa fa-facebook fa-lg white-text"></i></a><a class="px-3"><i class="fa fa-twitter fa-lg white-text"></i></a><a class="px-3"><i class="fa fa-google-plus fa-lg white-text"></i></a><a class="px-3"><i class="fa fa-linkedin fa-lg white-text"></i></a></div>-->
-        <!--          </div>-->
-        <!--        </div>-->
-        <!--      </div>-->
-        <div class="footer-copyright">
-            <div class="container-fluid">
-                <p>&copy; Five Bank</p>
-            </div>
-        </div>
-    </footer>
-</div>
-</body>
+			<footer class="page-footer indigo darken-2 center-on-small-only pt-0 mt-0">
+				<!--      <div class="container">-->
+				<!--        <div class="row">-->
+				<!--          <div class="col-md-12">-->
+				<!--            <div class="mb-5 flex-center"><a class="px-3"><i class="fa fa-facebook fa-lg white-text"></i></a><a class="px-3"><i class="fa fa-twitter fa-lg white-text"></i></a><a class="px-3"><i class="fa fa-google-plus fa-lg white-text"></i></a><a class="px-3"><i class="fa fa-linkedin fa-lg white-text"></i></a></div>-->
+				<!--          </div>-->
+				<!--        </div>-->
+				<!--      </div>-->
+				<div class="footer-copyright">
+					<div class="container-fluid">
+						<p>&copy; Five Bank</p>
+					</div>
+				</div>
+			</footer>
+			
+			<div id="reg-modal" class="modal" tabindex="-1" role="dialog">
+			  <div class="modal-dialog" role="document">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <h5 class="modal-title">注册</h5>
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			          <span @click.prevent="closeModal()" aria-hidden="true">&times;</span>
+			        </button>
+			      </div>
+			      <div class="modal-body">
+			        <p>{{regMsg}}</p>
+			      </div>
+			      <div class="modal-footer">
+			        <button @click.prevent="closeModal()" type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+		</div>
+	</body>
 </html>
 
 <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
@@ -109,18 +160,178 @@
 <script type="text/javascript" src="js/vuejs-2.5.16.js"></script>
 <script type="text/javascript" src="js/api.1.js"></script>
 <script>
-    new Vue({
-        el: "#app",
-        data: {
-			user:{
-				userPhone:"",
-				userPassword:"",
-				passwordConfig:"",
-				code:""
+	new Vue({
+		el: "#app",
+		data: {
+			user: {
+				userPhone: "",
+				userPassword: "",
+				passwordConfig: "",
+				code: ""
+			},
+			regMsg: "",
+			errorMsg: "",
+			errorMsgHidden: false,
+			userPhoneMsg: "请输入手机号",
+			userPasswordMsg:"密码格式为6-20位的数字和英文",
+			passwordConfigMsg:"请再次确认密码",
+			disabled: false,
+			// 倒计时秒数
+			time: 60,
+			// 按钮上的文字
+			codeMsg: '获取验证码',
+			// 定时器
+			timer: null
+		},
+		methods: {
+			//发送验证码
+			registrySms: function(){
+				var _this = this;
+				console.log(_this.user)
+				if(_this.user.userPhone == ""){
+					alert("请先输入手机号")
+					return
+				}
+				var patrn=/^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/;
+				if(!patrn.exec(_this.user.userPhone)){
+					alert("请输入正确的手机号码")
+					return
+				}
+				registrySms(_this.user.userPhone).then(res => {
+					var d = res.data.data;
+					if (d.errno == 0) {
+						alert("发送成功,请注意查收")
+						//成功
+						//按钮不可以
+						_this.disabled = true
+						//倒计时
+						//验证码60秒倒计时
+						if (!_this.timer) {
+							_this.timer = setInterval(() => {
+								if (_this.time > 0 && _this.time <= 60) {
+									_this.time--;
+									if (_this.time !== 1) {
+										_this.codeMsg = "重新发送(" + _this.time + ")秒";
+									} else {
+										clearInterval(_this.timer);
+										//重置按钮内容
+										_this.codeMsg = "获取验证码";
+										//重置倒计时
+										_this.time = 60;
+										//重置定时器
+										_this.timer = null;
+										//恢复按钮状态
+										_this.disabled = false;
+									}
+								}
+							}, 1000)
+						}
+					} else {
+						//失败
+						alert(d.errmsg)
+					}
+				})
+			},
+			//注册
+			registry: function(){
+				var _this = this
+				if(_this.user.userPhone == ""){
+					$("#userPhoneMsgId").removeAttr("hidden");
+					this.userPhoneMsg = "手机号不能为空"
+					return
+				}
+				var phonPeatrn=/^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/;
+				if (!phonPeatrn.exec(this.user.userPhone)) {
+					$("#userPhoneMsgId").removeAttr("hidden");
+					this.userPhoneMsg = "手机号格式不正确"
+				}
+				if(_this.user.userPassword == ""){
+					$("#userPasswordMsgId").removeAttr("hidden");
+					this.userPasswordMsg = "密码不能为空"
+					return
+				}
+				if(_this.user.passwordConfig == ""){
+					$("#passwordConfigMsgId").removeAttr("hidden");
+					this.passwordConfigMsg = "确认密码不能为空";
+					return
+				}
+				if(_this.user.passwordConfig != _this.user.userPassword){
+					$("#passwordConfigMsgId").removeAttr("hidden");
+					this.passwordConfigMsg = "确认密码与密码不相同";
+					return
+				}
+				console.log(_this.user)
+				
+				registry(_this.user).then(res => {
+					var result = res.data.data;
+					console.log(res)
+					console.log(result)
+					if (result.errno == 0) {
+						_this.regMsg = result.errmsg;
+						$("#reg-modal").show()
+						setTimeout(
+							function() {
+								$("#reg-modal").hide()
+								location.href = "login.html"
+							}
+						, 1000);
+					} else{
+						_this.errorMsg = result.errmsg;
+						this.errorMsgHidden= true
+					}
+				})
+			},
+			closeModal: function(){
+				$("#reg-modal").hide()
 			}
 		},
-        methods: {
-			
+		watch: {
+			'user.userPhone': function(){
+				this.errorMsgHidden= false
+				var phonPeatrn=/^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/;
+				if(this.user.userPhone.length == 11){
+					if (!phonPeatrn.exec(this.user.userPhone)) {
+						$("#userPhoneMsgId").removeAttr("hidden");
+						this.userPhoneMsg = "手机号格式不正确"
+					} else {
+						$("#userPhoneMsgId").attr("hidden", "hidden");
+						this.userPhoneMsg = "请输入手机号"
+					}
+				}else {
+					$("#userPhoneMsgId").attr("hidden", "hidden");
+				} 
+			},
+			'user.userPassword': function() {
+				this.errorMsgHidden= false
+				var patrn = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$/;
+				if(!patrn.exec(this.user.userPassword)){
+					if(this.user.userPassword == 0){
+						$("#userPasswordMsgId").attr("hidden","hidden");
+						this.userPasswordMsg = "密码格式为6-20位的数字和英文"
+					}else{
+						$("#userPasswordMsgId").removeAttr("hidden");
+						this.userPasswordMsg = "密码格式不正确，为6-20位的数字和英文"
+					}
+				}else{
+					$("#userPasswordMsgId").attr("hidden","hidden");
+					this.userPasswordMsg = "密码格式为6-20位的数字和英文"
+				}
+			},
+			'user.passwordConfig': function() {
+				this.errorMsgHidden= false
+				if(this.user.userPassword != this.user.passwordConfig){
+					if(this.user.passwordConfig == 0){
+						$("#passwordConfigMsgId").attr("hidden","hidden");
+						this.userPasswordMsg = "请再次确认密码"
+					}else{
+						$("#passwordConfigMsgId").removeAttr("hidden");
+						this.passwordConfigMsg = "确认密码与密码不相同";
+					}
+				}else{
+					$("#passwordConfigMsgId").attr("hidden","hidden");
+					this.userPasswordMsg = "请再次确认密码"
+				}
+			}
 		}
-    })
+	})
 </script>

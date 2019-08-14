@@ -22,6 +22,17 @@ axios.interceptors.request.use(function (config) {
 
 
 
+//--------------------- registry.html  start --------------------
+//注册----获取验证码
+function registrySms(phone){
+	return axios.get("/web-service/registrySms/"+phone);
+}
+//注册----注册
+function registry(params){
+	return axios.post("/auth-service/registry",params);
+}
+//--------------------- registry.html  end --------------------
+
 //--------------------- login.html  start --------------------
 //登录----发送验证码
 function loginSms(params){
@@ -126,3 +137,8 @@ function CrossBorderTransfer(params){
 
 //----------------transfer_cross_border.html   end---------------
 
+
+//根据用户id获取该用户的其他银行的银行卡
+function getOtherBankCardByUserId(params){
+	return axios.get("/web-service/getOtherBankCardByUserId/"+params)
+}

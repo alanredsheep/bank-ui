@@ -1,63 +1,64 @@
 <!DOCTYPE html>
 <html class="full-height" lang="en-US">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>实名验证</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/mdb.min.css" rel="stylesheet">
-    <link href="styles/main.css" rel="stylesheet">
-</head>
-<body id="top">
-<div id="app" style="height: 100%">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>实名验证</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/mdb.min.css" rel="stylesheet">
+		<link href="styles/main.css" rel="stylesheet">
+	</head>
+	<body id="top">
+		<div id="app" style="height: 100%">
 
-    <header>
-        <!-- Navbar-->
-        <topnav></topnav>
-        <!-- Intro Section-->
-        <!-- 背景图-->
-        <div class="view hm-gradient" id="intro">
-            <!-- 渐变色-->
-            <div class="full-bg-img d-flex align-items-center">
-                <div class="container">
-                    <div class="col-md-10 col-lg-5" style="margin-left: 330px">
-                        <!-- 实名验证-->
-                        <div class="text-center form-title">实 名 验 证</div>
-                        <form id="authentic" class="">
-                            <div class="font-bold form-div">
-                                姓名：<input class="col-md-10 col-lg-11" type="text"></div>
-                            <div class="font-bold form-div">
-                                身份证：<input class="col-md-10 col-lg-11" type="text"></div>
-                            <div class="text-md-center">
-                                <button class="btn btn-blue btn-sm" style="font-size: medium" type="">验证</button>
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
+			<header>
+				<!-- Navbar-->
+				<topnav></topnav>
+				<!-- Intro Section-->
+				<!-- 背景图-->
+				<div class="view hm-gradient" id="intro">
+					<!-- 渐变色-->
+					<div class="full-bg-img d-flex align-items-center">
+						<div class="container">
+							<div class="col-md-10 col-lg-5" style="margin-left: 330px">
+								<!-- 实名验证-->
+								<div class="text-center form-title">实 名 验 证</div>
+								<form id="authentic" class="">
+									<div class="font-bold form-div">
+										身份证正面：<input class="file" name="file" type="file" accept="image/png,image/gif,image/jpeg" @change="update" />
+										<img src="" alt="">
+										<div class="font-bold form-div">
+											身份证反面：<img src="" alt="">
+											<div class="text-md-center">
+												<button class="btn btn-blue btn-sm" style="font-size: medium" type="">验证</button>
+												</button>
+											</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</header>
 
-    <footer class="page-footer indigo darken-2 center-on-small-only pt-0 mt-0">
-        <!--      <div class="container">-->
-        <!--        <div class="row">-->
-        <!--          <div class="col-md-12">-->
-        <!--            <div class="mb-5 flex-center"><a class="px-3"><i class="fa fa-facebook fa-lg white-text"></i></a><a class="px-3"><i class="fa fa-twitter fa-lg white-text"></i></a><a class="px-3"><i class="fa fa-google-plus fa-lg white-text"></i></a><a class="px-3"><i class="fa fa-linkedin fa-lg white-text"></i></a></div>-->
-        <!--          </div>-->
-        <!--        </div>-->
-        <!--      </div>-->
-        <div class="footer-copyright">
-            <div class="container-fluid">
-                <p>&copy; Five Bank</p>
-            </div>
-        </div>
-    </footer>
+			<footer class="page-footer indigo darken-2 center-on-small-only pt-0 mt-0">
+				<!--      <div class="container">-->
+				<!--        <div class="row">-->
+				<!--          <div class="col-md-12">-->
+				<!--            <div class="mb-5 flex-center"><a class="px-3"><i class="fa fa-facebook fa-lg white-text"></i></a><a class="px-3"><i class="fa fa-twitter fa-lg white-text"></i></a><a class="px-3"><i class="fa fa-google-plus fa-lg white-text"></i></a><a class="px-3"><i class="fa fa-linkedin fa-lg white-text"></i></a></div>-->
+				<!--          </div>-->
+				<!--        </div>-->
+				<!--      </div>-->
+				<div class="footer-copyright">
+					<div class="container-fluid">
+						<p>&copy; Five Bank</p>
+					</div>
+				</div>
+			</footer>
 
-</div>
-</body>
+		</div>
+	</body>
 </html>
 
 <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
@@ -71,9 +72,30 @@
 <script type="text/javascript" src="js/api.1.js"></script>
 <script type="text/javascript" src="components/topNav.js"></script>
 <script>
-    new Vue({
-        el: "#app",
-        data: {},
-        methods: {}
-    })
+	new Vue({
+		el: "#app",
+		data: {},
+		methods: {
+			upload: function() {
+				//创建form对象
+				let file = e.target.files[0];
+				let param = new FormData();
+				//通过append向form对象添加数据
+				param.append('file', file, file.name);
+				//添加form表单中其他数据
+				param.append('chunk', '0');
+				var token = localStorage.getItem("token");
+				//添加请求头
+				let config = {
+					headers: {
+						'Content-Type': 'multipart/form-data',
+						'Authorization': token
+					}
+				};
+				this.axios.post('http://127.0.0.1:10010/v1/web-service/', param, config).then(response => {
+					console.log(response.data);
+				})
+			}
+		}
+	})
 </script>
