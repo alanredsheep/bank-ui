@@ -134,3 +134,18 @@ function getExchangeRateCNY(price,type){
 }
 //----------------transfer_cross_border.html   end---------------
 
+//----------------bank_card_add_limit.html   start-------升级卡类型--------
+//通过银行卡id查询银行卡信息
+function getBankCardBybankCardId(bankCardId){
+    return axios.get("/web-service/getBankCardBybankCardId/"+bankCardId)
+}
+//发短信
+function sendUpgradeCard(bankCardId){
+    return axios.get("/web-service/sendUpgradeCard/"+bankCardId)
+}
+//申请
+function UpgradeCard(params){
+    return axios.post("/web-service/UpgradeCard",params)
+}
+
+//----------------bank_card_add_limit.html   end---------------
