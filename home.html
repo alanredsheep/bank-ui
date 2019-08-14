@@ -1,61 +1,61 @@
 <!DOCTYPE html>
 <html class="full-height" lang="en-US">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>五仁银行</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/mdb.min.css" rel="stylesheet">
-    <link href="styles/main.css" rel="stylesheet">
-</head>
-<body id="top">
-<div id="app" style="height: 100%">
-    <header>
-        <!-- Navbar-->
-        <topnav></topnav>
-        <!-- 背景图-->
-        <div class="view hm-gradient" id="intro">
-            <!-- 渐变色-->
-            <div class="full-bg-img d-flex align-items-center">
-                <div class="container main-container" style="margin-left: 100px">
-                    <div class="jumbotron row">
-                        <a href="transfer.html">单 次 转 账</a>
-                    </div>
-                    <div class="jumbotron row ">
-                        <a href="transfer_bulk.html">批 量 转 账</a>
-                    </div>
-                </div>
-                <div class="container main-container">
-                    <div class="jumbotron row">
-                        <a href="gathering_manage.html">主 动 收 款</a>
-                    </div>
-                    <div class="jumbotron row">
-                        <a href="fund_collection.html">资 金 归 集</a>
-                    </div>
-                </div>
-                <div class="container main-container">
-                    <div class="jumbotron row">
-                        <a href="transfer_record.html">转 账 记 录</a>
-                    </div>
-                    <div class="jumbotron row">
-                        <a href="bank_card_manage.html">银 行 卡 包</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>五仁银行</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/mdb.min.css" rel="stylesheet">
+		<link href="styles/main.css" rel="stylesheet">
+	</head>
+	<body id="top">
+		<div id="app" style="height: 100%">
+			<header>
+				<!-- Navbar-->
+				<topnav></topnav>
+				<!-- 背景图-->
+				<div class="view hm-gradient" id="intro">
+					<!-- 渐变色-->
+					<div class="full-bg-img d-flex align-items-center">
+						<div class="container main-container" style="margin-left: 100px">
+							<div class="jumbotron row">
+								<a href="transfer.html">单 次 转 账</a>
+							</div>
+							<div class="jumbotron row ">
+								<a href="transfer_bulk.html">批 量 转 账</a>
+							</div>
+						</div>
+						<div class="container main-container">
+							<div class="jumbotron row">
+								<a href="gathering_manage.html">主 动 收 款</a>
+							</div>
+							<div class="jumbotron row">
+								<a href="fund_collection.html">资 金 归 集</a>
+							</div>
+						</div>
+						<div class="container main-container">
+							<div class="jumbotron row">
+								<a href="transfer_record.html">转 账 记 录</a>
+							</div>
+							<div class="jumbotron row">
+								<a href="bank_card_manage.html">银 行 卡 包</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</header>
 
-    <footer class="page-footer indigo darken-2 center-on-small-only pt-0 mt-0">
-        <div class="footer-copyright">
-            <div class="container-fluid">
-                <p>&copy; Five Bank</p>
-            </div>
-        </div>
-    </footer>
-</div>
-</body>
+			<footer class="page-footer indigo darken-2 center-on-small-only pt-0 mt-0">
+				<div class="footer-copyright">
+					<div class="container-fluid">
+						<p>&copy; Five Bank</p>
+					</div>
+				</div>
+			</footer>
+		</div>
+	</body>
 </html>
 
 <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
@@ -70,20 +70,29 @@
 <script type="text/javascript" src="components/topNav.js"></script>
 
 <script>
-    new Vue({
-        el: "#app",
-        data: {
-            userName: localStorage.getItem("userName"),
-
-        },
-        methods: {
-            login:function () {
-                var userName = "luwei"
-                localStorage.setItem("userName",userName);
-            }
-        },
-        created(){
-            this.login();
-        }
-    })
+	new Vue({
+		el: "#app",
+		data: {
+			
+		},
+		methods: {
+			getOtherBankCard: function(userId) {
+				console.log(userId)
+				getOtherBankCardByUserId(userId).then(res => {
+					console.log(res)
+					var result = res.data.data;
+					if (result.errno == 0) {
+						var otherBankCards = result.otherBankCards;
+						sessionStorage.setItem("otherBankCards", JSON.stringify(otherBankCards));
+					}
+				})
+			}
+		},
+		created() {
+			var user = JSON.parse(sessionStorage.getItem("user"));
+			var userId = user.userId;
+			console.log(user)
+			this.getOtherBankCard(userId);
+		}
+	})
 </script>
