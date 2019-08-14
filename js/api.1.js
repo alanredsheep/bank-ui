@@ -105,8 +105,14 @@ function untiedBankCard() {
 function selectSubordinateBank(){
      return axios.get("/web-service/getAllSubordinateBank")
 }
-// selectBankCardAttribution
-
+//根据他行银行卡号查询出所属银行标识
+function selectBankCardAttribution(params){
+    return axios.post("/web-service/selectSubordinateBankByNum", params);
+}
+//单次转账提交
+function submitTransfer(params) {
+    return axios.post("/web-service/verifyBankCardForVo", params);
+}
 
 
 //----------------transfer.html   end---------------
@@ -126,3 +132,24 @@ function CrossBorderTransfer(params){
 
 //----------------transfer_cross_border.html   end---------------
 
+//----------------payee_group.html   start-------收款群组页面--------
+//根据用户查询出所有收款群组
+function selectPayeeGroupByUid(params){
+    return axios.post("/web-service/selectPayeeGroupByUid",params)
+}
+//根据收款群组id查询所属收款人
+function selectPayeeById(params) {
+    return axios.post("/web-service/selectPayeeById",params)
+}
+//添加一条收款群组
+function addPayeeGroup(params){
+    return axios.post("/web-service/addPayeeGroup",params)
+}
+// 根据id删除群组用户
+function deletePayeeById(params){
+    return axios.post("/web-service/deletePayeeById",params)
+}
+
+
+
+//----------------payee_group.html   end---------------
