@@ -177,14 +177,13 @@ function findCommoditityById(params) {
 
 
 // -----------------transfer_record.html    start--------------
-// 获取选定月份的转账记录
+// 获取选定月份和银行卡的转账记录
 function getTransferRecord(params) {
-    return axios.get("/web-service/getTransferRecordList", params);
+    return axios.get("/web-service/getTransferRecordList",{params:params});
 }
 
-// 根据选定银行卡的选定月份的转账记录
-function getTransferRecordByBankCard(params) {
-    return axios.get("/web-service/getTransferRecordByBankCard", params);
+function getBankCardsByUserId(params) {
+    return axios.get("/web-service/getBankCardByUserId",{params:params});
 }
 // -----------------transfer_record.html    end--------------
 
