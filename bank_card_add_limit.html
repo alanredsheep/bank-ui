@@ -163,6 +163,8 @@
                 UpgradeCard(this.bankCard).then(res =>{
                     if(res.data.data.errno == 0){
                         alert("申请成功,请耐心等待")
+                    }else{
+                        alert(res.data.data.errmsg)
                     }
                 })
             },
