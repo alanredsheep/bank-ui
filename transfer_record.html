@@ -30,33 +30,33 @@
                                 <form class="form-inline" style="margin-bottom: 10px;margin-left: 30%;">
                                     <select id="transfer_record_card" class="form-control form-selection-bank col-lg-4"
                                             style="margin-bottom: 6px" v-model="recordSelection.cardId">
-                                        <option value="" class="form-selection-option">全部账户</option>
+                                        <option value=0 class="form-selection-option">全部账户</option>
                                         <template v-for="bankCard in bankCards">
-                                            <option class="form-selection-option" value={{bankCard.bankCardId}}>
-                                                {{bankCard.bank}} {{bankCard.bankCardNum}}
+                                            <option class="form-selection-option" :value=bankCard.bankCardId>
+                                                {{bankCard.bank}} {{bankCard.bankCardType}} {{bankCard.bankCardNumber}}
                                             </option>
                                         </template>
                                     </select>
                                     <select id="transfer_record_month" class="form-control form-selection-bank col-lg-2"
                                             style="margin-bottom: 6px;margin-left: 30px"
                                             v-model="recordSelection.month">
-                                        <option disabled selected class="form-selection-option">选择月份</option>
-                                        <option value="1" class="form-selection-option">1月</option>
-                                        <option value="2" class="form-selection-option">2月</option>
-                                        <option value="3" class="form-selection-option">3月</option>
-                                        <option value="4" class="form-selection-option">4月</option>
-                                        <option value="5" class="form-selection-option">5月</option>
-                                        <option value="6" class="form-selection-option">6月</option>
-                                        <option value="7" class="form-selection-option">7月</option>
-                                        <option value="8" class="form-selection-option">8月</option>
-                                        <option value="9" class="form-selection-option">9月</option>
-                                        <option value="10" class="form-selection-option">10月</option>
-                                        <option value="11" class="form-selection-option">11月</option>
-                                        <option value="12" class="form-selection-option">12月</option>
+                                        <option value=0 selected class="form-selection-option">选择月份</option>
+                                        <option value=1 class="form-selection-option">1月</option>
+                                        <option value=2 class="form-selection-option">2月</option>
+                                        <option value=3 class="form-selection-option">3月</option>
+                                        <option value=4 class="form-selection-option">4月</option>
+                                        <option value=5 class="form-selection-option">5月</option>
+                                        <option value=6 class="form-selection-option">6月</option>
+                                        <option value=7 class="form-selection-option">7月</option>
+                                        <option value=8 class="form-selection-option">8月</option>
+                                        <option value=9 class="form-selection-option">9月</option>
+                                        <option value=10 class="form-selection-option">10月</option>
+                                        <option value=11 class="form-selection-option">11月</option>
+                                        <option value=12 class="form-selection-option">12月</option>
                                     </select>
                                     <button class="btn btn-sm btn-default my-2 my-sm-0" type="submit"
                                             style="color: #FFFFFF;font-size: 16px;margin-left: 30px"
-                                            @click="listTransferRecords()">查询
+                                            @click.prevent="selectByCondition">查询
                                     </button>
                                 </form>
                             </nav>
@@ -70,39 +70,40 @@
                                     <td>转账类型</td>
                                     <td>订单时间</td>
                                     <td>订单状态</td>
+                                    <td>交易备注</td>
                                     <td>交易单号</td>
                                 </tr>
-                                <template v-if="!transferRecords.inCardUserName == ''"
-                                          v-for="transferRecord in transferRecords">
-                                    <tr>
-                                        <td>{{transferRecord.inCardUserName}}</td>
-                                        <td>{{transferRecord.bankIn}} {{transferRecord.bankInCard}}</td>
-                                        <td class="font-bold">-￥{{transferRecord.transferRecordAmount}}</td>
-                                        <td>{{transferRecord.bankOut}} {{transferRecord.bankOutCard}}</td>
-                                        <td>{{transferRecord.transferType}}</td>
-                                        <td>{{transferRecord.transferRecordTime}}</td>
-                                        <td v-bind:style="transferRecord.transferStatus==1?{color:'red'}:{color:'#00FF3B'}"
-                                            class="font-bold">
-                                            {{transferRecord.transferStatus}}
-                                        </td>
-                                        <td>{{transferRecord.transferRecordUuid}}</td>
-                                    </tr>
+                                <template v-if="transferRecords!=null">
+                                    <template v-for="transferRecord in transferRecords">
+                                        <tr>
+                                            <td>{{transferRecord.inCardUserName}}</td>
+                                            <td>{{transferRecord.bankIn}} {{transferRecord.bankInCard}}</td>
+                                            <td class="font-bold">-￥{{transferRecord.transferRecordAmount}}</td>
+                                            <td>{{transferRecord.bankOut}} {{transferRecord.bankOutCard}}</td>
+                                            <td>{{transferRecord.transferStringType}}</td>
+                                            <td>{{transferRecord.transferRecordTime}}</td>
+                                            <td v-bind:style="transferRecord.transferStatus==102?{color:'red'}:
+                                                              transferRecord.transferStatus==101?{color:'#00FF3B'}:{color:'#FFC70F'}"
+                                                class="font-bold">
+                                                {{transferRecord.transferStringStatus}}
+                                            </td>
+                                            <td>{{transferRecord.transferNote}}</td>
+                                            <td>{{transferRecord.transferRecordUuid}}</td>
+                                        </tr>
+                                    </template>
                                 </template>
                             </table>
-                            <div class="" style="margin-left: 32%">
+                            <div class="" style="margin-left: 35%">
                                 <button class="btn btn-primary btn-sm" style=" color: #FFFFFF;font-size: 16px"
-                                        @click="pageFirst()">首页
+                                        @click="pageFirst">首页
                                 </button>
                                 <button class="btn btn-primary btn-sm" style="color: #FFFFFF;font-size: 16px"
-                                        v-bind:disabled="page.pageNum==1?true:false" @click="pagePre()"
-                                >上一页
+                                        v-bind:disabled="page.pageNum==1?true:false" @click="pagePre">
+                                    上一页
                                 </button>
                                 <button class="btn btn-primary btn-sm" style="color: #FFFFFF;font-size: 16px"
-                                        v-bind:disabled="page.pageNum==page.totalPage?true:false" @click="pageNext()">
+                                        v-bind:disabled="hasMoreRecord" @click="pageNext">
                                     下一页
-                                </button>
-                                <button class="btn btn-primary btn-sm" style="color: #FFFFFF;font-size: 16px"
-                                        @click="pageLast()">尾页
                                 </button>
                             </div>
                         </div>
@@ -142,21 +143,23 @@
         data: {
             // 用户信息
             user: {
-                userId: -1,
-                userName: "121",
+                userId: 1,
+                userName: "",
             },
-            //用户的银行卡
+            // 用户的银行卡
             bankCards: [{
-                bankCardId: "",
-                bank: "中国银行",
-                bankCardNum: "4123********4252",
+                bankCardId: 0,
+                bank: "",
+                bankCardType: "",
+                bankCardNumber: "",
             }],
             // 查询条件
             recordSelection: {
-                cardId: "",
-                month: "",
+                cardId: 0,
+                month: 0,
             },
             // 转账记录
+            hasMoreRecord: false,
             transferRecords: [{
                 inCardUserName: "",
                 bankIn: "",
@@ -164,69 +167,78 @@
                 transferRecordAmount: "",
                 bankOut: "",
                 bankOutCard: "",
-                transferType: "",
+                transferStringType: "",
                 transferRecordTime: "",
-                // 0成功，1失败
-                transferStatus: "",
+                transferStringStatus: "",
                 transferRecordUuid: "",
+                transferNote: "",
             }]
             ,
             // 分页
             page: {
                 pageNum: 1,
-                pageSize: 5,
-                totalRecord: 0,
-                totalPage: 5,
             },
-
-
         },
         methods: {
 
 // 换页相关的函数
             pageFirst: function () {
                 this.page.pageNum = 1;
-                // this.listTransferRecords();
-            },
-            pageLast: function () {
-                this.page.pageNum = this.page.totalPage;
                 this.listTransferRecords();
             },
             pagePre: function () {
                 this.page.pageNum -= 1;
-                // this.listTransferRecords();
+                this.listTransferRecords();
             },
             pageNext: function () {
                 this.page.pageNum += 1;
                 this.listTransferRecords();
             },
+            selectByCondition: function () {
+                this.page.pageNum = 1;
+                this.listTransferRecords();
+            },
 // 转账记录的列表渲染
             listTransferRecords: function () {
                 var _this = this;
-                if (this.recordSelection.cardId == "") {
-                    getTransferRecord({
-                        "pageNum": this.page.pageNum,
-                        "month": this.recordSelection.month,
-                    }).then(function (response) {
-                        _this.transferRecords = response.data.data;
-                    })
-                } else {
-                    getTransferRecordByBankCard({
-                        "pageNum": this.page.pageNum,
-                        "month": this.recordSelection.month,
-                        "bankCardId": this.recordSelection.cardId,
-                    })
-                }
+                getTransferRecord({
+                    "userId": _this.user.userId,
+                    "page": _this.page.pageNum,
+                    "month": _this.recordSelection.month,
+                    "bankCardId": _this.recordSelection.cardId,
+                }).then(function (response) {
+                    if (response.data.data.data == "") {
+                        _this.hasMoreRecord = true;
+                    } else {
+                        _this.transferRecords = response.data.data.data;
+                        if (_this.transferRecords.length < 5) {
+                            _this.hasMoreRecord = true;
+                        }else{
+                            _this.hasMoreRecord = false;
+                        }
+                    }
+                })
             },
 // 获取当前日期，赋值初始化recordSelection.month
-            addDate: function () {
+            initDate: function () {
                 nowDate = new Date();
                 this.recordSelection.month = nowDate.getMonth() + 1;
-            },
+            }
+// 获取用户的银行卡列表
+            ,
+            initBankCardList: function () {
+                var _this = this;
+                getBankCardsByUserId({
+                    "userId": this.user.userId,
+                }).then(function (response) {
+                    _this.bankCards = response.data.data.data;
+                })
+            }
         },
-        created: function () {
-            this.addDate();
+        created() {
+            this.initDate();
             this.listTransferRecords();
-        }
+            this.initBankCardList();
+        },
     })
 </script>

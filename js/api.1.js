@@ -81,14 +81,13 @@ function updateBankUserPassword(params) {
 //--------------------- chang_password.html  end --------------------
 
 // -----------------transfer_record.html    start--------------
-// 获取选定月份的转账记录
+// 获取选定月份和银行卡的转账记录
 function getTransferRecord(params) {
-    return axios.get("/web-service/getTransferRecordList", params);
+    return axios.get("/web-service/getTransferRecordList",{params:params});
 }
 
-// 根据选定银行卡的选定月份的转账记录
-function getTransferRecordByBankCard(params) {
-    return axios.get("/web-service/getTransferRecordByBankCard", params);
+function getBankCardsByUserId(params) {
+    return axios.get("/web-service/getBankCardByUserId",{params:params});
 }
 // -----------------transfer_record.html    end--------------
 
@@ -131,13 +130,35 @@ function getExchangeRate(params){
 function getBankCardByUser(params){
     return axios.post("/web-service/getBankCardByUser",params)
 }
+//转账
 function CrossBorderTransfer(params){
     return axios.post("/web-service/CrossBorderTransfer",params)
 }
-
+//根据人民币查询外币
+function getExchangeRatePrice(price,type){
+    return axios.get("/web-service/getExchangeRatePrice/"+price+"/"+type)
+}
+//根据外币查询人民币getExchangeRateCNY
+function getExchangeRateCNY(price,type){
+    return axios.get("/web-service/getExchangeRateCNY/"+price+"/"+type)
+}
 //----------------transfer_cross_border.html   end---------------
 
+//----------------bank_card_add_limit.html   start-------升级卡类型--------
+//通过银行卡id查询银行卡信息
+function getBankCardBybankCardId(bankCardId){
+    return axios.get("/web-service/getBankCardBybankCardId/"+bankCardId)
+}
+//发短信
+function sendUpgradeCard(bankCardId){
+    return axios.get("/web-service/sendUpgradeCard/"+bankCardId)
+}
+//申请
+function UpgradeCard(params){
+    return axios.post("/web-service/UpgradeCard",params)
+}
 
+//----------------bank_card_add_limit.html   end---------------
 //根据用户id获取该用户的其他银行的银行卡
 function getOtherBankCardByUserId(params){
 	return axios.get("/web-service/getOtherBankCardByUserId/"+params)
