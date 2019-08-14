@@ -133,3 +133,19 @@ function getExchangeRateCNY(price,type){
 }
 //----------------transfer_cross_border.html   end---------------
 
+
+//----------------bank_card_add.html    start------------------
+// 绑定银行卡
+function addOtherBankCard(params) {
+    return axios.post("/web-service/addOtherBankCard",params)
+}
+// 解绑银行卡
+function deleteOtherBankCard(params){
+    return axios.delete("/web-service/deleteOtherBankCard",params)
+}
+// 根据他行卡号查询银行标识符
+function findBankCardIdentification(bankCard) {
+    return axios.get("/web-service/findBankCardIdentification/"+bankCard)
+}
+
+//----------------bank_card_add.html    end------------------

@@ -223,8 +223,7 @@
                 //当输入数值大于15并且光标离开和回车时调用
                 if (this.transferValue.inBankCard.size > 15) {
                     //调用查询银行卡归属银行
-                    selectBankCardAttribution(this.transferValue.inBankCard).then(res => {
-
+                    findBankCardIdentification(this.transferValue.inBankCard).then(res => {
 
                     })
 

@@ -17,7 +17,7 @@
     <header>
         <!-- Navbar-->
         <topnav></topnav>
-		
+
         <!-- 背景图-->
         <div class="view hm-gradient" id="intro">
             <!-- 渐变色-->
@@ -29,21 +29,25 @@
                 <div class="container">
                     <div class="col-md-10 col-lg-5" style="margin-left: 330px">
 
-                        <div class="text-center form-title">添 加 银 行 卡</div>
+                        <div class="text-center form-title">绑 定 银 行 卡</div>
                         <form id="registry" class="">
-                            <div class="font-bold form-div">
-                                姓名：农*民
-                            </div>
                             <div class="font-bold form-div">
                                 <div>银行卡号：</div>
                                 <div class="font-bold form-div col-lg-8 btn-group">
-                                    <select class="form-control form-selection-bank col-lg-5">
-                                        <option disabled selected class="form-selection-option">选择银行</option>
-                                        <option class="form-selection-option">中国银行</option>
-                                        <option class="form-selection-option">招商银行</option>
+                                    <select class="form-control form-selection-bank col-lg-5"
+                                            v-model="otherBankCard.bankIdentification">
+                                        <option disabled value="" class="form-selection-option">选择银行</option>
+                                        <template v-for="bank in subordinateBank">
+                                            <option :value=bank.bankIdentification
+                                                    class="form-selection-option">
+                                                {{bank.bankName}}
+                                            </option>
+                                        </template>
                                     </select>
                                     <div style="margin-left: 20px">
-                                        <input class="col-md-10" style="width: 260px" type="text">
+                                        <input v-model="otherBankCard.otherBankCardNumber" class="col-md-10"
+                                               style="width: 260px" type="text" @blur="selectBankName">
+                                        <h5 v-if="hasHint">{{hint}}</h5>
                                     </div>
                                 </div>
                             </div>
@@ -51,20 +55,22 @@
                                 预留手机号码：
                                 <div>
                                     <span class="input-group-addon" style="margin: 2px">+86</span>
-                                    134****8045
+                                    {{user.userPhone}}
                                 </div>
                             </div>
-                            <!--                            查到银行预留手机号码，自动填上-->
+                            <!--查到银行预留手机号码，自动填上-->
                             <div class="font-bold form-auth-code">
                                 验证码：
                                 <div>
                                     <input class="col-md-10 col-lg-7" type="text">
-                                    <button class="btn btn-sm btn-default auth-code" style="font-size: 12px">获取验证码
+                                    <button class="btn btn-sm btn-default auth-code" style="font-size: 12px" @click.prevent="">获取验证码
                                     </button>
                                 </div>
                             </div>
                             <div class="text-md-center">
-                                <button class="btn btn-blue btn-sm" style="font-size: medium" type="submit">确定</button>
+                                <button class="btn btn-blue btn-sm" style="font-size: medium" type="submit"
+                                        @click.prevent="bindOtherBankCard">确定
+                                </button>
                                 </button>
                             </div>
                         </form>
@@ -102,9 +108,60 @@
     new Vue({
         el: "#app",
         data: {
-
+            // 银行名称与标识符
+            subordinateBank: [{
+                bankIdentification: "BOC",
+                bankName: "中国银行",
+            }, {
+                bankIdentification: "BOWR",
+                bankName: "五仁银行",
+            }],
+            // 用户输入的银行卡号
+            otherBankCard: {
+                otherBankCardNumber: "",
+                otherBankName: "",
+                bankIdentification: "",
+            },
+            // 用户信息
+            user: {
+                userId: 1,
+                userName: "卢*",
+                userPhone: "123****7647",
+            },
+            // 用户输入的验证码
+            authCode: "",
+            // 用户错误操作提醒
+            hasHint: false,
+            hint: "",
         },
         methods: {
+            bindOtherBankCard: function () {
+                var _this = this;
+                addOtherBankCard({
+                    "authCode": _this.authCode,
+                    "userId": _this.user.userId,
+                    "bankCardNumber": _this.otherBankCard.otherBankCardNumber,
+                    "subordinateBanksIdentification": _this.otherBankCard.bankIdentification,
+                }).then(function (response) {
+                    console.log(response.data.data.errmsg);
+                })
+            },
+            selectBankName: function () {
+                var _this = this;
+                findBankCardIdentification(_this.otherBankCard.otherBankCardNumber).then(function (response) {
+                    if (response.data.data.errno == 1) {
+                        _this.hasHint = true;
+                        _this.hint = response.data.data.errmsg;
+                    } else {
+                        _this.hasHint = false;
+                        _this.otherBankCard.bankIdentification = response.data.data.data;
+                        console.log(response.data.data.data);
+                    }
+
+                })
+            }
+        },
+        created() {
 
         }
     })
