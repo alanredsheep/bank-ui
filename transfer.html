@@ -41,7 +41,7 @@
                         </div>
                     </nav>
                     <!--银行卡转账表单-->
-                    <form id="bankCardTransfer" class="" v-show="!transferMethod" >
+                    <form id="bankCardTransfer" class="" v-show="!transferMethod">
                         <div class="font-bold form-div col-lg-12 btn-group">
                             <select class="form-control form-selection col-lg-9" v-model="transferValue.outBankCard">
                                 <option disabled value="" class="form-selection-option">选择付款银行卡</option>
@@ -58,8 +58,11 @@
                                 <select class="form-control form-selection-bank col-lg-4"
                                         v-model="transferValue.inBank">
                                     <option disabled class="form-selection-option" value="">选择银行</option>
-                                    <option class="form-selection-option">中国银行</option>
-                                    <option class="form-selection-option">招商银行</option>
+                                    <template v-for="sb in subordinateBank">
+                                        <option class="form-selection-option">
+                                            {{sb.bankName}}
+                                        </option>
+                                    </template>
                                 </select>
                                 <div style="margin-left: 20px">
                                     <input v-model="transferValue.inBankCard" class="col-md-10" style="width: 228px"
@@ -101,7 +104,7 @@
                         </div>
                     </form>
                     <!--手机号转账表单-->
-                    <form id="phoneTransfer" class=""  v-show="transferMethod" >
+                    <form id="phoneTransfer" class="" v-show="transferMethod">
                         <div class="font-bold form-div col-lg-12 btn-group">
                             <select class="form-control form-selection col-lg-9" v-model="transferValue.outBankCard">
                                 <option disabled value="" class="form-selection-option">选择付款银行卡</option>
@@ -116,7 +119,7 @@
                             收款人手机号：
                             <div class="font-bold form-div col-lg-8 btn-group">
                                 <div style="margin-left: 20px">
-                                    <input  class="col-md-10" style="width: 228px"
+                                    <input class="col-md-10" style="width: 228px"
                                            type="text">
                                 </div>
                             </div>
@@ -183,6 +186,8 @@
 <script type="text/javascript" src="js/vuejs-2.5.16.js"></script>
 <script type="text/javascript" src="js/api.1.js"></script>
 <script type="text/javascript" src="components/topNav.js"></script>
+<script type="text/javascript" src="scripts/util.js"></script>
+
 <script>
     new Vue({
         el: "#app",
@@ -207,31 +212,42 @@
             //转账方式选择，false为银行卡转账，true为手机号转账
             transferMethod: false,
 
+            subordinateBank: [{
+                // bankIdentification: "",
+                // bankName: "",
+            }],
         },
         methods: {
+            //查询银行卡归属银行
             selectBankCard: function () {
-                if (this.inBankCard != "") {
-                    //调用查询银行卡归属银行方法
-                    selectBankCard(this.inBankCard).then(res => {
-                        this.inBank = res.data.data;
+                //当输入数值大于15并且光标离开和回车时调用
+                if (this.transferValue.inBankCard.size > 15) {
+                    //调用查询银行卡归属银行
+                    selectBankCardAttribution(this.transferValue.inBankCard).then(res => {
+
 
                     })
 
                 }
             },
-            selectUserAllBankCard: function() {
+            selectUserAllBankCard: function () {
                 //条用根据用户ID查询所有用户银行卡的方法
             },
-            changeBankCardTransfer:function(){
-                this.transferMethod=false;
+            changeBankCardTransfer: function () {
+                this.transferMethod = false;
             },
-            changePhoneTransfer:function(){
-                this.transferMethod=true;
-            }
+            changePhoneTransfer: function () {
+                this.transferMethod = true;
+            },
+
         },
-        create() {
+        created() {
+
+            // 加载页面时从本地查询出所有所属银行
+            this.subordinateBank = JSON.parse(sessionStorage.getItem("subordinateBank"));
             //加载页面是调用查询用户所有银行卡方法
-            this.selectBankCard();
+            // this.selectBankCard();
         }
+
     })
 </script>

@@ -9,9 +9,11 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/mdb.min.css" rel="stylesheet">
     <link href="styles/main.css" rel="stylesheet">
+
+
 </head>
 <body id="top">
-<div id="app" style="height: 100%">
+<div id="app"  class="view  hm-gradient" style="height: 100%">
     <header>
         <!-- Navbar-->
         <topnav></topnav>
@@ -25,45 +27,69 @@
                 <div class="col-md-10 col-lg-10" style="margin-left: 100px">
                     <div class="text-center form-title">消 息 中 心</div>
 
-
                     <div class="panel-body scroll-panel"
                          style="height: 300px;width: 300px; overflow-y:scroll;float: left;margin-left: 200px">
                         <div class=" col col-lg-12">
-                            <ul class="navbar-nav ml-auto payee-group-list-ul">
-                                <a>
-                                    <li>来自 <u>张磊</u> 的主动收款</li>
+                            <ul class="navbar-nav ml-auto payee-group-list-ul" v-for="active in activeGatherings">
+                                <a @click="clickPayment(active.activeId)">
+                                    <li>来自 {{active.inUserName}} 的主动收款</li>
                                 </a>
-                                <a>
-                                    <li>来自 <u>张磊</u> 的主动收款</li>
+                            </ul>
+                            <ul class="navbar-nav ml-auto payee-group-list-ul" v-for="mt in managerTranscations">
+                                <a @click="manager(mt.transcationId)">
+                                    <li>提额申请通知</li>
                                 </a>
                             </ul>
                         </div>
                     </div>
-                    <form style="float: left;margin-left: 20px;background-color: rgba(255,255,255,0.2);height: 300px;width: 300px">
+                    <!--展示主动收款通知-->
+                    <form    v-for="active in activeById()"  :key="transferRecordId" @submit.prevent="onSubmit" style="float: left;margin-left: 20px;background-color: rgba(255,255,255,0.2);height: 300px;width: 300px" v-if="flag==0">
                         <div class="font-bold form-div">
-                            收款人：
-                            <u>潘德山</u>
+                            收款人 ：{{active.inUserName}}
                         </div>
                         <div class="font-bold form-div">
-                            收款账户：
-                            <div>1234 5678 8989 3849</div>
+                            收款账户：{{active.inBankCard}}
                         </div>
                         <div class="font-bold form-div">
-                            付款金额：
-                            <u>￥2000</u>
+                            付款金额：{{active.muchMoney}}
+                            <u>￥</u>
                         </div>
                         <div class="font-bold form-div">
-                            <!--                        <div class="">-->
-                            选择付款银行卡：
-                            <!--                        </div>-->
+                            备注: {{active.transferRemarks}}
+                        </div>
+                        <div class="font-bold form-div">
                             <select class="form-control form-selection col-lg-11"
-                                    style="margin-left: 5px;margin-top: 10px">
-                                <option class="form-selection-option">中国银行，1234***********6789</option>
-                                <option class="form-selection-option">招商银行，1234***********6789</option>
+                                    style="margin-left: 5px;margin-top: 10px"  v-model="userBankId">
+                                <option  class="form-selection-option" v-for="banks in bankCards" :value="banks.bankCardId" >
+                                   {{banks.bank}},{{banks.bankCardNumber}}
+                                </option>
                             </select>
                         </div>
-                        <button style="margin-left: 8%;margin-top: 20px" class="btn btn-danger">拒绝</button>
-                        <button style="margin-left: 8%;margin-top: 20px" class="btn btn-success">确认付款</button>
+                        <div class="font-bold form-div" v-for="banks in bankById()" :key="userBankId">
+                            单笔限额:{{banks.bankCardType}}
+                        </div>
+                        <button style="margin-left: 8%;margin-top: 20px" class="btn btn-danger" @click="userfalse(active.activeId)" >拒绝</button>
+                        <button style="margin-left: 8%;margin-top: 20px" class="btn btn-success"  @click="usertrue(active.activeId)">确认付款</button>
+                    </form>
+                    <!--展示提额通知-->
+                    <form   v-for="managerTranscation in managerById()" :key="managerId" @submit.prevent="onSubmit"  style="float: left;margin-left: 20px;background-color: rgba(255,255,255,0.2);height: 300px;width: 300px" v-else>
+                        <div class="font-bold form-div">
+                            申请卡号 ：{{managerTranscation.bankCard}}
+                        </div>
+                        <div class="font-bold form-div">
+                            申请事由：{{managerTranscation.transcationMsg}}
+                        </div>
+                            <div class="font-bold form-div" v-if="managerTranscation.transcationStatus==0">
+                                申请状态：处理中
+                            </div>
+                            <div class="font-bold form-div" v-if="managerTranscation.transcationStatus==1">
+                                申请状态：申请失败
+                            </div>
+                            <div class="font-bold form-div" v-if="managerTranscation.transcationStatus==2">
+                                申请状态：申请成功
+                            </div>
+                        <button style="margin-left: 8%;margin-top: 20px" class="btn btn-danger" v-if="managerTranscation.transcationStatus==0">取消申请</button>
+                        <button style="margin-left: 8%;margin-top: 20px" class="btn btn-danger" v-else>处理完成</button>
                     </form>
 
 
@@ -71,6 +97,7 @@
                 </div>
             </div>
         </div>
+
     </header>
 
     <footer class="page-footer indigo darken-2 center-on-small-only pt-0 mt-0">
@@ -98,10 +125,208 @@
     new Vue({
         el: "#app",
         data: {
-
+            /*获取所有相关主动收款通知*/
+            activeGatherings:[
+                {
+                    inUserId:"A1",
+                    //主动收款人姓名
+                    inUserName:"A1",
+                    //收款人银行卡归属行
+                    inBank:"A1",
+                    //收款人卡号
+                    inBankCard:"A1",
+                    //付款人id
+                    outUserId:"A1",
+                    //付款人姓名
+                    outUserName:"A1",
+                    //付款人银行卡归属行
+                    outBank:"A1",
+                    //付款人卡号
+                    outBankCard:"A1",
+                    //订单id
+                    activeId:"A1",
+                    //订单金额
+                    muchMoney:"A1",
+                    //订单备注
+                    transferRemarks:"A1",
+                    //订单类型
+                    activeType:"A1",
+                    //订单状态
+                    /**
+                     * 交易状态
+                     * 110 交易中
+                     * 120 成功
+                     * 130 失败
+                     */
+                    activestate:"110"
+                },
+                {
+                    inUserId:"b1",
+                    //主动收款人姓名
+                    inUserName:"b1",
+                    //收款人银行卡归属行
+                    inBank:"b1",
+                    //收款人卡号
+                    inBankCard:"b1",
+                    //付款人id
+                    outUserId:"b1",
+                    //付款人姓名
+                    outUserName:"b1",
+                    //付款人银行卡归属行
+                    outBank:"b1",
+                    //付款人卡号
+                    outBankCard:"b1",
+                    //订单id
+                    activeId:"b1",
+                    //订单金额
+                    muchMoney:"b1",
+                    //订单备注
+                    transferRemarks:"b1",
+                    //订单类型
+                    activeType:"b1",
+                    //订单状态
+                    /**
+                     * 交易状态
+                     * 110 交易中
+                     * 120 成功
+                     * 130 失败
+                     */
+                    activestate:"120"
+                }
+            ],
+            /*提额申请通知*/
+            managerTranscations:[
+                {
+                    //订单id
+                    transcationId: "11",
+                    //订单卡号
+                    bankCard: "11",
+                    //订单状态
+                    transcationStatus: "0",
+                    //申请备注
+                    transcationMsg: "11"
+                },
+                {
+                    //订单id
+                    transcationId: "22",
+                    //订单卡号
+                    bankCard: "22",
+                    //订单状态
+                    transcationStatus: "1",
+                    //申请备注
+                    transcationMsg: "22"
+                }
+            ],
+            /*获取用户名下所有银行卡*/
+            bankCards:[
+                {
+                    //银行卡id
+                    bankCardId:"11",
+                    //银行卡号
+                    bankCardNumber:"11",
+                    //银行卡所属银行
+                    bank:"11",
+                    //银行卡类型
+                    bankCardType:"普通卡"
+                },
+                {
+                    //银行卡id
+                    bankCardId:"22",
+                    //银行卡号
+                    bankCardNumber:"22",
+                    //银行卡所属银行
+                    bank:"22",
+                    //银行卡类型
+                    bankCardType:"钻石卡"
+                },
+            ],
+            /*判断用户点了提额通知还是收款通知(0:收款通知,1提额通知)*/
+            flag:"0",
+            /*获取用户所选卡id*/
+            userBankId:"",
+            //获取所选银行卡的支付密码
+            userBankPassword:"",
+            //根据用户点击展示收款信息的key
+            transferRecordId:"",
+            //根据用户点击提额通知id展示信息的key
+            managerId:""
         },
         methods: {
+            /*点击主动收款通知执行的方法*/
+            clickPayment: function(obj){
+                this.transferRecordId=obj;
+                this.userBankId=null;
+                this.flag="0";
+            },
+            /*根据id展示收款信息*/
+            activeById(){
+                    return this.activeGatherings.filter(item =>{
+                        if(item.activeId==this.transferRecordId){
+                        return true
+                    }
+                })
+            },
+            /*点击提额申请通知执行的方法*/
+            manager: function(obj){
+                this.managerId=obj;
+                this.flag="1";
+            },
+            /*根据id展示提额通知*/
+            managerById(){
+                    return this.managerTranscations.filter(item =>{
+                        if(item.transcationId==this.managerId){
+                        return true
+                    }
+                })
+            },
+            /*根据银行卡id展示该卡交易限额*/
+            bankById(){
+                    return this.bankCards.filter(item =>{
+                        if(item.bankCardId==this.userBankId){
+                            if(item.bankCardType.indexOf("普") != -1){
+                                item.bankCardType="￥1500,000"
+                            }else if(item.bankCardType.indexOf("黑") != -1){
+                                item.bankCardType="￥2500,000"
+                            }else if(item.bankCardType.indexOf("钻") != -1){
+                                item.bankCardType="￥3500,000"
+                            }
+                            else if(item.bankCardType.indexOf("企") != -1){
+                                item.bankCardType="￥4500,000"
+                            }
+                        return true
+                    }
+                });
+
+            },
+            /*用户点击拒绝付款执行的方法*/
+            userfalse:function(obj){
+
+            },
+
+            /*用户同意付款执行的方法*/
+            usertrue:function(obj){
+
+            },
+            /*取消表单的默认提交*/
+            onSubmit:function(){return false;},
+            /*页面加载完成事件*/
+            created: function () {
+
+            }
 
         }
     })
+    /*1.用户进入页面时分别查询交易记录表和管理员事务表,获取需要展示的通知
+    * 展示通知内容带主动收款人姓名,交易流水号;提额申请通知,提额申请id*/
+    /*2.根据用户的操作,获取对应操作的id,异步查询后台数据展示到侧边栏
+    如果是主动收款通知,展示收款人姓名(只读),收款人卡号(只读),收款金额(只读),收款人填写的备注信息,用户的付款卡号(默认展示请选择),通知提供两个按键
+    (付款按钮,拒绝按钮)
+    如果是提额申请通知,展示申请卡号,展示申请状态(成功或者失败),
+    * */
+    /*主动收款:用户拒绝收款请求,按钮隐藏,提示状态为已拒绝,流程结束
+    *   用户同意付款:要求用户选择付款的银行卡,选择银行卡后,增加显示该卡的当日限额
+    * 用户提交时要求用户输入支付密码,后台校验该卡余额,该卡状态
+    * 支付密码输错3次后锁定账号,当日不可支付
+    * 该卡可正常支付:按钮变为为已支付,支付失败则提示失败原因*/
+
 </script>
