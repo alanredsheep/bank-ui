@@ -123,8 +123,6 @@ function selectBankCardAttribution(params){
 function submitTransfer(params) {
     return axios.post("/web-service/verifyBankCardForVo", params);
 }
-
-
 //----------------transfer.html   end---------------
 
 //----------------transfer_cross_border.html   start-------跨境转账页面--------
@@ -166,6 +164,10 @@ function addPayeeGroup(params){
 // 根据id删除群组用户
 function deletePayeeById(params){
     return axios.post("/web-service/deletePayeeById",params)
+}
+//添加一个群组收款人
+function addPayee(params) {
+    return axios.post("/web-service/addPayee",params)
 }
 //----------------payee_group.html   end---------------
 
