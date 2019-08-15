@@ -22,6 +22,13 @@ axios.interceptors.request.use(function (config) {
 
 
 
+//--------------------- identity.html  start --------------------
+//实名认证----实名认证
+function verifyIndentity(params,config){
+	return axios.post("/web-service/verifiedIdentity",params,config);
+}
+//--------------------- identity.html  end --------------------
+
 //--------------------- registry.html  start --------------------
 //注册----获取验证码
 function registrySms(phone){
@@ -163,3 +170,12 @@ function UpgradeCard(params){
 function getOtherBankCardByUserId(params){
 	return axios.get("/web-service/getOtherBankCardByUserId/"+params)
 }
+function getBankCards(params) {
+    return axios.get("/web-service/getBankCardByUserId",{params:{"userId":params}});
+}
+
+//---------------- enterprise_login.html   start ---------------
+function enterpriseLoginTemp(params){
+	return axios.post("/auth-service/bankEnterpriseLogin",params)
+}
+//---------------- enterprise_login.html   end   ---------------
