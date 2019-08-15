@@ -90,12 +90,12 @@
                             <div class="font-bold form-div">
                                 转账金额（人民币）：
                                 <input class="col-md-10 col-lg-4" v-model="crossBorderTransferForm.transferRecordAmountFrom" type="text"
-                                    @Keyup="getExchangeRatePrice(crossBorderTransferForm.transferRecordAmountFrom)">元
+                                    @change="getExchangeRatePrice(crossBorderTransferForm.transferRecordAmountFrom)">元
                             </div>
                             <div class="font-bold form-div">
                                 转账金额（外币）：
                                 <input class="col-md-10 col-lg-4" v-model="crossBorderTransferForm.transferRecordAmountTo" type="text"
-                                    @keyup="getExchangeRateCNY(crossBorderTransferForm.transferRecordAmountTo)">元
+                                    @change="getExchangeRateCNY(crossBorderTransferForm.transferRecordAmountTo)">元
                             </div>
                             <div class="font-bold form-div">
                                 备注：
@@ -161,8 +161,7 @@
             },
             // 用户所有的本行卡
             bankCards: [],
-
-           
+            //银行卡
             user: {
                 userId: "2",
                 userName: "啊啊啊啊啊",
@@ -207,58 +206,76 @@
             },
             //转账
             CrossBorderTransfer: function () {
-                //this.user = JSON.parse(sessionStorage.getItem("user"));
+                this.user = JSON.parse(sessionStorage.getItem("user"));
                 this.crossBorderTransferForm.userId = this.user.userId;
                 //校验付款卡
                 if (this.crossBorderTransferForm.bankOutCardId != "") {
                     //校验收款人名字
-                    if (!/^[A-Za-z]/.test(this.crossBorderTransferForm.inCardUserName)) {
-                        CrossBorderTransfer(this.crossBorderTransferForm).then(res => {
+                    if (/^([\u4E00-\u9FA5]+|[a-zA-Z]+)$/.test(this.crossBorderTransferForm.inCardUserName)) {
+                        if(/^([1-9]{1})(\d{14}|\d{18})$/.test(this.crossBorderTransferForm.bankInCard)){
+                        //校验金额
+                        if(/^([1-9][0-9]*)+(.[0-9]{1,2})?$/.test(this.crossBorderTransferForm.transferRecordAmountFrom)){
+                            CrossBorderTransfer(this.crossBorderTransferForm).then(res => {
                             //成功
                             if (res.data.data.errno == 0) {
                                 alert("转账成功")
                             }else if(res.data.data.errno == 1){
                                 alert("余额不足")
+                            }else if(res.data.data.errno == 2){
+                                alert("已超出银行卡限额,请前往提升卡类型")
                             }else{
-                                alert("转账失败")
+                                alert("转账失败,请重试")
                             }
                         })
+                        }else{
+                            alert("金额不合法,请重新输入")
+                        }
+                        }else {
+                            alert("卡号不合法,请重新输入")
+                        }
+                    }else{
+                        alert("名字不合法,请重新输入")
                     }
                 }
             },
             //查询外币
             getExchangeRatePrice: function (value) {
+                if(/^[0-9]+(.[0-9]{2})?$/.test( this.crossBorderTransferForm.transferRecordAmountFrom)){
                 if (value != "0" && this.crossBorderTransferForm.currencyType!="") {
                     getExchangeRatePrice(value,this.crossBorderTransferForm.currencyType).then(res => {
                         if(res.data.data.errno == 0){
                             this.crossBorderTransferForm.transferRecordAmountFrom = res.data.data.data.transferRecordAmountFrom;
                             this.crossBorderTransferForm.transferRecordAmountTo = res.data.data.data.transferRecordAmountTo;
-                              //保留两位小数(不四舍五入)
-                            this.crossBorderTransferForm.transferRecordAmountFrom = this.numFilter(this.crossBorderTransferForm.transferRecordAmountFrom)
-                            this.crossBorderTransferForm.transferRecordAmountTo = this.numFilter(this.crossBorderTransferForm.transferRecordAmountTo)
+                          
                         }
                     })
                 }else{
-                    this.transferRecordAmountFrom  = "0"
+                    this.crossBorderTransferForm.transferRecordAmountFrom  = ""
+                }
+                }else{
+                    this.crossBorderTransferForm.transferRecordAmountFrom  = ""
                 }
 
             },
             //根据外币查询人民币
             getExchangeRateCNY: function (value) {
-                if (value != "0" && this.crossBorderTransferForm.currencyType!="") {
+                if(/^[0-9]+(.[0-9]{2})?$/.test( this.crossBorderTransferForm.transferRecordAmountFrom)){
+                    if (value != "0" && this.crossBorderTransferForm.currencyType!="") {
                     getExchangeRateCNY(value,this.crossBorderTransferForm.currencyType).then(res => {
                         if(res.data.data.errno == 0){
                             this.crossBorderTransferForm.transferRecordAmountFrom = res.data.data.data.transferRecordAmountFrom;
                             this.crossBorderTransferForm.transferRecordAmountTo = res.data.data.data.transferRecordAmountTo;
-                            //保留两位小数(不四舍五入)
-                            this.crossBorderTransferForm.transferRecordAmountFrom = this.numFilter(this.crossBorderTransferForm.transferRecordAmountFrom)
-                            this.crossBorderTransferForm.transferRecordAmountTo = this.numFilter(this.crossBorderTransferForm.transferRecordAmountTo)
                         }
                     })
                 }else{
-                    this.transferRecordAmountTo  = "0"
+                    this.crossBorderTransferForm.transferRecordAmountTo  = ""
                 }
+                }else{
+                    this.crossBorderTransferForm.transferRecordAmountTo  = ""
+                }
+            
             },
+
         },
 
 

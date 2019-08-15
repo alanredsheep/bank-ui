@@ -9,6 +9,12 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/mdb.min.css" rel="stylesheet">
     <link href="styles/main.css" rel="stylesheet">
+    <style>
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none !important;
+        }
+    </style>
 
 </head>
 <body id="top">
@@ -22,20 +28,20 @@
             <!-- 渐变色-->
             <div class="full-bg-img d-flex align-items-center">
                 <!--   主体内容    -->
-                <div class="col-md-10 col-lg-5" style="margin-left: 360px">
+                <div class="col-md-10 col-lg-5" style="margin-left: 360px" v-show="!showpop">
                     <div class="text-center form-title">单 次 转 账</div>
                     <!--转账方式选择栏-->
                     <nav class="navbar navbar-expand-lg navbar-light col-md-10 col-lg-9" style="margin-bottom: 20px">
                         <div class="collapse navbar-collapse" id="navbarNav">
                             <ul class="navbar-nav">
                                 <!--默认选中银行卡转账-->
-                                <li id="li-password-login" class="nav-item active text-center col-lg-7">
+                                <li id="li-password-login" class="nav-item text-center col-lg-7">
                                     <a class="nav-link " style="color: #ffffff;font-size: x-large"
-                                       @click="changeBankCardTransfer()" href="#">银行卡转账</a>
+                                       @click.prevent="changeBankCardTransfer()" href="#">银行卡转账</a>
                                 </li>
                                 <li id="li-auth-code-login" class="nav-item text-center col-lg-8">
                                     <a class="nav-link" style="color: #ffffff;font-size: x-large"
-                                       @click="changePhoneTransfer()" href="#">手机号转账</a>
+                                       @click.prevent="changePhoneTransfer()" href="#">手机号转账</a>
                                 </li>
                             </ul>
                         </div>
@@ -43,11 +49,17 @@
                     <!--银行卡转账表单-->
                     <form id="bankCardTransfer" class="" v-show="!transferMethod">
                         <div class="font-bold form-div col-lg-12 btn-group">
-                            <select class="form-control form-selection col-lg-9" v-model="transferValue.outBankCard">
+
+                            <select class="form-control form-selection col-lg-9"
+                                    v-model="transferValue.outBankCardID">
                                 <option disabled value="" class="form-selection-option">选择付款银行卡</option>
-                                <option class="form-selection-option">中国银行，1234***********6789</option>
-                                <option class="form-selection-option">招商银行，1234***********6789</option>
+                                <template v-for="bankCard in bankCards">
+                                    <option :value="bankCard.bankCardId" class="form-selection-option">
+                                        {{bankCard.bank}}，{{bankCard.bankCardNumber}}
+                                    </option>
+                                </template>
                             </select>
+
                             <button class="form-selection-btn"><a href="bank_card_manage.html" style="color: #ffffff">管理银行卡</a>
                             </button>
                         </div>
@@ -59,14 +71,15 @@
                                         v-model="transferValue.inBank">
                                     <option disabled class="form-selection-option" value="">选择银行</option>
                                     <template v-for="sb in subordinateBank">
-                                        <option class="form-selection-option">
+                                        <option class="form-selection-option" :value="sb.bankIdentification">
                                             {{sb.bankName}}
                                         </option>
                                     </template>
                                 </select>
                                 <div style="margin-left: 20px">
                                     <input v-model="transferValue.inBankCard" class="col-md-10" style="width: 228px"
-                                           type="text" @blur="selectBankCard()">
+                                           type="number" @blur="selectBankCard()"/>
+                                    <h6 style="color: red">{{this.msgforselectBankCard}}</h6>
                                 </div>
                             </div>
                         </div>
@@ -76,16 +89,17 @@
                         </div>
                         <div class="font-bold form-div">
                             转账金额：
-                            <input class="col-md-10 col-lg-4" v-model="transferValue.muchMoney" type="text">元
+                            <input class="col-md-10 col-lg-4" v-model="transferValue.muchMoney" @keyup="checkAmount()"
+                                   type="number">元
+                            <h6 style="color: red">{{this.msgAmount}}</h6>
                         </div>
                         <div class="font-bold form-div">
                             预约到账时间：
                             <div class="font-bold form-div col-lg-8 btn-group">
                                 <select class="form-control form-selection-bank col-lg-5"
-                                        v-model="transferValue.transferTime" @blur="opp()">
+                                        v-model="transferValue.transferTime">
                                     <option value="0" class="form-selection-option">马上到账</option>
                                     <option value="2" class="form-selection-option">2小时后到账</option>
-                                    <option value="4" class="form-selection-option">4小时后到账</option>
                                 </select>
                             </div>
 
@@ -99,17 +113,24 @@
                         <!--                        <div><input class="col-md-10 col-lg-11" type="password"></div>-->
                         <!--                    </div>-->
                         <div class="text-md-center">
-                            <button class="btn btn-blue btn-sm" style="font-size: medium" type="submit">确认转账</button>
+                            <button class="btn btn-blue btn-sm" style="font-size: medium" @click.prevent="changepop()">
+                                确认转账
+                            </button>
                             </button>
                         </div>
+
                     </form>
                     <!--手机号转账表单-->
                     <form id="phoneTransfer" class="" v-show="transferMethod">
                         <div class="font-bold form-div col-lg-12 btn-group">
-                            <select class="form-control form-selection col-lg-9" v-model="transferValue.outBankCard">
+                            <select class="form-control form-selection col-lg-9"
+                                    v-model="transferValue.outBankCardID">
                                 <option disabled value="" class="form-selection-option">选择付款银行卡</option>
-                                <option class="form-selection-option">中国银行，1234***********6789</option>
-                                <option class="form-selection-option">招商银行，1234***********6789</option>
+                                <template v-for="bankCard in bankCards">
+                                    <option :value="bankCard.bankCardId" class="form-selection-option">
+                                        {{bankCard.bank}}，{{bankCard.bankCardNumber}}
+                                    </option>
+                                </template>
                             </select>
                             <button class="form-selection-btn"><a href="bank_card_manage.html" style="color: #ffffff">管理银行卡</a>
                             </button>
@@ -120,7 +141,9 @@
                             <div class="font-bold form-div col-lg-8 btn-group">
                                 <div style="margin-left: 20px">
                                     <input class="col-md-10" style="width: 228px"
-                                           type="text">
+                                           maxlength="11" @blur="checkPhone()" type="text"
+                                           v-model=" transferValue.bankPhone">
+                                    <h6 style="color: red">{{this.msgPhone}}</h6>
                                 </div>
                             </div>
                         </div>
@@ -130,16 +153,17 @@
                         </div>
                         <div class="font-bold form-div">
                             转账金额：
-                            <input class="col-md-10 col-lg-4" v-model="transferValue.muchMoney" type="text">元
+                            <input class="col-md-10 col-lg-4" v-model="transferValue.muchMoney" @keyup="checkAmount()"
+                                   type="number">元
+                            <h6 style="color: red">{{this.msgAmount}}</h6>
                         </div>
                         <div class="font-bold form-div">
                             预约到账时间：
                             <div class="font-bold form-div col-lg-8 btn-group">
                                 <select class="form-control form-selection-bank col-lg-5"
-                                        v-model="transferValue.transferTime" @blur="opp()">
+                                        v-model="transferValue.transferTime">
                                     <option value="0" class="form-selection-option">马上到账</option>
                                     <option value="2" class="form-selection-option">2小时后到账</option>
-                                    <option value="4" class="form-selection-option">4小时后到账</option>
                                 </select>
                             </div>
 
@@ -153,17 +177,38 @@
                         <!--                        <div><input class="col-md-10 col-lg-11" type="password"></div>-->
                         <!--                    </div>-->
                         <div class="text-md-center">
-                            <button class="btn btn-blue btn-sm" style="font-size: medium" type="submit">确认转账</button>
+                            <button class="btn btn-blue btn-sm" style="font-size: medium" type="submit"
+                                    @click.prevent="changepop()">确认转账
+                            </button>
                             </button>
                         </div>
                     </form>
+                </div>
+                <!-- 弹窗 -->
 
-
+                <div class="col-md-10 col-lg-3" v-show="showpop" style="margin: auto">
+                    <div class="text-center form-title">请输入六位支付密码</div>
+                    <div style="margin-bottom: 40px">
+                        <input type="password" class="col-lg-2" maxlength="6" v-model="transferValue.password"
+                               style="text-align:center;margin-left: 36%"
+                               onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))"
+                        />
+                    </div>
+                    <button class="btn btn-danger btn-sm"
+                            style="margin-left: 30px;margin-top: 20px;font-size: medium" @click.prevent="changepop()">
+                        取消
+                    </button>
+                    <button class="btn btn-success btn-sm"
+                            style="margin-left: 60px;margin-top: 20px;font-size: medium"
+                            @click.prevent="submitTransfer()">
+                        确认
+                    </button>
                 </div>
 
             </div>
         </div>
     </header>
+
 
     <footer class="page-footer indigo darken-2 center-on-small-only pt-0 mt-0">
         <div class="footer-copyright">
@@ -175,15 +220,15 @@
 </div>
 </body>
 </html>
-
+<script type="text/javascript" src="js/vuejs-2.5.16.js"></script>
+<script type="text/javascript" src="js/axios-0.18.0.js"></script>
 <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="js/popper.min.js"></script>
 <script type="text/javascript" src="js/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/mdb.min.js"></script>
 <script type="text/javascript" src="scripts/main.js"></script>
 
-<script type="text/javascript" src="js/axios-0.18.0.js"></script>
-<script type="text/javascript" src="js/vuejs-2.5.16.js"></script>
+
 <script type="text/javascript" src="js/api.1.js"></script>
 <script type="text/javascript" src="components/topNav.js"></script>
 <script type="text/javascript" src="scripts/util.js"></script>
@@ -194,8 +239,10 @@
         data: {
             //转账信息
             transferValue: {
-                //付款银行卡
-                outBankCard: "",
+                //用户id
+                userId: "",
+                //付款银行卡id
+                outBankCardID: "",
                 //收款的银行
                 inBank: "",
                 //收款的银行卡号
@@ -204,49 +251,174 @@
                 inBankName: "",
                 //转账金额
                 muchMoney: "",
-                //转账时间,0,代表即时转账，2代表2小时转账，4代表4小时转账
+                //转账时间,0,代表即时转账，2代表2小时转账
                 transferTime: "0",
                 //转账备注
-                transferRemarks: ""
+                transferRemarks: "",
+                //密码字段
+                password: "",
+                //手机号字段
+                bankPhone: "",
+
             },
             //转账方式选择，false为银行卡转账，true为手机号转账
             transferMethod: false,
-
+            //所有合作银行
             subordinateBank: [{
                 // bankIdentification: "",
                 // bankName: "",
             }],
+            //用户所有本行卡
+            bankCards: [{
+                //银行卡id，bankCardId
+                //残缺卡号，bankCardNumber
+                //银行卡类型，bankCardType
+            }],
+            //用户所有他行卡
+            otherBankCards: [{
+                //他行卡id，otherBankCardId
+                //残缺卡号，otherBankCardNumbe
+                // 所属银行，otherBankName
+            }],
+            user: {
+                userId: "2",
+                userName: "啊啊啊啊啊",
+                userPhone: "235456",
+                userPassword: "123123",
+
+            },
+            //弹窗
+            showpop: false,
+            //查询银行卡错误
+            msgforselectBankCard: "",
+            //转账金额输入错误
+            msgAmount: "",
+            //手机号码报错
+            msgPhone: "",
         },
         methods: {
-            //查询银行卡归属银行
+            //查询银行  卡归属银行
             selectBankCard: function () {
+                var str = /^\d{15,19}$/;
                 //当输入数值大于15并且光标离开和回车时调用
-                if (this.transferValue.inBankCard.size > 15) {
+                if (str.exec(this.transferValue.inBankCard)) {
                     //调用查询银行卡归属银行
-                    selectBankCardAttribution(this.transferValue.inBankCard).then(res => {
+                    this.msgforselectBankCard = "";
+                    if (this.transferValue.inBankCard.substring(0, 4) == "9999") {
+                        this.transferValue.inBank = "BOWR";
+                    } else {
+                        selectBankCardAttribution(this.transferValue.inBankCard).then(res => {
+                            if (res.data.data.errno == 0) {
+                                this.transferValue.inBank = res.data.data.data;
+                            } else {
+                                this.msgforselectBankCard = res.data.data.errmsg;
+                            }
+                        })
+                    }
+                } else {
+                    this.transferValue.inBankCard = "";
+                    this.msgforselectBankCard = "请按照格式输入银行卡号，15-19位纯数字 ";
+                }
 
+            },
+            //获取用户所持银行卡信息
+            getBankCardByUser: function () {
+                getBankCardByUser(this.user).then(res => {
+                    if (res.data.data.errno == 0) {
+                        this.bankCards = res.data.data.data;
+                    }
+                })
 
-                    })
-
+            },
+            //切换成银行卡转账
+            changeBankCardTransfer: function () {
+                if (this.transferMethod) {
+                    this.transferMethod = false;
+                    this.transferValue.outBankCardID = "";
+                    this.transferValue.inBankName = "";
+                    this.transferValue.muchMoney = "";
+                    this.transferValue.transferTime = "0";
+                    this.transferValue.transferRemarks = "";
+                    this.transferValue.password = "";
+                    this.transferValue.bankPhone = "";
+                    this.msgPhone = "";
+                    this.msgAmount = "";
                 }
             },
-            selectUserAllBankCard: function () {
-                //条用根据用户ID查询所有用户银行卡的方法
-            },
-            changeBankCardTransfer: function () {
-                this.transferMethod = false;
-            },
+            //切换成手机转账
             changePhoneTransfer: function () {
-                this.transferMethod = true;
+                if (!this.transferMethod) {
+                    this.transferMethod = true;
+                    this.transferValue.outBankCardID = "";
+                    this.transferValue.inBank = "";
+                    this.transferValue.inBankCard = "";
+                    this.transferValue.inBankName = "";
+                    this.transferValue.muchMoney = "";
+                    this.transferValue.transferTime = "0";
+                    this.transferValue.transferRemarks = "";
+                    this.transferValue.password = "";
+                    this.msgforselectBankCard = "";
+                    this.msgAmount = "";
+                }
             },
+
+            changepop: function () {
+                if (!this.showpop) {
+                    if (this.transferValue.outBankCardID == "") {
+                        return alert("请选择银行卡");
+                    }
+                    if (this.transferValue.inBank == "") {
+                        return alert("请选择银行卡,无效请通知管理员");
+                    }
+                    if (this.transferValue.inBankCard == "" && this.transferValue.bankPhone == "") {
+                        return alert("请输入收款银行卡号或输入收款手机号");
+                    }
+                    if (this.transferValue.inBankName == "") {
+                        return alert("请输入收款人姓名");
+                    }
+                    if (this.transferValue.muchMoney == "") {
+                        return alert("请输入转账金额");
+                    }
+                    if (this.transferValue.muchMoney == "") {
+                        return alert("请输入转账金额");
+                    }
+                    this.showpop = true;
+                } else {
+                    this.showpop = false;
+                    this.transferValue.password = "";
+                }
+            },
+            checkAmount: function () {
+                var str = /^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/;
+                if (!str.exec(this.transferValue.muchMoney)) {
+                    this.transferValue.muchMoney = " ";
+                    this.msgAmount = "请输入正确的转账金额 ，例如：100.11";
+                } else {
+                    this.msgAmount = "";
+                }
+            },
+            checkPhone: function () {
+                var str = /^\d{11}$/;
+                if (!str.exec(this.transferValue.bankPhone)) {
+                    this.transferValue.bankPhone = "";
+                    this.msgPhone = "请输入正确的手机格式，13位纯数字";
+                } else {
+                    this.msgPhone = "";
+                }
+            },
+            submitTransfer: function () {
+                this.transferValue.userId = this.user.userId;
+                submitTransfer(this.transferValue)
+            }
 
         },
         created() {
-
             // 加载页面时从本地查询出所有所属银行
             this.subordinateBank = JSON.parse(sessionStorage.getItem("subordinateBank"));
-            //加载页面是调用查询用户所有银行卡方法
-            // this.selectBankCard();
+            //根据用户查询他所拥有的银行卡
+            this.getBankCardByUser();
+
+
         }
 
     })
