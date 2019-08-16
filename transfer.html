@@ -78,7 +78,7 @@
                                 </select>
                                 <div style="margin-left: 20px">
                                     <input v-model="transferValue.inBankCard" class="col-md-10" style="width: 228px"
-                                            type="number" @blur="selectBankCard()"/>
+                                           type="number" @blur="selectBankCard()"/>
                                     <h6 style="color: red">{{this.msgforselectBankCard}}</h6>
                                 </div>
                             </div>
@@ -199,7 +199,8 @@
                         取消
                     </button>
                     <button class="btn btn-success btn-sm"
-                            style="margin-left: 60px;margin-top: 20px;font-size: medium" @click.prevent="submitTransfer()">
+                            style="margin-left: 60px;margin-top: 20px;font-size: medium"
+                            @click.prevent="submitTransfer()">
                         确认
                     </button>
                 </div>
@@ -262,7 +263,7 @@
             },
             //转账方式选择，false为银行卡转账，true为手机号转账
             transferMethod: false,
-           //所有合作银行
+            //所有合作银行
             subordinateBank: [{
                 // bankIdentification: "",
                 // bankName: "",
@@ -312,10 +313,7 @@
                             } else {
                                 this.msgforselectBankCard = res.data.data.errmsg;
                             }
-                    findBankCardIdentification(this.transferValue.inBankCard).then(res => {
-
                         })
-
                     }
                 } else {
                     this.transferValue.inBankCard = "";
@@ -325,9 +323,6 @@
             },
             //获取用户所持银行卡信息
             getBankCardByUser: function () {
-                //获取用户信息
-                //this.user = JSON.parse(sessionStorage.getItem("user"));
-                //根据用户信息查询银行卡
                 getBankCardByUser(this.user).then(res => {
                     if (res.data.data.errno == 0) {
                         this.bankCards = res.data.data.data;
@@ -335,6 +330,7 @@
                 })
 
             },
+            //切换成银行卡转账
             changeBankCardTransfer: function () {
                 if (this.transferMethod) {
                     this.transferMethod = false;
@@ -349,6 +345,7 @@
                     this.msgAmount = "";
                 }
             },
+            //切换成手机转账
             changePhoneTransfer: function () {
                 if (!this.transferMethod) {
                     this.transferMethod = true;
@@ -364,14 +361,14 @@
                     this.msgAmount = "";
                 }
             },
-            changepop: function () {
 
+            changepop: function () {
                 if (!this.showpop) {
                     if (this.transferValue.outBankCardID == "") {
-                         return alert("请选择银行卡");
+                        return alert("请选择银行卡");
                     }
                     if (this.transferValue.inBank == "") {
-                         return  alert("请选择银行卡,无效请通知管理员");
+                        return alert("请选择银行卡,无效请通知管理员");
                     }
                     if (this.transferValue.inBankCard == "" && this.transferValue.bankPhone == "") {
                         return alert("请输入收款银行卡号或输入收款手机号");
@@ -410,7 +407,7 @@
                 }
             },
             submitTransfer: function () {
-                //TODO 跳转去显示页面-
+                this.transferValue.userId = this.user.userId;
                 submitTransfer(this.transferValue)
             }
 

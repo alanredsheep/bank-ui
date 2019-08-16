@@ -201,7 +201,7 @@
             msgforselectBankCard: "",
             newPayee: {
                 payeeName: "张三",
-                payeeBankIdentification: "垃圾银行",
+                payeeBankIdentification: "BOWR",
                 payeeBankCard: "123456",
                 payeeGroupId: "",
             }
@@ -220,6 +220,7 @@
             },
 
             selectPayeeById: function (id) {
+                this.showChange = false;
                 //根据 收款群组id获取所有收款人
                 selectPayeeById(id).then(res => {
                     this.newPayee.payeeGroupId = id;
@@ -235,13 +236,13 @@
             oppenAddPayeeGroup: function () {
                 this.showAddPayeeGroupInput = true;
             },
+
             addPayeeGroup: function () {
                 this.newPayeeGroup.userId = this.user.userId;
-                if(this.newPayeeGroup.userId==""){
+                if (this.newPayeeGroup.userId == "") {
                     return alert("操作异常请重新登录");
                 }
                 if (this.newPayeeGroup.inputPayeeGroup != "") {
-
                     //添加一条收款群组到
                     addPayeeGroup(this.newPayeeGroup).then(res => {
                         if (res.data.data.errono == 1) {
@@ -253,59 +254,59 @@
                         }
                     })
                 }
-            }
-        },
-        //切换添加Payee
-        showChangeOpen: function () {
-            if (this.showChange) {
-                this.msgforselectBankCard = "";
-                this.showChange = false;
-            } else {
-                this.showChange = true;
-            }
-        },
-        // 删除群组用户的方法
-        deletePayeeById: function (payeeId) {
-            deletePayeeById(payeeId).then(res => {
-                if (res.data.data.errono == 1) {
-                    alert(res.data.data.errmsg);
+            },
+            //切换添加Payee
+            showChangeOpen: function () {
+                if (this.showChange) {
+                    this.msgforselectBankCard = "";
+                    this.showChange = false;
                 } else {
-                    for (var i=0;i<this.payees.length;i++) {
-                        if(this.payees[i].payeeId==this.newPayeeGroup.userId){
-                            this.payees.splice(i,1);
+                    this.showChange = true;
+                }
+            },
+            // 删除群组用户的方法
+            deletePayeeById: function (payeeId) {
+                deletePayeeById(payeeId).then(res => {
+                    if (res.data.data.errono == 1) {
+                        alert(res.data.data.errmsg);
+                    } else {
+                        for (var i = 0; i < this.payees.length; i++) {
+                            if (this.payees[i].payeeId == payeeId) {
+                                this.payees.splice(i, 1);
+                            }
                         }
                     }
-                }
 
-            })
-        },
-        // 查询银行卡所属银行的方法
-        selectBankCard: function () {
-            var str = /^\d{15,19}$/;
-            //当输入数值大于15并且光标离开和回车时调用
-            if (str.exec(this.newPayee.payeeBankCard)) {
-                //调用查询银行卡归属银行
-                this.msgforselectBankCard = "";
-                if (this.newPayee.payeeBankCard.substring(0, 4) == "9999") {
-                    this.newPayee.payeeBankIdentification = "BOWR";
+                })
+            },
+            // 查询银行卡所属银行的方法
+            selectBankCard: function () {
+                var str = /^\d{15,19}$/;
+                //当输入数值大于15并且光标离开和回车时调用
+                if (str.exec(this.newPayee.payeeBankCard)) {
+                    //调用查询银行卡归属银行
+                    this.msgforselectBankCard = "";
+                    if (this.newPayee.payeeBankCard.substring(0, 4) == "9999") {
+                        this.newPayee.payeeBankIdentification = "BOWR";
+                    } else {
+                        selectBankCardAttribution(this.newPayee.payeeBankCard).then(res => {
+                            if (res.data.data.errno == 0) {
+                                this.newPayee.payeeBankCard = res.data.data.data;
+                            } else {
+                                this.msgforselectBankCard = res.data.data.errmsg;
+                            }
+                        })
+                    }
                 } else {
-                    selectBankCardAttribution(this.newPayee.payeeBankCard).then(res => {
-                        if (res.data.data.errno == 0) {
-                            this.newPayee.payeeBankCard = res.data.data.data;
-                        } else {
-                            this.msgforselectBankCard = res.data.data.errmsg;
-                        }
-                    })
+                    this.payees.payeeBankCard = "";
+                    this.msgforselectBankCard = "请按照格式输入银行卡号，15-19位纯数字 ";
                 }
-            } else {
-                this.payees.payeeBankCard = "";
-                this.msgforselectBankCard = "请按照格式输入银行卡号，15-19位纯数字 ";
-            }
 
-        },
-        // 添加收款组用户
-        addPayee: function () {
-            if (this.inputPayee != "") {
+            },
+
+            // 添加收款组用户
+            addPayee: function () {
+
                 if (this.newPayee.payeeBankCard == "") {
                     return alert("请输入银行卡号");
                 }
@@ -318,10 +319,17 @@
                 if (this.newPayee.payeeGroupId == "") {
                     return alert("请重新选择群组后添加");
                 }
+                addPayee(this.newPayee).then(res => {
+                    if (res.data.data.errno == 0) {
+                        this.showChangeOpen();
+                        this.selectPayeeById(this.newPayee.payeeGroupId);
+                    } else {
+                        return alert(res.data.data.errmsg)
+                    }
+                })
 
-            }
 
-
+            },
         },
         created() {
             this.selectAllPayeeGroup()
