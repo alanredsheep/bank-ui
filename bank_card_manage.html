@@ -28,7 +28,8 @@
                     <div class="panel-body scroll-panel"
                          style="width: 40%;height: 290px; overflow-y:scroll;margin-left: 12%;float: left">
                         <div class="scroll-panel-div">
-                            <div class="container bank-card-container" v-for="(bankCard,index) in bankCards">
+                            <div v-if="hasBankCard" class="container bank-card-container"
+                                 v-for="(bankCard,index) in bankCards">
                                 <a @click="selectBankCard(index)">
                                     <div class="jumbotron row"
                                          v-bind:style='bankCard.bankCardType == "钻石卡"?{"background-image":diamondCardImage}:
@@ -40,7 +41,8 @@
                                     </div>
                                 </a>
                             </div>
-                            <div class="container bank-card-container" v-for="(bankCard,index) in otherBankCards">
+                            <div v-if="hasBankCard" class="container bank-card-container"
+                                 v-for="(bankCard,index) in otherBankCards">
                                 <a @click="selectOtherBankCard(index)">
                                     <div class="jumbotron row" style="background-color:#FF9248">
                                         <p style="font-size: xx-large">{{bankCard.bankCardName}}</p>
@@ -55,7 +57,7 @@
                         <a href="bank_card_add.html">
                             <button @click="addBankCard()" class="btn btn-default bank-card-button">绑定银行卡</button>
                         </a>
-                        <button v-bind:disabled="selectAOtherBankCard" @click="upgradeBankCard"
+                        <button v-bind:disabled="selectBlackCard" @click="upgradeBankCard"
                                 class="btn btn-blue bank-card-button">升级银行卡
                         </button>
                         <button v-bind:disabled="selectABankCard" @click="untiedBankCard"
@@ -117,7 +119,6 @@
             user: {
                 userId: 1,
                 userName: "",
-                userStatus: 100,
             },
             // 是否选中他行卡
             selectAOtherBankCard: true,
@@ -155,7 +156,10 @@
             confirmToUntied: false,
             // 确定挂失银行卡
             confirmToReport: false,
-            //
+            // 用户是否有银行卡
+            hasBankCard: false,
+            // 用户是否选中了黑卡
+            selectBlackCard: true,
         },
         methods: {
             // 取消按钮
@@ -170,23 +174,27 @@
                 if (this.confirmToReport) {
                     reportBankCardLoss({
                         "userId": this.user.userId,
-                        "password": this.password,
-                        "bankCardId": this.bankCardSelected.bankCardId,
+                        "bankCardPassword": this.password,
+                        "bankCardId": this.bankCardSelected.bankCardId
                     }).then(res => {
                         this.confirmToReport = false;
                         alert(res.data.data.errmsg);
-                        window.location.reload();
+                        if (res.data.data.errno == 0) {
+                            window.location.reload();
+                        }
                     })
                 }
                 if (this.confirmToUntied) {
                     untiedOtherBankCard({
                         "userId": this.user.userId,
-                        "password": this.password,
-                        "otherBankCardId": this.otherBankCardSelected.bankCardId,
+                        "bankCardPassword": this.password,
+                        "bankCardId": this.otherBankCardSelected.bankCardId,
                     }).then(res => {
                         this.confirmToUntied = false;
                         alert(res.data.data.errmsg);
-                        window.location.reload();
+                        if (res.data.data.errno == 0) {
+                            window.location.reload();
+                        }
                     })
                 }
             },
@@ -195,14 +203,18 @@
                 this.selectAOtherBankCard = false;
                 this.selectABankCard = true;
                 this.bankCardSelected.bankCardId = this.bankCards[index].bankCardId;
-                console.log(this.bankCardSelected.bankCardId);
+                if (this.bankCards[index].bankCardType == "黑卡") {
+                    this.selectBlackCard = true;
+                }else{
+                    this.selectBlackCard = false;
+                }
             },
             // 点击某张他行卡
             selectOtherBankCard: function (index) {
                 this.selectAOtherBankCard = true;
                 this.selectABankCard = false;
+                this.selectBlackCard = true;
                 this.otherBankCardSelected.bankCardId = this.otherBankCards[index].bankCardId;
-                console.log(this.otherBankCardSelected.bankCardId);
             },
             // 解绑银行卡
             untiedBankCard: function () {
@@ -218,21 +230,27 @@
             },
             // 升级银行卡
             upgradeBankCard: function () {
-                sessionStorage.setItem("")
+                sessionStorage.removeItem("upgradeBankCard");
+                sessionStorage.setItem("upgradeBankCard", this.bankCardSelected.bankCardId);
+                window.location.href = "bank_card_add_limit.html";
             },
             // 初始化用户的银行卡信息
             initOtherBankCardList: function () {
                 var _this = this;
                 getOtherBankCardByUserId(_this.user.userId).then(res => {
-                    _this.otherBankCards = res.data.data.otherBankCards;
+                    if (res.data.data)
+                        _this.otherBankCards = res.data.data.otherBankCards;
                 });
             },
             initBankCardList: function () {
                 var _this = this;
-                getBankCardByUser({"userId": _this.user.userId}).then(res => {
+                getBankCardsByUserId({"userId": _this.user.userId}).then(res => {
+                    if (res.data.data.data != null) {
+                        _this.hasBankCard = true;
+                    }
                     _this.bankCards = res.data.data.data;
                 });
-            }
+            },
         },
         created: function () {
             this.initBankCardList();

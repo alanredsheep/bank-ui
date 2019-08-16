@@ -141,18 +141,17 @@
                 userPassword: "123123",
 
             },
-       
+
         },
         methods: {
             //获取银行卡信息通过id
             getBankCardBybankCardId: function () {
                 //获取银行卡id
-                this.bankCard.bankCardId = 1
+                this.bankCard.bankCardId = sessionStorage.getItem("upgradeBankCard")
                 //调用方法
                 getBankCardBybankCardId(this.bankCard.bankCardId).then(res => {
                     if (res.data.data.errno == 0) {
                         //赋值
-
                         this.bankCard = res.data.data.data;
                         if( this.bankCard.bankCardType == "普通卡"){
                             this.bankCard.bankCardType ="钻石卡"
@@ -215,7 +214,7 @@
                 })
 
             },
-            
+
         },
         created() {
             this.getBankCardBybankCardId()
