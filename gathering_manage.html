@@ -53,7 +53,7 @@
                         <div class="font-bold form-div">
                             付款人：{{active.outUserName}}
                         </div>
-                        <div class="font-bold form-div" >
+                        <div class="font-bold form-div">
                             收款金额：{{active.muchMoney}}
                             元
                         </div>
@@ -159,8 +159,7 @@
                 //订单金额
                 muchMoney:"",
                 //订单备注
-                transferRemarks:"",
-
+                transferRemarks:""
             },
             /*获取用户名下所有银行卡*/
             bankCards:[],
@@ -173,27 +172,22 @@
             /*金额校验提醒*/
             msgAmount :""
         },
-
-
         methods: {
             /*进入主动收款时执行的方法
             * 根据用户id查询历史记录*/
             getActiveGatherings:function () {
                 //刷新this作用域
                     var _this = this
-                //this.userId
                     getActiveCollectionList(this.userId).then(res=>{
                         if(res.data.data.errno==0){
                             _this.activeGatherings=res.data.data.data
                         }
                     })
-
                 },
             /*点击了查看历史记录*/
             clickHistory: function(obj){
                 this.flag="0";
                 this.transferRecordId=obj
-
             },
             /*根据订单id查询历史记录*/
             transferRecordsByID(){
@@ -210,7 +204,6 @@
             /*取消主动收款执行的方法*/
             abolishGathering:function() {
                 //状态修改为取消的订单id
-               // console.log(this.transferRecordId)
                 updateGatheringStatus(this.transferRecordId).then(res=>{
                     if(res.data.data.errno==0){
                         alert("已取消")
@@ -219,7 +212,6 @@
                         alert("请求超时")
                      }
                 })
-                //修改状态为已取消此订单id发送到后台修改订单状态为取消
              },
             /*取消表单默认提交*/
             onSubmit:function(){return false;},
@@ -229,11 +221,7 @@
                 if(this.activeGathering.inBankId==""){
                     alert("请选择收款卡")
                 }
-
                 this.activeGathering.inUserId=this.userId;
-
-
-               // this.activeGathering.inUserId=25
                 addTransactionTecord(this.activeGathering).then(res=>{
                     if(res.data.data.errno==0){
                         alert("发起成功")
@@ -243,7 +231,6 @@
                         alert("信息有误,请重试")
                     }
                 })
-
             },
             /*金额校验*/
             checkAmount: function () {
@@ -263,7 +250,6 @@
                     return
                 }
             },
-
             /*获取当前登录用户*/
             getUser: function () {
                 var user = JSON.parse(sessionStorage.getItem("user"));
@@ -271,12 +257,16 @@
             }
         },
         created:function(){
+			//判断用户是否登录,没有登录则跳转到登录页面
+			var token = localStorage.getItem("token");
+			if (token == null) {
+				location.href = "login.html";
+			}
                this.getUser()
             this.getActiveGatherings()
             getBankCardByUser(this.userId).then(res=>{
                 _this.bankCards=res.data.data.data
             })
         }
-
     })
 </script>

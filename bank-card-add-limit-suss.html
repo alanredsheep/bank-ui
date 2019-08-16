@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html class="full-height" lang="en-US">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,9 +11,11 @@
     <link href="css/mdb.min.css" rel="stylesheet">
     <link href="styles/main.css" rel="stylesheet">
 </head>
+
 <body id="top">
 
-    <div id="app" style="height: 100%">
+    <div id="app" class="view  hm-gradient" style="height: 100%">
+
         <header>
             <!-- Navbar-->
             <topnav></topnav>
@@ -20,14 +23,13 @@
             <div class="view hm-gradient" id="intro">
                 <!-- 渐变色-->
                 <div class="full-bg-img d-flex align-items-center">
+
+
                     <!--   主体内容    -->
-                    <div class="col-md-10 col-lg-6" style="margin-left: 360px">
-                        <div class="text-center form-title">申请成功,请耐心等待</div>
+                    <div class="text-center form-title">申 请 成 功,请 耐 心 等 待</div>
 
-                        <div class="text-center form-title">审批完成后会通过短信告知</div>
 
-                    </div>
-
+                    <!--   主体内容结束    -->
                 </div>
             </div>
         </header>
@@ -39,6 +41,7 @@
                 </div>
             </div>
         </footer>
+
     </div>
 </body>
 
@@ -58,10 +61,18 @@
     new Vue({
         el: "#app",
         data: {
-
+            token: ""
         },
         methods: {
 
-        }
+        },
+        created() {
+            this.token = localStorage.getItem("token")
+            if (this.token != "" && this.token != null) {
+
+            } else {
+                location.href = "login.html"
+            }
+        },
     })
 </script>

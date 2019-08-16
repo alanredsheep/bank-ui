@@ -95,8 +95,6 @@
                         <button style="margin-left: 8%;margin-top: 20px" class="btn btn-danger" @click="abolishmanagerById()" v-if="managerTranscation.transcationStatus==0">取消申请</button>
                         <button style="margin-left: 8%;margin-top: 20px" class="btn btn-danger" v-else>处理完成</button>
                     </form>
-
-
                     <!--主体内容结束-->
                 </div>
             </div>
@@ -185,7 +183,6 @@
             manager: function(obj){
                 this.flag="1";
                 this.managerId=obj;
-
             },
             /*根据id展示提额通知*/
             managerById(){
@@ -204,13 +201,10 @@
                     }else{
                         alert("请求超时")
                     }
-
                 })
             },
-
             /*根据银行卡id展示该卡交易限额*/
             bankById(){
-
                     return this.bankCards.filter(item =>{
                         if(item.bankCardId==this.userBankId){
                             if(item.bankCardType.indexOf("普") != -1){
@@ -226,7 +220,6 @@
                         return true
                     }
                 });
-
             },
             /*用户点击拒绝付款执行的方法*/
             userfalse:function(obj){
@@ -239,7 +232,6 @@
                     }
                 })
             },
-
             /*用户同意付款执行的方法*/
             usertrue:function(obj){
                 if (this.activeGathering.outBankId==""){
@@ -261,22 +253,21 @@
                 this.userId=user.userId;
                 this.userName=user.userName;
             },
-
-
-
             /*取消表单的默认提交*/
             onSubmit:function(){return false;},
-
         },
         /*页面加载完成事件*/
         created: function () {
+            var token = localStorage.getItem("token");
+            if (token == null) {
+                location.href = "login.html";
+            }
             this.getUser()
             this.getMessageCenters()
             getBankCardByUser(this.userId).then(res=>{
                 _this.bankCards=res.data.data.data
             })
         }
-
     })
     /*1.用户进入页面时分别查询交易记录表和管理员事务表,获取需要展示的通知
     * 展示通知内容带主动收款人姓名,交易流水号;提额申请通知,提额申请id*/

@@ -9,7 +9,12 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/mdb.min.css" rel="stylesheet">
     <link href="styles/main.css" rel="stylesheet">
+<!--可无视-->
+<link rel="stylesheet" type="text/css" href="css/bootstrap-grid.min.css" /><!--CSS RESET-->
+<link rel="stylesheet" type="text/css" href="css/demo.css"><!--演示页面样式，使用时可以不引用-->
 
+<!--必要样式-->
+<link rel="stylesheet" href="css/naranja.min.css">
 </head>
 
 <body id="top">
@@ -96,6 +101,8 @@
 <script type="text/javascript" src="js/vuejs-2.5.16.js"></script>
 <script type="text/javascript" src="js/api.1.js"></script>
 <script type="text/javascript" src="components/topNav.js"></script>
+<script type="text/javascript" src="js/naranja.js"></script>
+<script type="text/javascript" src="components/send.js"></script>
 <script>
     new Vue({
         el: "#app",
@@ -134,12 +141,15 @@
                 userPassword: "123123",
 
             },
+
+            token:""
+
         },
         methods: {
             //获取银行卡信息通过id
             getBankCardBybankCardId: function () {
                 //获取银行卡id
-                this.bankCard.bankCardId = 1
+                this.bankCard.bankCardId = sessionStorage.getItem("upgradeBankCard")
                 //调用方法
                 getBankCardBybankCardId(this.bankCard.bankCardId).then(res => {
                     if (res.data.data.errno == 0) {
@@ -162,7 +172,7 @@
                 this.bankCard.userId = this.user.userId;
                 UpgradeCard(this.bankCard).then(res =>{
                     if(res.data.data.errno == 0){
-                        alert("申请成功,请耐心等待")
+                       location.href="bank-card-add-limit-suss.html"
                     }else{
                         alert(res.data.data.errmsg)
                     }
@@ -207,8 +217,15 @@
                 })
 
             },
+
         },
         created() {
+			//判断用户是否登录,没有登录则跳转到登录页面
+			var token = localStorage.getItem("token");
+			if (token == null) {
+				location.href = "login.html";
+			}
+
             this.getBankCardBybankCardId()
         },
     })

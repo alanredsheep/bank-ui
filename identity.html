@@ -9,6 +9,13 @@
 		<link href="css/bootstrap.min.css" rel="stylesheet">
 		<link href="css/mdb.min.css" rel="stylesheet">
 		<link href="styles/main.css" rel="stylesheet">
+		<style type="text/css">
+			.form-div img{
+				width: 227px;
+				height: 141px;
+				border-radius: 10px;
+			}
+		</style>
 	</head>
 	<body id="top">
 		<div id="app" style="height: 100%">
@@ -26,16 +33,19 @@
 								<!-- 实名验证-->
 								<div class="text-center form-title">实 名 验 证</div>
 								<form id="authentic" class="">
+									<div class="font-bold form-div" v-show="errHidden">
+										<span class="msg">{{errMsg}}</span>
+									</div>
 									<div class="font-bold form-div">
-										身份证正面：<input class="file" name="file" type="file" accept="image/png,image/gif,image/jpeg" @change="update" />
-										<img src="" alt="">
-										<div class="font-bold form-div">
-											身份证反面：<img src="" alt="">
-											<div class="text-md-center">
-												<button class="btn btn-blue btn-sm" style="font-size: medium" type="">验证</button>
-												</button>
-											</div>
-										</div>
+										身份证正面：<input class="file" @change="update($event)" name="fontFile" type="file" accept="image/png,image/gif,image/jpeg" />
+										<img id="font" :src="fontImg" alt="">
+									</div>
+									<div class="font-bold form-div">
+										身份证反面：<input class="file" @change="update($event)" name="backFile" type="file" accept="image/png,image/gif,image/jpeg" />
+										<img id="back" :src="backImg" alt="">
+									</div>
+									<div class="text-md-center">
+										<button @click.prevent="upload()" class="btn btn-blue btn-sm" style="font-size: medium" type="">验证</button>
 									</div>
 								</form>
 							</div>
@@ -59,6 +69,24 @@
 				</div>
 			</footer>
 
+			<div id="identity-modal" class="modal" tabindex="-1" role="dialog">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">注册</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span @click.prevent="closeModal()" aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<p>{{identityMsg}}</p>
+						</div>
+						<div class="modal-footer">
+							<button @click.prevent="closeModal()" type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</body>
 </html>
@@ -76,16 +104,43 @@
 <script>
 	new Vue({
 		el: "#app",
-		data: {},
+		data: {
+			font: "",
+			back: "",
+			fontImg: 'img/idcard_positive.png',
+			backImg: 'img/idcard_back.png',
+			identityMsg: "",
+			errMsg:"",
+			errHidden: false
+		},
 		methods: {
 			upload: function() {
+				var _this = this
 				//创建form对象
-				let file = e.target.files[0];
+				/* let files = e.target.files;
+				for (var i = 0; i < files.length; i++) {
+					files[i]
+				} */
+				if (this.font == "") {
+					alert("请上传身份证正面图片")
+					return
+				}
+				if (this.back == "") {
+					alert("请上传身份证背面图片")
+					return
+				}
+				var userId = "";
+				var user = JSON.parse(sessionStorage.getItem("user"));
+				if (user != null) {
+					userId = user.userId;
+				}
+
 				let param = new FormData();
 				//通过append向form对象添加数据
-				param.append('file', file, file.name);
+				param.append('file', this.font, this.font.name);
+				param.append('file', this.back, this.back.name);
 				//添加form表单中其他数据
-				param.append('chunk', '0');
+				param.append('userId', userId);
 				var token = localStorage.getItem("token");
 				//添加请求头
 				let config = {
@@ -94,9 +149,52 @@
 						'Authorization': token
 					}
 				};
-				this.axios.post('http://127.0.0.1:10010/v1/web-service/', param, config).then(response => {
-					console.log(response.data);
+				verifyIndentity(param, config).then(res => {
+					var result = res.data.data;
+					if(result.errno == 0){
+						_this.identityMsg = result.errmsg;
+						$("#identity-modal").show()
+						setTimeout(
+							function() {
+								$("#identity-modal").hide()
+								location.href = "personal_center.html"
+							}
+						, 1000);
+					}else {
+						_this.errHidden = true;
+						_this.errMsg = result.errmsg;
+					}
 				})
+			},
+			update: function(obj) {
+				var _this = this
+				_this.errHidden = true;
+				var file = obj.target.files[0];
+				var name = obj.target.name
+				var reader = new FileReader();
+				reader.onload = function(e) {
+					var img;
+					if (name == "fontFile") {
+						_this.font = file
+						img = document.getElementById("font");
+					} else {
+						_this.back = file
+						img = document.getElementById("back");
+					}
+					img.src = e.target.result;
+					//或者 img.src = this.result;  //e.target == this
+				}
+				reader.readAsDataURL(file)
+			},
+			closeModal: function(){
+				$("#reg-modal").hide()
+			}
+		},
+		created() {
+			//判断用户是否登录,没有登录则跳转到登录页面
+			var token = localStorage.getItem("token");
+			if (token == null) {
+				location.href = "login.html";
 			}
 		}
 	})

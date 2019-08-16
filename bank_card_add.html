@@ -26,7 +26,8 @@
 
                 <!--   主体内容    -->
 
-                <div class="container">
+                <!--                添加银行卡模块-->
+                <div v-if="!readyToPay" class="container">
                     <div class="col-md-10 col-lg-5" style="margin-left: 330px">
 
                         <div class="text-center form-title">绑 定 银 行 卡</div>
@@ -35,6 +36,7 @@
                                 <div>银行卡号：</div>
                                 <div class="font-bold form-div col-lg-8 btn-group">
                                     <select class="form-control form-selection-bank col-lg-5"
+                                            :disabled="disableBankName"
                                             v-model="otherBankCard.bankIdentification">
                                         <option disabled value="" class="form-selection-option">选择银行</option>
                                         <template v-for="bank in subordinateBank">
@@ -62,9 +64,11 @@
                             <div class="font-bold form-auth-code">
                                 验证码：
                                 <div>
-                                    <input class="col-md-10 col-lg-7" type="text">
-                                    <button class="btn btn-sm btn-default auth-code" style="font-size: 12px" @click.prevent="">获取验证码
+                                    <input class="col-md-10 col-lg-7" type="text" v-model="authCode">
+                                    <button class="btn btn-sm btn-default auth-code" style="font-size: 12px"
+                                            @click.prevent="getAuthCode" >获取验证码
                                     </button>
+                                    <p v-if="noBankCard">请先输入正确的银行卡号</p>
                                 </div>
                             </div>
                             <div class="text-md-center">
@@ -75,8 +79,28 @@
                             </div>
                         </form>
                     </div>
-                    <!--   主体内容结束    -->
                 </div>
+
+                <!-- 填写密码-->
+                <div v-if="readyToPay" class="col-md-10 col-lg-3" style="margin: auto">
+                    <div class="text-center form-title">支 付 密 码</div>
+                    <div style="margin-bottom: 40px">
+                        <input type="password" class="col-lg-2" maxlength="6"
+                               style="text-align:center;margin-left: 36%" v-model="otherBankCard.payPassword"
+                               onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))"/>
+                    </div>
+                    <button class="btn btn-danger btn-sm" @click.prevent="cancelToPay"
+                            style="margin-left: 30px;margin-top: 20px;font-size: medium">
+                        取消
+                    </button>
+                    <button class="btn btn-success btn-sm" @click.prevent="bindOtherBankCard"
+                            style="margin-left: 60px;margin-top: 20px;font-size: medium">
+                        确认
+                    </button>
+                </div>
+
+
+                <!--   主体内容结束    -->
             </div>
         </div>
     </header>
@@ -121,6 +145,7 @@
                 otherBankCardNumber: "",
                 otherBankName: "",
                 bankIdentification: "",
+                payPassword: "",
             },
             // 用户信息
             user: {
@@ -133,36 +158,93 @@
             // 用户错误操作提醒
             hasHint: false,
             hint: "",
+            // 支付密码与表单的切换
+            readyToPay: false,
+            // 已经自动选择银行，不可更改
+            disableBankName: false,
+            // 还未输入正确的银行卡号
+            noBankCard: false,
+            //登录标识
+            token:""
         },
         methods: {
+            // 取消按钮，返回表单，清空密码字段
+            cancelToPay: function () {
+                var _this = this;
+                _this.readyToPay = false;
+                _this.otherBankCard.payPassword = "";
+            },
+            // 确认按钮，校验数据填写，并切换到密码支付
+            confirmToPay: function () {
+                var _this = this;
+                if (_this.authCode == "") {
+                    alert("请输入验证码");
+                    return;
+                }
+                if (_this.otherBankCard.otherBankCardNumber == "") {
+                    alert("输入银行卡号")
+                    return;
+                }
+                if (_this.otherBankCard.bankIdentification == "") {
+                    alert("请点击页面空白部分自动选择银行")
+                    return;
+                }
+                // TODO 校验验证码是否正确
+                _this.readyToPay = true;
+            },
+            // 获取验证码按钮
+            getAuthCode: function () {
+                var _this = this;
+                if (_this.disableBankName == false) {
+                    _this.noBankCard = true;
+                } else {
+                    _this.noBankCard = false;
+                }
+                // TODO 获取验证码
+            },
+            // 添加银行卡请求
             bindOtherBankCard: function () {
                 var _this = this;
+                if (_this.otherBankCard.bankIdentification == "") {
+                    this.selectBankName();
+                }
                 addOtherBankCard({
                     "authCode": _this.authCode,
                     "userId": _this.user.userId,
                     "bankCardNumber": _this.otherBankCard.otherBankCardNumber,
                     "subordinateBanksIdentification": _this.otherBankCard.bankIdentification,
+                    "payPassword": _this.otherBankCard.payPassword,
                 }).then(function (response) {
-                    console.log(response.data.data.errmsg);
+                    alert(response.data.data.errmsg);
+                    if (response.data.data.errno == 0) {
+                        window.location.href = "bank_card_manage.html";
+                    }
                 })
             },
+            // 异步显示银行卡所属银行
             selectBankName: function () {
                 var _this = this;
                 findBankCardIdentification(_this.otherBankCard.otherBankCardNumber).then(function (response) {
                     if (response.data.data.errno == 1) {
                         _this.hasHint = true;
                         _this.hint = response.data.data.errmsg;
+                        _this.disableBankName = false;
+
                     } else {
                         _this.hasHint = false;
                         _this.otherBankCard.bankIdentification = response.data.data.data;
-                        console.log(response.data.data.data);
+                        _this.disableBankName = true;
+                        _this.noBankCard = false;
                     }
-
                 })
             }
         },
         created() {
-
+			//判断用户是否登录,没有登录则跳转到登录页面
+			var token = localStorage.getItem("token");
+			if (token == null) {
+				location.href = "login.html";
+			}
         }
     })
 </script>

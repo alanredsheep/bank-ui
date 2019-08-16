@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html class="full-height" lang="en-US">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>企业登录</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/mdb.min.css" rel="stylesheet">
+		<link href="styles/main.css" rel="stylesheet">
+		<style>
+			::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+				color: #c6c4cd;
+			}
+			:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+				color: #c6c4cd;
+				opacity:  1;
+			}
+			::-moz-placeholder { /* Mozilla Firefox 19+ */
+				color:  #c6c4cd;
+				opacity:  1;
+			}
+			:-ms-input-placeholder { /* Internet Explorer 10-11 */
+				color:  #c6c4cd;
+			}
+			#navbarNav a{
+				color: #ffffff;
+				font-size: x-large;
+				margin: auto;
+			}
+		</style>
+	</head>
+	<body id="top">
+
+		<div id="app" class="view  hm-gradient" style="height: 100%">
+			<header>
+				<!-- Navbar-->
+				<nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar" id="navbar">
+					<div class="container"><a class="navbar-brand" href="login.html"><strong>五仁银行</strong></a>
+						<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent"
+						 aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+						<div class="collapse navbar-collapse" id="navbarContent">
+							<ul class="navbar-nav ml-auto">
+								<li class="nav-item"><a class="nav-link" href="javaScript:;">注册</a></li>
+								<li class="nav-item"><a class="nav-link" href="javaScript:;">登录</a></li>
+							</ul>
+						</div>
+					</div>
+				</nav>
+				<!-- Intro Section-->
+				<!-- 背景图-->
+				<div class="view hm-gradient" id="intro">
+					<!-- 渐变色-->
+					<div class="full-bg-img d-flex align-items-center">
+						<div class="container">
+							<div class="col-md-10 col-lg-5" style="margin-left: 330px">
+								<!-- 登录组件-->
+								<div class="login">
+									<!-- 登录导航栏-->
+									<nav class="navbar navbar-expand-lg navbar-light" style="margin-bottom: 30px">
+										<div class="collapse navbar-collapse" id="navbarNav">
+											<a class="nav-link" href="javaScript:;">企业登录</a>
+										</div>
+									</nav>
+									<form>
+										<div class="font-bold form-div">
+											银行卡号：
+											<input v-model="bankEnterprise.enterpriseBankCard" class="col-md-10 col-lg-11" type="text" placeholder="请输入银行卡号">
+										</div>
+										<div class="font-bold form-div">
+											密码：
+											<input v-model="bankEnterprise.enterpriseLoginPassword" class="col-md-10 col-lg-11" type="password" placeholder="请输入密码">
+										</div>
+										<div class="text-center">
+											<button @click.prevent="enterpriseLoginTemp()" class="btn btn-blue btn-sm" style="font-size: medium">登录</button>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</header>
+
+			<footer class="page-footer indigo darken-2 center-on-small-only pt-0 mt-0">
+				<div class="footer-copyright">
+					<div class="container-fluid">
+						<p>&copy; Five Bank</p>
+					</div>
+				</div>
+			</footer>
+		</div>
+
+	</body>
+</html>
+
+<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="js/popper.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/mdb.min.js"></script>
+<script type="text/javascript" src="scripts/main.js"></script>
+
+<script type="text/javascript" src="js/axios-0.18.0.js"></script>
+<script type="text/javascript" src="js/vuejs-2.5.16.js"></script>
+<script type="text/javascript" src="js/api.1.js"></script>
+<script>
+	new Vue({
+		el: "#app",
+		data: {
+			bankEnterprise: {
+				enterpriseBankCard: "",
+				enterpriseLoginPassword: ""
+			}
+		},
+		methods: {
+			//登录
+			enterpriseLoginTemp: function() {
+				var _this = this
+				if (_this.bankEnterprise.enterpriseBankCard == "") {
+					alert("银行卡号不能为空")
+					return
+				}
+				if (_this.bankEnterprise.enterpriseLoginPassword == "") {
+					alert("密码不能为空")
+					return
+				}
+				enterpriseLoginTemp(_this.bankEnterprise).then(res => {
+					var result = res.data.data;
+					console.log(result)
+					if (result.errno == 0) {
+						var token = result.enterpriseToken;
+						var enterprise = result.enterprise;
+						localStorage.setItem("token", token);
+						sessionStorage.setItem("enterprise", JSON.stringify(enterprise))
+						window.location.href = "home.html"
+					} else if(result.errno == 1){
+						alert(result.errmsg)
+					}
+				})
+			}
+		}
+	})
+</script>
