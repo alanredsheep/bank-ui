@@ -142,6 +142,8 @@
 
             },
 
+            token:""
+
         },
         methods: {
             //获取银行卡信息通过id
@@ -152,6 +154,7 @@
                 getBankCardBybankCardId(this.bankCard.bankCardId).then(res => {
                     if (res.data.data.errno == 0) {
                         //赋值
+
                         this.bankCard = res.data.data.data;
                         if( this.bankCard.bankCardType == "普通卡"){
                             this.bankCard.bankCardType ="钻石卡"
@@ -169,7 +172,7 @@
                 this.bankCard.userId = this.user.userId;
                 UpgradeCard(this.bankCard).then(res =>{
                     if(res.data.data.errno == 0){
-                        alert("申请成功,请耐心等待")
+                       location.href="bank-card-add-limit-suss.html"
                     }else{
                         alert(res.data.data.errmsg)
                     }
@@ -217,6 +220,12 @@
 
         },
         created() {
+			//判断用户是否登录,没有登录则跳转到登录页面
+			var token = localStorage.getItem("token");
+			if (token == null) {
+				location.href = "login.html";
+			}
+
             this.getBankCardBybankCardId()
         },
     })

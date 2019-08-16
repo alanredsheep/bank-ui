@@ -340,7 +340,14 @@
                // this.getMessageCenter()
             }
 
-        }
+        },
+		created() {
+			//判断用户是否登录,没有登录则跳转到登录页面
+			var token = localStorage.getItem("token");
+			if (token == null) {
+				location.href = "login.html";
+			}
+		}
     })
     /*1.用户进入页面时分别查询交易记录表和管理员事务表,获取需要展示的通知
     * 展示通知内容带主动收款人姓名,交易流水号;提额申请通知,提额申请id*/

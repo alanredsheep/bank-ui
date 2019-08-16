@@ -146,6 +146,12 @@
             },
         },
         created(){
+			//判断用户是否登录,没有登录则跳转到登录页面
+			var token = localStorage.getItem("token");
+			if (token == null) {
+				location.href = "login.html";
+			}
+			
             //根据用户查询他所拥有的银行卡
             this.getBankCardByUser();
         }

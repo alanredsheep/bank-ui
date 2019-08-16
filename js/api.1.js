@@ -129,7 +129,6 @@ function getBankCardsByUserId(params) {
 function getFundCollectionRecordByInCardAndOutCard(params) {
     return axios.get("/web-service/getFundCollectionRecordByInCardAndOutCard", params);
 }
-
 //-----------------fund_collection.html    end----------------------
 
 
@@ -310,6 +309,11 @@ function MessageNotification(userId) {
     return axios.get("/web-service/MessageNotification/" + userId)
 }
 
+
+//将数据放到redis(消息)
+function setRedisMessage(params){
+    return axios.post("/web-service/setRedisMessage",params)
+}
 //-----------------message.html    end---------------------
 
 //-----------------bank_card_manage.html    start----------------
@@ -326,3 +330,7 @@ function reportBankCardLoss(params) {
 //-------------------bank_card_manage.html   end----------------
 
 
+//普通用户退出登录
+function logout(params){
+	return axios.get("/auth-service/logout/"+params);
+}

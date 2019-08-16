@@ -112,33 +112,49 @@
                                 narnError('error');
                             }
 
-                        })
-                        clearInterval(this.setInterName);
-                    }
-                })
-            },
-            //根据用户id获取本行银行卡
-            getBankCards: function (userId) {
-                getBankCards(userId).then(res => {
-                    var result = res.data.data;
-                    console.log(result)
-                    if (result.errno == 0) {
-                        var bankCards = result.data;
-                        sessionStorage.setItem("bankCards", JSON.stringify(bankCards));
-                    }
-                })
+							})
+							setRedisMessage(this.messages).then(res =>{
+								if(res.data.data.errno == 0){
+									console.log("保存成功")
+								}
+							})
+							clearInterval(this.setInterName);
+                        }
+
+                    })
+
             }
-        },
-        created() {
-            var user = JSON.parse(sessionStorage.getItem("user"));
-            if (user != null) {
-                var userId = user.userId;
-                this.getOtherBankCard(userId);
-                this.getBankCards(userId);
-            }
-            this.setInterName = setInterval(() => {
-                this.narn(1)
-            }, 1000);
-        }
+			},
+			//根据用户id获取本行银行卡
+			getBankCards: function(userId){
+				getBankCards(userId).then(res => {
+					var result = res.data.data;
+					console.log(result)
+					if (result.errno == 0) {
+						var bankCards = result.data;
+						sessionStorage.setItem("bankCards", JSON.stringify(bankCards));
+					}
+				})
+			}
+		},
+		created() {
+			//判断用户是否登录,没有登录则跳转到登录页面
+			var token = localStorage.getItem("token");
+			if (token == null) {
+				location.href = "login.html";
+			}
+			
+			var user = JSON.parse(sessionStorage.getItem("user"));
+			if(user != null){
+				var userId = user.userId;
+				this.getOtherBankCard(userId);
+				this.getBankCards(userId);
+			}
+			this.setInterName = setInterval(() =>{
+				this.narn(1)
+			},1000)
+
+
+		}
     })
 </script>

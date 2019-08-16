@@ -73,7 +73,7 @@
                             </div>
                             <div class="text-md-center">
                                 <button class="btn btn-blue btn-sm" style="font-size: medium" type="submit"
-                                        @click.prevent="confirmToPay">确定
+                                        @click.prevent="bindOtherBankCard">确定
                                 </button>
                                 </button>
                             </div>
@@ -164,6 +164,8 @@
             disableBankName: false,
             // 还未输入正确的银行卡号
             noBankCard: false,
+            //登录标识
+            token:""
         },
         methods: {
             // 取消按钮，返回表单，清空密码字段
@@ -238,7 +240,11 @@
             }
         },
         created() {
-
+			//判断用户是否登录,没有登录则跳转到登录页面
+			var token = localStorage.getItem("token");
+			if (token == null) {
+				location.href = "login.html";
+			}
         }
     })
 </script>
