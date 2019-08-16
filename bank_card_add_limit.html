@@ -141,6 +141,7 @@
                 userPassword: "123123",
 
             },
+            token:""
        
         },
         methods: {
@@ -170,7 +171,7 @@
                 this.bankCard.userId = this.user.userId;
                 UpgradeCard(this.bankCard).then(res =>{
                     if(res.data.data.errno == 0){
-                        alert("申请成功,请耐心等待")
+                       location.href="bank-card-add-limit-suss.html"
                     }else{
                         alert(res.data.data.errmsg)
                     }
@@ -218,7 +219,13 @@
             
         },
         created() {
-            this.getBankCardBybankCardId()
+            this.token = localStorage.getItem("token")
+            if(this.token != "" && this.token != null){
+                this.getBankCardBybankCardId()
+            }else {
+                location.href="login.html"
+            }
+           
         },
     })
 </script>

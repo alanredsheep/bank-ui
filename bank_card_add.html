@@ -133,6 +133,8 @@
             // 用户错误操作提醒
             hasHint: false,
             hint: "",
+            //登录标识
+            token:""
         },
         methods: {
             bindOtherBankCard: function () {
@@ -162,7 +164,12 @@
             }
         },
         created() {
+            this.token = localStorage.getItem("token")
+            if(this.token != "" && this.token != null){
 
+        }else{
+            location.href="login.html"
+        }
         }
     })
 </script>

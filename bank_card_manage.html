@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html class="full-height" lang="en-US" xmlns:v-bind="http://www.w3.org/1999/xhtml"
-      xmlns:v-if="http://www.w3.org/1999/xhtml">
+    xmlns:v-if="http://www.w3.org/1999/xhtml">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,68 +12,70 @@
     <link href="css/mdb.min.css" rel="stylesheet">
     <link href="styles/main.css" rel="stylesheet">
 </head>
+
 <body id="top">
-<div id="app" style="height: 100%">
-    <header>
-        <!-- Navbar-->
-        <topnav></topnav>
+    <div id="app" style="height: 100%">
+        <header>
+            <!-- Navbar-->
+            <topnav></topnav>
 
-        <!-- 背景图-->
-        <div class="view hm-gradient" id="intro">
-            <!-- 渐变色-->
-            <div class="full-bg-img d-flex align-items-center">
-                <!-- 主体内容-->
-                <div class="col-md-10 col-lg-10" style="margin-left: 15%">
-                    <div class="text-center form-title" style="margin-left: -13%">银 行 卡 管 理</div>
+            <!-- 背景图-->
+            <div class="view hm-gradient" id="intro">
+                <!-- 渐变色-->
+                <div class="full-bg-img d-flex align-items-center">
+                    <!-- 主体内容-->
+                    <div class="col-md-10 col-lg-10" style="margin-left: 15%">
+                        <div class="text-center form-title" style="margin-left: -13%">银 行 卡 管 理</div>
 
-                    <div class="panel-body scroll-panel"
-                         style="width: 40%;height: 290px; overflow-y:scroll;margin-left: 12%;float: left">
-                        <div class="scroll-panel-div">
-                            <div class="container bank-card-container" v-for="(bankCard,index) in bankCards">
-                                <a @click="selectBankCard(index)">
-                                    <div class="jumbotron row"
-                                         v-bind:style='bankCard.bankCardType == "钻石卡"?{"background-image":diamondCardImage}:
+                        <div class="panel-body scroll-panel"
+                            style="width: 40%;height: 290px; overflow-y:scroll;margin-left: 12%;float: left">
+                            <div class="scroll-panel-div">
+                                <div class="container bank-card-container" v-for="(bankCard,index) in bankCards">
+                                    <a @click="selectBankCard(index)">
+                                        <div class="jumbotron row"
+                                            v-bind:style='bankCard.bankCardType == "钻石卡"?{"background-image":diamondCardImage}:
                                          bankCard.bankCardType == "普通卡"?{"background-image":goldCardImage}:
                                          bankCard.bankCardType == "黑卡"?{"background-color":"black"}:{"background-color":"#FF9248"}'>
-                                        <p style="font-size: xx-large">{{bankCard.bank}}</p>
-                                        <p style="font-size: large;margin-left: 20px;margin-top: 18px">
-                                            {{bankCard.bankCardType}}</p>
-                                        <p style="font-size: x-large">{{bankCard.bankCardNum}}</p>
-                                    </div>
-                                </a>
+                                            <p style="font-size: xx-large">{{bankCard.bank}}</p>
+                                            <p style="font-size: large;margin-left: 20px;margin-top: 18px">
+                                                {{bankCard.bankCardType}}</p>
+                                            <p style="font-size: x-large">{{bankCard.bankCardNum}}</p>
+                                        </div>
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-lg-4" style="float: left">
-                        <!--   他行银行卡只有解绑的功能   -->
-                        <a href="bank_card_add.html">
-                            <button @click="addBankCard()" class="btn btn-default bank-card-button">绑定银行卡</button>
-                        </a>
-                        <button v-bind:disabled="otherBankCardSelected" @click="upgradeBankCard()"
+                        <div class="col-lg-4" style="float: left">
+                            <!--   他行银行卡只有解绑的功能   -->
+                            <a href="bank_card_add.html">
+                                <button @click="addBankCard()" class="btn btn-default bank-card-button">绑定银行卡</button>
+                            </a>
+                            <button v-bind:disabled="otherBankCardSelected" @click="upgradeBankCard()"
                                 class="btn btn-blue bank-card-button">升级银行卡
-                        </button>
-                        <button v-bind:disabled="!otherBankCardSelected" @click="untiedBankCard()"
+                            </button>
+                            <button v-bind:disabled="!otherBankCardSelected" @click="untiedBankCard()"
                                 class="btn btn-warning bank-card-button">解绑银行卡
-                        </button>
-                        <button v-bind:disabled="otherBankCardSelected" @click="reportBankCard()"
+                            </button>
+                            <button v-bind:disabled="otherBankCardSelected" @click="reportBankCard()"
                                 class="btn btn-danger bank-card-button">挂失银行卡
-                        </button>
+                            </button>
+                        </div>
+                        <!--主体内容结束-->
                     </div>
-                    <!--主体内容结束-->
                 </div>
             </div>
-        </div>
-    </header>
+        </header>
 
-    <footer class="page-footer indigo darken-2 center-on-small-only pt-0 mt-0">
-        <div class="footer-copyright">
-            <div class="container-fluid">
-                <p>&copy; Five Bank</p>
+        <footer class="page-footer indigo darken-2 center-on-small-only pt-0 mt-0">
+            <div class="footer-copyright">
+                <div class="container-fluid">
+                    <p>&copy; Five Bank</p>
+                </div>
             </div>
-        </div>
-    </footer>
-</div>
+        </footer>
+    </div>
 </body>
+
 </html>
 
 <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
@@ -109,12 +112,14 @@
                 bank: "中国银行",
                 bankCardType: "",
             }],
-// 绑定背景图片
+            // 绑定背景图片
             diamondCardImage: "url(" + "img/diamond_card.jpg" + ")",
             goldCardImage: "url(" + "img/gold.jpg" + ")",
+            //登录标识
+            token: ""
         },
         methods: {
-// 点击某张银行卡
+            // 点击某张银行卡
             selectBankCard: function (index) {
                 if (this.bankCards[index].bankCardType == "") {
                     this.otherBankCardSelected = true;
@@ -133,7 +138,12 @@
             }
         },
         created: function () {
+            this.token = localStorage.getItem("token")
+            if (this.token != "" && this.token != null) {
 
+            } else {
+                location.href = "login.html"
+            }
         }
 
 

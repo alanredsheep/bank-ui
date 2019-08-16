@@ -262,3 +262,7 @@ function  updateManagerTranscationStatus(transcationId) {
 function MessageNotification(userId){
     return axios.get("/web-service/MessageNotification/"+userId)
 }
+//将数据放到redis(消息)
+function setRedisMessage(params){
+    return axios.post("/web-service/setRedisMessage",params)
+}

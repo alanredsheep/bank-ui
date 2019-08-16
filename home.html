@@ -113,6 +113,11 @@
 								}
 
 							})
+							setRedisMessage(this.messages).then(res =>{
+								if(res.data.data.errno == 0){
+									console.log("保存成功")
+								}
+							})
 							clearInterval(this.setInterName);
                         }
 
