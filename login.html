@@ -24,9 +24,6 @@
 			:-ms-input-placeholder { /* Internet Explorer 10-11 */
 				color:  #c6c4cd;
 			}
-			.input-border{
-				border: #BF360C;
-			}
 		</style>
 	</head>
 	<body id="top">
@@ -71,14 +68,22 @@
 									</nav>
 									<!-- 密码登录表单-->
 									<form id="form-password-login" v-show="loginType">
-										<div>用户名或密码有误，请重新输入或<a href="javaScript:;">找回密码</a></div>
+										<div class="font-bold form-div" v-show="errMsgHidden">
+											<span class="msg">{{errMsg}}</span>
+										</div>
 										<div class="font-bold form-div">
 											手机号/身份证号：
-											<input v-model="loginAccount" class="col-md-10 col-lg-11" type="text" placeholder="请输入手机号或身份证号">
+											<input v-model="loginAccount" @focus="setFalse()" class="col-md-10 col-lg-11" type="text" placeholder="请输入手机号或身份证号">
+										</div>
+										<div class="font-bold form-div" v-show="loginAccountErrMsgHidden">
+											<span class="msg">{{loginAccountErrMsg}}</span>
 										</div>
 										<div class="font-bold form-div">
 											密码：
-											<input v-model="user.userPassword" class="col-md-10 col-lg-11" type="password" :placeholder="passwordPlaceholder">
+											<input v-model="user.userPassword" @focus="setFalse()" class="col-md-10 col-lg-11" type="password" :placeholder="passwordPlaceholder">
+										</div>
+										<div class="font-bold form-div" v-show="loginPasswordErrMsgHidden">
+											<span class="msg">{{loginPasswordErrMsg}}</span>
 										</div>
 										<div class="text-center">
 											<a href="registry.html" style="font-size: 0.5rem;float: left;margin-top: 15px;color: #bdaf07;">立即注册</a>
@@ -87,18 +92,27 @@
 									</form>
 									<!-- 验证码登录表单-->
 									<form id="form-auth-code-login" v-show="!loginType">
+										<div class="font-bold form-div" v-show="authErrMsgHidden">
+											<span class="msg">{{authErrMsg}}</span>
+										</div>
 										<div class="font-bold form-div">
 											手机号：
 											<div>
-												<input v-model="user.userPhone" class="col-md-10 col-lg-11" type="text" placeholder="请输入手机号">
+												<input v-model="user.userPhone" @focus="setFalse()" class="col-md-10 col-lg-11" type="text" placeholder="请输入手机号">
 											</div>
+										</div>
+										<div class="font-bold form-div" v-show="loginPhoneErrMsgHidden">
+											<span class="msg">{{loginPhoneErrMsg}}</span>
 										</div>
 										<div class="font-bold form-auth-code">
 											验证码：
 											<div>
-												<input v-model="user.code" class="col-md-10 col-lg-6" type="text" placeholder="请输入验证码">
+												<input v-model="user.code" @focus="setFalse()" class="col-md-10 col-lg-6" type="text" placeholder="请输入验证码">
 												<button @click.prevent="loginSms()" class="btn btn-sm btn-default auth-code" style="font-size: 12px">获取验证码</button>
 											</div>
+										</div>
+										<div class="font-bold form-div" v-show="loginAuthErrMsgHidden">
+											<span class="msg">{{loginAuthErrMsg}}</span>
 										</div>
 										<div class="text-center">
 											<a href="registry.html" style="font-size: 0.5rem;float: left;margin-top: 15px;color: #bdaf07;">立即注册</a>
@@ -150,6 +164,18 @@
 			loginAccount: "",
 			loginType: true,
 			passwordPlaceholder: "请输入密码",
+			errMsgHidden: false,
+			errMsg: "",
+			loginAccountErrMsgHidden: false,
+			loginAccountErrMsg: "",
+			loginPasswordErrMsgHidden: false,
+			loginPasswordErrMsg: "",
+			authErrMsgHidden: false,
+			authErrMsg: "",
+			loginPhoneErrMsgHidden: false,
+			loginPhoneErrMsg: "",
+			loginAuthErrMsgHidden: false,
+			loginAuthErrMsg: "",
 			disabled: false,
 			// 倒计时秒数
 			time: 60,
@@ -228,8 +254,6 @@
 					alert("密码不能为空")
 					return
 				}
-				console.log(_this.loginAccount)
-
 				//手机验证表达式
 				var phonPeatrn = /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/;
 				//身份证验证表达式
@@ -246,11 +270,10 @@
 					alert("输入的账号不正确")
 					return;
 				}
-
-				console.log(_this.user)
 				//执行使用密码登录的方法
 				loginByPassword(_this.user).then(res => {
 					var result = res.data.data;
+					console.log(result)
 					if (result.errno == 0) {
 						var token = result.token;
 						var user = result.user;
@@ -258,18 +281,29 @@
 						sessionStorage.setItem("user", JSON.stringify(user))
 						window.location.href = "home.html"
 					} else if(result.errno == 1){
-						alert(result.errmsg)
-					} else if(result.errno == 2){
-						alert(result.errmsg)
-					} else if(result.errno == 3){
-						alert(result.errmsg)
+						//没有这个账号
+						var err = result.errmsg+"，您可以<a href='registry.html'>立即注册</a>"
+						_this.errMsg = err;
+						_this.errMsgHidden = true;
+					} else if(result.errno == 2 || result.errno == 3){
+						//密码错误次数小于3
+						var err = result.errmsg+"，或<a href='change_password.html'>找回密码</a>"
+						_this.errMsg = err;
+						_this.errMsgHidden = true;
+					} else if(result.errno == 4){
+						//账号错误
+						_this.loginAccountErrMsg = result.errmsg;
+						_this.loginAccountErrMsgHidden = true;
+					} else if(result.errno == 5){
+						//密码错误
+						_this.loginPasswordErrMsgHidden = result.errmsg;
+						_this.loginPasswordErrMsg = true;
 					}
 				})
 			},
 			//使用验证码登录
 			loginByAuthCode: function() {
 				var _this = this
-
 				if (_this.user.userPhone == "") {
 					alert("手机号不能为空")
 					return
@@ -284,8 +318,6 @@
 					alert("手机号不正确")
 					return
 				}
-
-				console.log(_this.user)
 				loginByPassword(_this.user).then(res => {
 					var result = res.data.data;
 					console.log(result)
@@ -296,8 +328,18 @@
 						sessionStorage.setItem("user", JSON.stringify(user))
 						_this.getOtherBankCard(user.userId);
 						window.location.href = "home.html"
-					} else {
-						alert(result.errmsg)
+					} else if(result.errno == 1 || result.errno == 3){
+						//验证码过期
+						_this.loginAuthErrMsg = result.errmsg;
+						_this.loginAuthErrMsgHidden = true;
+					} else if(result.errno == 2){
+						//登录失败
+						_this.authErrMsg = result.errmsg;
+						_this.authErrMsgHidden = true;
+					} else if(result.errno == 4){
+						//手机号不正确
+						_this.loginPhoneErrMsg = result.errmsg;
+						_this.loginPhoneErrMsgHidden = true;
 					}
 				})
 			},
@@ -310,6 +352,14 @@
 						sessionStorage.setItem("subordinateBank",subordinateBank);
 					})
 				}				
+			},
+			setFalse: function(){
+				_this.errMsgHidden = true;
+				_this.loginAccountErrMsgHidden = false
+				_this.loginPasswordErrMsgHidden = false
+				_this.authErrMsgHidden = false
+				_this.loginPhoneErrMsgHidden = false
+				_this.loginAuthErrMsgHidden = false
 			}
 		},
 		created() {

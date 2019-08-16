@@ -22,6 +22,13 @@ axios.interceptors.request.use(function (config) {
 
 
 
+//--------------------- identity.html  start --------------------
+//实名认证----实名认证
+function verifyIndentity(params,config){
+	return axios.post("/web-service/verifiedIdentity",params,config);
+}
+//--------------------- identity.html  end --------------------
+
 //--------------------- registry.html  start --------------------
 //注册----获取验证码
 function registrySms(phone){
@@ -207,6 +214,50 @@ function findBankCardIdentification(bankCard) {
 function getOtherBankCardByUserId(params){
 	return axios.get("/web-service/getOtherBankCardByUserId/"+params)
 }
+function getBankCards(params) {
+    return axios.get("/web-service/getBankCardByUserId",{params:{"userId":params}});
+}
+
+//---------------- enterprise_login.html   start ---------------
+function enterpriseLoginTemp(params){
+	return axios.post("/auth-service/bankEnterpriseLogin",params)
+}
+//---------------- enterprise_login.html   end   ---------------
+
+//gathering_manage.html ---- start  主动收款页面
+//查询历史主动收款记录
+function getActiveCollectionList(userId){
+    return axios.get("/web-service/getActiveCollection/"+userId)
+}
+//取消主动收款请求执行
+function updateGatheringStatus(activeId){
+    return axios.post("/web-service/updateGatheringType/"+activeId)
+}
+//提交主动收款
+function  addTransactionTecord(params){
+    return axios.post("/web-service/addTransactionTecord",activeId)
+}
+//查询用户名下所有银行卡
+function getBankCardByUser(userId){
+    return axios.get("/web-service/getBankCardByUser/"+userId)
+}
+//gathering_manage.html ---- end  主动收款页面
+
+//message.html ---- start  消息中心页面
+//查询待付款订单和提额申请订单
+function  getMessageCenter(userId,userName) {
+    return axios.get("/web-service/getMessageCenter/"+userId+"/"+userName)
+}
+//用户同意付款执行
+function  agreeGathering(agvo) {
+    return axios.post("/web-service/agreeGathering",activeId)
+}
+//用户主动取消提额申请
+function  updateManagerTranscationStatus(transcationId) {
+    return axios.post("/web-service/updateManagerTranscationStatus/"+transcationId)
+}
+
+
 //消息通知(通用)
 function MessageNotification(userId){
     return axios.get("/web-service/MessageNotification/"+userId)
