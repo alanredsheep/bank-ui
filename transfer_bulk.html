@@ -11,7 +11,7 @@
     <link href="styles/main.css" rel="stylesheet">
     <style>
         input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button{
+        input::-webkit-inner-spin-button {
             -webkit-appearance: none !important;
         }
     </style>
@@ -29,18 +29,17 @@
 
                 <!--   主体内容    -->
 
-                <div class="col-md-10 col-lg-5" style="margin-left: 360px">
+                <div class="col-md-10 col-lg-5" style="margin-left: 360px" v-show="!showpop">
                     <div class="text-center form-title">批 量 转 账</div>
 
                     <form id="transfer" class="">
                         <!--本地获取当前用户所有银行卡-->
                         <div class="font-bold form-div col-lg-12 btn-group">
-                            <select class="form-control form-selection col-lg-9"
-                                  v-model="transferBulkVo.outBankCardID"  >
+                            <select class="form-control form-selection col-lg-9" v-model="payees.bankCard.bankCardId">
                                 <option disabled value="" class="form-selection-option">选择付款银行卡</option>
-                                <template v-for="bankCard in bankCards">
-                                    <option :value="bankCard.bankCardId" class="form-selection-option">
-                                        {{bankCard.bank}}，{{bankCard.bankCardNumber}}
+                                <template v-for="bc in bankCards">
+                                    <option :value="bc.bankCardId" class="form-selection-option">
+                                        {{bc.bank}}，{{bc.bankCardNumber}}
                                     </option>
                                 </template>
                             </select>
@@ -49,21 +48,31 @@
                         </div>
                         <!--根据用户id遍历群组-->
                         <div class="font-bold form-div col-lg-12 btn-group">
-                            <select class="form-control form-selection col-lg-9" v-model="selectPayeeGroup">
+                            <select class="form-control form-selection col-lg-9" v-model="currentPayeeGroupid"
+                                    @click.prevent="selectPayeeById(currentPayeeGroupid)">
                                 <option disabled selected class="form-selection-option" value="">选择收款群组</option>
                                 <option class="form-selection-option">发工资（10人）</option>
-                                <option class="form-selection-option">发零花钱（2人）</option>
+                                <template v-for="pg in payeeGroup">
+                                    <option class="form-selection-option" :value="pg.payeeGroupId">
+                                        {{pg.payeeGroupName}}
+                                    </option>
+                                </template>
                             </select>
                             <button class="form-selection-btn"><a href="payee_group.html">管理收款群组</a></button>
                         </div>
 
                         <div class="panel-body scroll-panel" style="height: 200px; overflow-y:scroll">
                             <!--根据群组遍历转账用户-->
-                            <div class="scroll-panel-div" v-for="payee in payees">
-                                <div><span> {{payee.payeeName}}，{{payee.bankName}}，{{payee.payeeBankCard}}，转账：</span><input type="number" class="col-md-10"
-                                                                                        style="width: 95px"  @blur="ismoney()">元
+                            <div class="scroll-panel-div" v-for="(p,index) in payees.payee">
+                                <div>
+                                    <span> {{p.payeeName}}，{{p.payeeBankIdentification}}，{{p.payeeBankCard}}，转账：</span>
+                                    <input
+                                            type="number" class="col-md-10"
+                                            style="width: 95px" v-model="p.muchMoney" @keyup="checkAmount(index)">元
                                 </div>
+
                             </div>
+                            <h6 style="color: red">{{this.msgAmount}}</h6>
                         </div>
 
                         <!--                    <div class="font-bold form-div">-->
@@ -74,13 +83,32 @@
 
                         <div class="text-md-center">
                             <button class="btn btn-blue btn-sm" style="margin-top: 20px; font-size: medium"
-                                    type="submit">确认转账
+                                    type="submit" @click.prevent="changepop()">确认转账
                             </button>
                             </button>
                         </div>
                     </form>
                 </div>
+                <!-- 弹窗 -->
 
+                <div class="col-md-10 col-lg-3" v-show="showpop" style="margin: auto">
+                    <div class="text-center form-title">请输入六位支付密码</div>
+                    <div style="margin-bottom: 40px">
+                        <input type="password" class="col-lg-2" maxlength="6" v-model="payees.bankCard.bankCardPassword"
+                               style="text-align:center;margin-left: 36%"
+                               onKeypress="return (/[\d{6}]/.test(String.fromCharCode(event.keyCode)))"
+                        />
+                    </div>
+                    <button class="btn btn-danger btn-sm"
+                            style="margin-left: 30px;margin-top: 20px;font-size: medium" @click.prevent="changepop()">
+                        取消
+                    </button>
+                    <button class="btn btn-success btn-sm"
+                            style="margin-left: 60px;margin-top: 20px;font-size: medium"
+                            @click.prevent="submitTransferBulk()">
+                        确认
+                    </button>
+                </div>
 
             </div>
         </div>
@@ -112,16 +140,33 @@
     new Vue({
         el: "#app",
         data: {
-            selectPayeeGroup:"",
-            payees:[{
-                payeeName:"张三",
-                bankName:"垃圾银行",
-                payeeBankCard:"123456"
+            //查询出来的该用户所有收款群组
+            payeeGroup: [{
+                payeeGroupId: "",
+                payeeGroupName: "",
             }],
+            // 当前选择的群组
+            currentPayeeGroupid: 0,
+            payees: {
+                bankCard: {
+                    bankCardId: "",
+                    bankCardPassword: "",
+                },
+                payee:[{
+                    payeeName: "",
+                    payeeBankIdentification: "",
+                    payeeBankCard: "",
+                    muchMoney: "",
+                }]
+            },
+            //查询出的银行卡
             bankCards: [{
-                //银行卡id，bankCardId
-                //残缺卡号，bankCardNumber
-                //银行卡类型，bankCardType
+                //银行卡id，
+                bankCardId:"",
+                //残缺卡号，
+                bankCardNumber:"",
+                //银行卡类型，
+                bankCardType:""
             }],
             user: {
                 userId: "2",
@@ -130,9 +175,16 @@
                 userPassword: "123123",
 
             },
-            transferBulkVo:[{
-                outBankCardID: "",
-            }],
+            //金额错误提示
+            msgAmount: "",
+            //弹窗
+            showpop: false,
+            //提交的银行卡
+            bankCard: {
+                bankCardId: "",
+                bankCardPassword: "",
+            }
+
         },
         methods: {
             //获取用户所持银行卡信息
@@ -144,10 +196,68 @@
                 })
 
             },
+            //获取用户所有的转账群组
+            selectPayeeGroupByUid: function () {
+                selectPayeeGroupByUid(this.user.userId).then(res => {
+                    if (res.data.data.errono == 1) {
+                        alert(res.data.data.errmsg);
+                    } else {
+                        this.payeeGroup = res.data.data.data;
+                    }
+                })
+            },
+            //弹窗切换
+            changepop: function () {
+                if (!this.showpop) {
+                    if (this.payees.bankCard.bankCardId == "") {
+                        return alert("请选择付款银行卡");
+                    }
+                    this.payees.payee.forEach()
+                    if ()
+                    this.showpop = true;
+                } else {
+                    this.showpop = false;
+                    this.payees.bankCard.bankCardPassword = "";
+                }
+            },
+
+            //根据 收款群组id获取所有收款人
+            selectPayeeById: function (id) {
+                this.showChange = false;
+                selectPayeeById(id).then(res => {
+                    if (res.data.data.errono == 1) {
+                        alert(res.data.data.errmsg);
+                    } else {
+                        this.payees.payee = res.data.data.data;
+                    }
+
+                })
+            },
+            //金额校验
+            checkAmount: function (index) {
+                var str = /^(([1-9]{1}\d{0,10})|([0]{1}))(\.(\d){1,2})?$/;
+                if (!str.exec(this.payees.payee[index].muchMoney)) {
+                    this.payees.payee[index].muchMoney = " ";
+                    this.msgAmount = "请输入正确的转账金额 ，例如：100.11";
+                } else {
+                    this.msgAmount = "";
+                }
+            },
+            submitTransferBulk: function () {
+                submitTransferBulk(this.payees).then(res => {
+                    if (res.data.data.errno == 1) {
+                        return alert(res.data.data.errmsg);
+                    }
+
+                })
+            }
+
         },
-        created(){
+        created() {
             //根据用户查询他所拥有的银行卡
             this.getBankCardByUser();
+            //获取用户所有的转账群组
+            this.selectPayeeGroupByUid();
         }
     })
 </script>

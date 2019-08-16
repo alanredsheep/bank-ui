@@ -94,7 +94,7 @@
                                             v-model="newPayee.payeeBankIdentification">
                                         <option disabled class="form-selection-option" value="">选择银行</option>
                                         <template v-for="sb in subordinateBank">
-                                            <option class="form-selection-option" :value="sb.bankIdentification">
+                                            <option class="form-selection-option" :value="sb.bankName">
                                                 {{sb.bankName}}
                                             </option>
                                         </template>
