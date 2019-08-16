@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html class="full-height" lang="en-US" xmlns:v-bind="http://www.w3.org/1999/xhtml"
-      xmlns:v-if="http://www.w3.org/1999/xhtml">
+    xmlns:v-if="http://www.w3.org/1999/xhtml">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,18 +12,26 @@
     <link href="css/mdb.min.css" rel="stylesheet">
     <link href="styles/main.css" rel="stylesheet">
 </head>
-<body id="top">
-<div id="app" style="height: 100%">
-    <header>
-        <!-- Navbar-->
-        <topnav></topnav>
 
+<body id="top">
+    <div id="app" style="height: 100%">
+        <header>
+            <!-- Navbar-->
+            <topnav></topnav>
+
+            <!-- 背景图-->
+            <div class="view hm-gradient" id="intro">
+                <!-- 渐变色-->
+                <div class="full-bg-img d-flex align-items-center">
+                    <!-- 主体内容-->
+                    <div class="col-md-10 col-lg-10" style="margin-left: 15%">
+                        <div class="text-center form-title" style="margin-left: -13%">银 行 卡 管 理</div>
         <!-- 背景图-->
         <div class="view hm-gradient" id="intro">
             <!-- 渐变色-->
             <div class="full-bg-img d-flex align-items-center">
                 <!-- 主体内容-->
-                <div class="col-md-10 col-lg-10" style="margin-left: 15%">
+                <div v-if="!readyToPassword" class="col-md-10 col-lg-10" style="margin-left: 15%">
                     <div class="text-center form-title" style="margin-left: -13%">银 行 卡 管 理</div>
 
                     <div class="panel-body scroll-panel"
@@ -32,12 +41,19 @@
                                 <a @click="selectBankCard(index)">
                                     <div class="jumbotron row"
                                          v-bind:style='bankCard.bankCardType == "钻石卡"?{"background-image":diamondCardImage}:
-                                         bankCard.bankCardType == "普通卡"?{"background-image":goldCardImage}:
-                                         bankCard.bankCardType == "黑卡"?{"background-color":"black"}:{"background-color":"#FF9248"}'>
-                                        <p style="font-size: xx-large">{{bankCard.bank}}</p>
+                                         bankCard.bankCardType == "普通卡"?{"background-image":goldCardImage}:{"background-color":"black"}'>
+                                        <p style="font-size: xx-large">五仁银行</p>
                                         <p style="font-size: large;margin-left: 20px;margin-top: 18px">
                                             {{bankCard.bankCardType}}</p>
-                                        <p style="font-size: x-large">{{bankCard.bankCardNum}}</p>
+                                        <p style="font-size: x-large">{{bankCard.bankCardNumber}}</p>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="container bank-card-container" v-for="(bankCard,index) in otherBankCards">
+                                <a @click="selectOtherBankCard(index)">
+                                    <div class="jumbotron row" style="background-color:#FF9248">
+                                        <p style="font-size: xx-large">{{bankCard.bankCardName}}</p>
+                                        <p style="font-size: x-large">{{bankCard.bankCardNumber}}</p>
                                     </div>
                                 </a>
                             </div>
@@ -48,31 +64,84 @@
                         <a href="bank_card_add.html">
                             <button @click="addBankCard()" class="btn btn-default bank-card-button">绑定银行卡</button>
                         </a>
-                        <button v-bind:disabled="otherBankCardSelected" @click="upgradeBankCard()"
+                        <button v-bind:disabled="selectAOtherBankCard" @click="upgradeBankCard"
+                        <div class="panel-body scroll-panel"
+                            style="width: 40%;height: 290px; overflow-y:scroll;margin-left: 12%;float: left">
+                            <div class="scroll-panel-div">
+                                <div class="container bank-card-container" v-for="(bankCard,index) in bankCards">
+                                    <a @click="selectBankCard(index)">
+                                        <div class="jumbotron row"
+                                            v-bind:style='bankCard.bankCardType == "钻石卡"?{"background-image":diamondCardImage}:
+                                         bankCard.bankCardType == "普通卡"?{"background-image":goldCardImage}:
+                                         bankCard.bankCardType == "黑卡"?{"background-color":"black"}:{"background-color":"#FF9248"}'>
+                                            <p style="font-size: xx-large">{{bankCard.bank}}</p>
+                                            <p style="font-size: large;margin-left: 20px;margin-top: 18px">
+                                                {{bankCard.bankCardType}}</p>
+                                            <p style="font-size: x-large">{{bankCard.bankCardNum}}</p>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4" style="float: left">
+                            <!--   他行银行卡只有解绑的功能   -->
+                            <a href="bank_card_add.html">
+                                <button @click="addBankCard()" class="btn btn-default bank-card-button">绑定银行卡</button>
+                            </a>
+                            <button v-bind:disabled="otherBankCardSelected" @click="upgradeBankCard()"
                                 class="btn btn-blue bank-card-button">升级银行卡
                         </button>
-                        <button v-bind:disabled="!otherBankCardSelected" @click="untiedBankCard()"
+                        <button v-bind:disabled="selectABankCard" @click="untiedBankCard"
+                            </button>
+                            <button v-bind:disabled="!otherBankCardSelected" @click="untiedBankCard()"
                                 class="btn btn-warning bank-card-button">解绑银行卡
                         </button>
-                        <button v-bind:disabled="otherBankCardSelected" @click="reportBankCard()"
+                        <button v-bind:disabled="selectAOtherBankCard" @click="reportBankCardLoss"
+                            </button>
+                            <button v-bind:disabled="otherBankCardSelected" @click="reportBankCard()"
                                 class="btn btn-danger bank-card-button">挂失银行卡
+                            </button>
+                        </div>
+                        <!--主体内容结束-->
+                    </div>
+                </div>
+            </div>
+        </header>
                         </button>
                     </div>
-                    <!--主体内容结束-->
                 </div>
+
+                <div v-if="readyToPassword" class="col-md-10 col-lg-3" style="margin: auto">
+                    <div class="text-center form-title">支 付 密 码</div>
+                    <div style="margin-bottom: 40px">
+                        <input type="password" class="col-lg-2" maxlength="6"
+                               style="text-align:center;margin-left: 36%" v-model="password"
+                               onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))"/>
+                    </div>
+                    <button class="btn btn-danger btn-sm" @click.prevent="cancelToPassword"
+                            style="margin-left: 30px;margin-top: 20px;font-size: medium">
+                        取消
+                    </button>
+                    <button class="btn btn-success btn-sm" @click.prevent="confirm"
+                            style="margin-left: 60px;margin-top: 20px;font-size: medium">
+                        确认
+                    </button>
+                </div>
+                <!--主体内容结束-->
             </div>
         </div>
     </header>
 
-    <footer class="page-footer indigo darken-2 center-on-small-only pt-0 mt-0">
-        <div class="footer-copyright">
-            <div class="container-fluid">
-                <p>&copy; Five Bank</p>
+        <footer class="page-footer indigo darken-2 center-on-small-only pt-0 mt-0">
+            <div class="footer-copyright">
+                <div class="container-fluid">
+                    <p>&copy; Five Bank</p>
+                </div>
             </div>
-        </div>
-    </footer>
-</div>
+        </footer>
+    </div>
 </body>
+
 </html>
 
 <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
@@ -89,44 +158,123 @@
     new Vue({
         el: "#app",
         data: {
-            otherBankCardSelected: false,
+            // 用户信息
+            user: {
+                userId: 1,
+                userName: "",
+                userStatus: 100,
+            },
+            // 是否选中他行卡
+            selectAOtherBankCard: true,
+            // 是否选中本行卡
+            selectABankCard: true,
+            // 用户选中的本行卡
             bankCardSelected: {
                 bankCardId: "",
             },
+            //
+            // 用户选中的他行卡
+            otherBankCardSelected: {
+                bankCardId: "",
+            },
+            // 用户本行卡
             bankCards: [{
-                bankCardId: "1",
-                bankCardNum: "2341**8432",
-                bank: "五仁银行",
-                bankCardType: "黑卡",
-            }, {
-                bankCardId: "2",
-                bankCardNum: "2341**8432",
-                bank: "五仁银行",
-                bankCardType: "钻石卡",
-            }, {
-                bankCardId: "3",
-                bankCardNum: "2341**8432",
-                bank: "中国银行",
+                bankCardId: "",
+                bankCardNumber: "",
                 bankCardType: "",
             }],
-// 绑定背景图片
+            // 用户他行卡
+            otherBankCards: [{
+                bankCardId: "",
+                bankCardNumber: "",
+                bankCardName: "",
+            }],
+            // 绑定背景图片
+            // 绑定背景图片
             diamondCardImage: "url(" + "img/diamond_card.jpg" + ")",
             goldCardImage: "url(" + "img/gold.jpg" + ")",
+            // 是否弹出支付页面
+            readyToPassword: false,
+            // 用户输入的密码
+            password: "",
+            // 确定解绑银行卡
+            confirmToUntied: false,
+            // 确定挂失银行卡
+            confirmToReport: false,
+            //
+            //登录标识
+            token: ""
         },
         methods: {
-// 点击某张银行卡
-            selectBankCard: function (index) {
-                if (this.bankCards[index].bankCardType == "") {
-                    this.otherBankCardSelected = true;
-                } else {
-                    this.otherBankCardSelected = false;
-                }
-                this.bankCardSelected.bankCardId = this.bankCards[index].bankCardId;
-                // console.log(this.bankCardSelected.bankCardId);
+            // 点击某张银行卡
+            // 取消按钮
+            cancelToPassword: function () {
+                this.readyToPassword = false;
+                this.confirmToReport = false;
+                this.confirmToUntied = false;
+                this.password = "";
             },
+            // 确认按钮
+            confirm: function () {
+                if (this.confirmToReport) {
+                    reportBankCardLoss({
+                        "userId": this.user.userId,
+                        "password": this.password,
+                        "bankCardId": this.bankCardSelected.bankCardId,
+                    }).then(res => {
+                        this.confirmToReport = false;
+                        alert(res.data.data.errmsg);
+                        window.location.reload();
+                    })
+                }
+                if (this.confirmToUntied) {
+                    untiedOtherBankCard({
+                        "userId": this.user.userId,
+                        "password": this.password,
+                        "otherBankCardId": this.otherBankCardSelected.bankCardId,
+                    }).then(res => {
+                        this.confirmToUntied = false;
+                        alert(res.data.data.errmsg);
+                        window.location.reload();
+                    })
+                }
+            },
+            // 点击某张本行卡
+            selectBankCard: function (index) {
+                this.selectAOtherBankCard = false;
+                this.selectABankCard = true;
+                this.bankCardSelected.bankCardId = this.bankCards[index].bankCardId;
+                console.log(this.bankCardSelected.bankCardId);
+            },
+            // 点击某张他行卡
+            selectOtherBankCard: function (index) {
+                this.selectAOtherBankCard = true;
+                this.selectABankCard = false;
+                this.otherBankCardSelected.bankCardId = this.otherBankCards[index].bankCardId;
+                console.log(this.otherBankCardSelected.bankCardId);
+            },
+            // 解绑银行卡
             untiedBankCard: function () {
+                confirm("确认要解绑该银行卡吗？");
+                this.confirmToUntied = true;
+                this.readyToPassword = true;
+            },
+            // 挂失银行卡
+            reportBankCardLoss: function () {
+                confirm("确认要挂失该银行卡吗？");
+                this.confirmToReport = true;
+                this.readyToPassword = true;
+            },
+            // 升级银行卡
+            upgradeBankCard: function () {
+                sessionStorage.setItem("")
+            },
+            // 初始化用户的银行卡信息
+            initOtherBankCardList: function () {
                 var _this = this;
-
+                getOtherBankCardByUserId(_this.user.userId).then(res => {
+                    _this.otherBankCards = res.data.data.otherBankCards;
+                });
             },
             upgradeBankCard: function () {
 
