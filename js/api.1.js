@@ -219,7 +219,7 @@ function updateGatheringStatus(activeId){
 }
 //提交主动收款
 function  addTransactionTecord(params){
-    return axios.post("/web-service/addTransactionTecord",activeId)
+    return axios.post("/web-service/addTransactionTecord",params)
 }
 //查询用户名下所有银行卡
 function getBankCardByUser(userId){
@@ -234,7 +234,7 @@ function  getMessageCenter(userId,userName) {
 }
 //用户同意付款执行
 function  agreeGathering(agvo) {
-    return axios.post("/web-service/agreeGathering",activeId)
+    return axios.post("/web-service/agreeGathering",agvo)
 }
 //用户主动取消提额申请
 function  updateManagerTranscationStatus(transcationId) {
