@@ -207,3 +207,7 @@ function findBankCardIdentification(bankCard) {
 function getOtherBankCardByUserId(params){
 	return axios.get("/web-service/getOtherBankCardByUserId/"+params)
 }
+//消息通知(通用)
+function MessageNotification(userId){
+    return axios.get("/web-service/MessageNotification/"+userId)
+}

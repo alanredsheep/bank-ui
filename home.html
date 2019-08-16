@@ -9,6 +9,12 @@
 		<link href="css/bootstrap.min.css" rel="stylesheet">
 		<link href="css/mdb.min.css" rel="stylesheet">
 		<link href="styles/main.css" rel="stylesheet">
+		<!--可无视-->
+<link rel="stylesheet" type="text/css" href="css/bootstrap-grid.min.css" /><!--CSS RESET-->
+<link rel="stylesheet" type="text/css" href="css/demo.css"><!--演示页面样式，使用时可以不引用-->
+
+<!--必要样式-->
+<link rel="stylesheet" href="css/naranja.min.css">
 	</head>
 	<body id="top">
 		<div id="app" style="height: 100%">
@@ -68,12 +74,17 @@
 <script type="text/javascript" src="js/vuejs-2.5.16.js"></script>
 <script type="text/javascript" src="js/api.1.js"></script>
 <script type="text/javascript" src="components/topNav.js"></script>
+<script type="text/javascript" src="js/naranja.js"></script>
+<script type="text/javascript" src="components/send.js"></script>
 
 <script>
 	new Vue({
 		el: "#app",
 		data: {
-			
+			     //定时器名称
+				 setInterName:null,
+            //消息
+            messages:[],
 		},
 		methods: {
 			getOtherBankCard: function(userId) {
@@ -86,13 +97,41 @@
 						sessionStorage.setItem("otherBankCards", JSON.stringify(otherBankCards));
 					}
 				})
-			}
+			},
+			//消息
+            narn:function(userId){
+			
+                    //消息通知
+                    MessageNotification(userId).then(res =>{
+                        if(res.data.data.errno == 0){
+                            this.messages = res.data.data.data;
+                            this.messages.forEach(function (c){
+                                if(c.transcationStatus == 1){
+									narnSuccess('success');
+									
+                                }else{
+                                    narnError('error');
+								}
+								
+							})
+							clearInterval(this.setInterName);
+                        }
+                       
+                    })
+
+				
+				
+            }
 		},
 		created() {
-			var user = JSON.parse(sessionStorage.getItem("user"));
-			var userId = user.userId;
-			console.log(user)
-			this.getOtherBankCard(userId);
+			// var user = JSON.parse(sessionStorage.getItem("user"));
+			// var userId = user.userId;
+			// console.log(user)
+			// this.getOtherBankCard(userId);
+			this.setInterName = setInterval(() =>{
+				this.narn(1)
+			},1000)
+		
 		}
 	})
 </script>
