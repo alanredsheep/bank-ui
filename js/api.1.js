@@ -282,7 +282,7 @@ function  addTransactionTecord(params){
 }
 
 //查询用户名下所有银行卡
-function getBankCardByUser(userId) {
+function getbankCardByUser(userId) {
     return axios.get("/web-service/getBankCardByUser/" + userId)
 }
 
