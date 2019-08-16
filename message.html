@@ -59,7 +59,7 @@
                         </div>
                         <div class="font-bold form-div">
                             <select class="form-control form-selection col-lg-11"
-                                    style="margin-left: 5px;margin-top: 10px"  v-model="userBankId">
+                                    style="margin-left: 5px;margin-top: 10px"  v-model="activeGathering.outBankId">
                                 <option  class="form-selection-option" v-for="banks in bankCards" :value="banks.bankCardId" >
                                    {{banks.bank}},{{banks.bankCardNumber}}
                                 </option>
@@ -68,8 +68,12 @@
                         <div class="font-bold form-div" v-for="banks in bankById()" :key="userBankId">
                             单笔限额:{{banks.bankCardType}}
                         </div>
+                        <div class="font-bold form-div">
+                            支付密码: <input class="col-md-10 col-lg-10" type="text" style="margin-left: 8px" v-model="activeGathering.outBankPassword">
+                        </div>
                         <button style="margin-left: 8%;margin-top: 20px" class="btn btn-danger" @click="userfalse(active.activeId)" >拒绝</button>
                         <button style="margin-left: 8%;margin-top: 20px" class="btn btn-success"  @click="usertrue(active.activeId)">确认付款</button>
+
                     </form>
                     <!--展示提额通知-->
                     <form   v-for="managerTranscation in managerById()" :key="managerId" @submit.prevent="onSubmit"  style="float: left;margin-left: 20px;background-color: rgba(255,255,255,0.2);height: 300px;width: 300px" v-else>
@@ -135,14 +139,6 @@
                     inBank:"A1",
                     //收款人卡号
                     inBankCard:"A1",
-                    //付款人id
-                    outUserId:"A1",
-                    //付款人姓名
-                    outUserName:"A1",
-                    //付款人银行卡归属行
-                    outBank:"A1",
-                    //付款人卡号
-                    outBankCard:"A1",
                     //订单id
                     activeId:"A1",
                     //订单金额
@@ -154,11 +150,11 @@
                     //订单状态
                     /**
                      * 交易状态
-                     * 110 交易中
-                     * 120 成功
-                     * 130 失败
+                     * 100 交易中
+                     * 101 成功
+                     * 102 失败
                      */
-                    activestate:"110"
+                    activestate:"100"
                 },
                 {
                     inUserId:"b1",
@@ -168,14 +164,6 @@
                     inBank:"b1",
                     //收款人卡号
                     inBankCard:"b1",
-                    //付款人id
-                    outUserId:"b1",
-                    //付款人姓名
-                    outUserName:"b1",
-                    //付款人银行卡归属行
-                    outBank:"b1",
-                    //付款人卡号
-                    outBankCard:"b1",
                     //订单id
                     activeId:"b1",
                     //订单金额
@@ -187,11 +175,11 @@
                     //订单状态
                     /**
                      * 交易状态
-                     * 110 交易中
-                     * 120 成功
-                     * 130 失败
+                     * 100 交易中
+                     * 101 成功
+                     * 102 失败
                      */
-                    activestate:"120"
+                    activestate:"101"
                 }
             ],
             /*提额申请通知*/
@@ -240,12 +228,22 @@
                     bankCardType:"钻石卡"
                 },
             ],
+                /*获取同意付款的订单信息*/
+                activeGathering:{
+                       // 订单id
+                    activeId:"",
+                        //付款卡id
+                    outBankId:"",
+                    //付款卡密码
+                    outBankPassword:""
+                }
+            ,
             /*判断用户点了提额通知还是收款通知(0:收款通知,1提额通知)*/
             flag:"0",
-            /*获取用户所选卡id*/
-            userBankId:"",
-            //获取所选银行卡的支付密码
-            userBankPassword:"",
+            /*登录用户id*/
+            userId: "",
+            /*登录用户名*/
+            userName:"",
             //根据用户点击展示收款信息的key
             transferRecordId:"",
             //根据用户点击提额通知id展示信息的key
@@ -300,18 +298,46 @@
             },
             /*用户点击拒绝付款执行的方法*/
             userfalse:function(obj){
-
+                updateGatheringStatus(obj).then(res=>{
+                    if (res.data){
+                        alert("已取消付款")
+                    }else {
+                        alert("订单异常,请重试")
+                    }
+                })
             },
 
             /*用户同意付款执行的方法*/
             usertrue:function(obj){
-
+                this.activeGathering.activeId=this.transferRecordId
+                agreeGathering(this.activeGathering).then(res=>{
+                    if (res.data){
+                        alert("支付成功")
+                    }else {
+                        alert("支付密码错误")
+                    }
+                })
+            },
+            /*获取当前登录用户*/
+            getUser: function () {
+                var user = JSON.parse(sessionStorage.getItem("user"));
+                this.userId=user.userId;
+                this.userName=user.userName;
+            },
+            getMessageCenter:function(){
+                _this=this
+                //this.userId,this.userName
+                getMessageCenter(25,"testA1").then(res=>{
+                    _this.activeGatherings= res.data.activeGatheringVo
+                    _this.managerTranscations=res.data.managerTranscation
+                })
             },
             /*取消表单的默认提交*/
             onSubmit:function(){return false;},
             /*页面加载完成事件*/
             created: function () {
-
+               // this.getUser()
+               // this.getMessageCenter()
             }
 
         }

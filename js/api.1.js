@@ -122,10 +122,14 @@ function untiedBankCard() {
 function selectSubordinateBank(){
      return axios.get("/web-service/getAllSubordinateBank")
 }
-// selectBankCardAttribution
-
-
-
+//根据他行银行卡号查询出所属银行标识
+function selectBankCardAttribution(params){
+    return axios.post("/web-service/selectSubordinateBankByNum", params);
+}
+//单次转账提交
+function submitTransfer(params) {
+    return axios.post("/web-service/verifyBankCardForVo", params);
+}
 //----------------transfer.html   end---------------
 
 //----------------transfer_cross_border.html   start-------跨境转账页面--------
@@ -151,6 +155,29 @@ function getExchangeRateCNY(price,type){
 }
 //----------------transfer_cross_border.html   end---------------
 
+//----------------payee_group.html   start-------收款群组页面--------
+//根据用户查询出所有收款群组
+function selectPayeeGroupByUid(params){
+    return axios.post("/web-service/selectPayeeGroupByUid",params)
+}
+//根据收款群组id查询所属收款人
+function selectPayeeById(params) {
+    return axios.post("/web-service/selectPayeeById",params)
+}
+//添加一条收款群组
+function addPayeeGroup(params){
+    return axios.post("/web-service/addPayeeGroup",params)
+}
+// 根据id删除群组用户
+function deletePayeeById(params){
+    return axios.post("/web-service/deletePayeeById",params)
+}
+//添加一个群组收款人
+function addPayee(params) {
+    return axios.post("/web-service/addPayee",params)
+}
+//----------------payee_group.html   end---------------
+
 //----------------bank_card_add_limit.html   start-------升级卡类型--------
 //通过银行卡id查询银行卡信息
 function getBankCardBybankCardId(bankCardId){
@@ -164,6 +191,23 @@ function sendUpgradeCard(bankCardId){
 function UpgradeCard(params){
     return axios.post("/web-service/UpgradeCard",params)
 }
+
+//----------------bank_card_add.html    start------------------
+// 绑定银行卡
+function addOtherBankCard(params) {
+    return axios.post("/web-service/addOtherBankCard",params)
+}
+// 解绑银行卡
+function deleteOtherBankCard(params){
+    return axios.delete("/web-service/deleteOtherBankCard",params)
+}
+// 根据他行卡号查询银行标识符
+function findBankCardIdentification(bankCard) {
+    return axios.get("/web-service/findBankCardIdentification/"+bankCard)
+}
+
+//----------------bank_card_add.html    end------------------
+
 
 //----------------bank_card_add_limit.html   end---------------
 //根据用户id获取该用户的其他银行的银行卡
@@ -179,3 +223,37 @@ function enterpriseLoginTemp(params){
 	return axios.post("/auth-service/bankEnterpriseLogin",params)
 }
 //---------------- enterprise_login.html   end   ---------------
+
+//gathering_manage.html ---- start  主动收款页面
+//查询历史主动收款记录
+function getActiveCollectionList(userId){
+    return axios.get("/web-service/getActiveCollection/"+userId)
+}
+//取消主动收款请求执行
+function updateGatheringStatus(activeId){
+    return axios.post("/web-service/updateGatheringType/"+activeId)
+}
+//提交主动收款
+function  addTransactionTecord(params){
+    return axios.post("/web-service/addTransactionTecord",activeId)
+}
+//查询用户名下所有银行卡
+function getBankCardByUser(userId){
+    return axios.get("/web-service/getBankCardByUser/"+userId)
+}
+//gathering_manage.html ---- end  主动收款页面
+
+//message.html ---- start  消息中心页面
+//查询待付款订单和提额申请订单
+function  getMessageCenter(userId,userName) {
+    return axios.get("/web-service/getMessageCenter/"+userId+"/"+userName)
+}
+//用户同意付款执行
+function  agreeGathering(agvo) {
+    return axios.post("/web-service/agreeGathering",activeId)
+}
+//用户主动取消提额申请
+function  updateManagerTranscationStatus(transcationId) {
+    return axios.post("/web-service/updateManagerTranscationStatus/"+transcationId)
+}
+

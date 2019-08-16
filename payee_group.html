@@ -50,19 +50,20 @@
                                 </a>
                                 <!-- 遍历出该用户所有的收款群组-->
                                 <li v-for="group in payeeGroup">
-                                    <div @click="selectPayeeById(group.payeeGroupId)">{{group.payeeGroupName}}</div>
+                                    <div @click.prevent="selectPayeeById(group.payeeGroupId)">{{group.payeeGroupName}}
+                                    </div>
                                 </li>
                                 <!--添加群组-->
-                                <li v-show="showInput">
-                                    <input type="text" v-model="inputPayee" placeholder="请输入新的群组姓名">
-                                    <button class="btn btn-blue btn-sm" @click="addPayee()"
+                                <li v-show="showAddPayeeGroupInput">
+                                    <input type="text" v-model="newPayeeGroup.inputPayeeGroup" placeholder="请输入新的群组姓名">
+                                    <button class="btn btn-blue btn-sm" @click.prevent="addPayeeGroup()"
                                             style="margin-top: 20px;font-size: medium">
                                         添加
                                     </button>
                                 </li>
 
                                 <!--添加群组-->
-                                <a @click="addPayeeGroup()">
+                                <a @click.prevent="oppenAddPayeeGroup()">
                                     ➕创建群组
                                 </a>
                             </ul>
@@ -76,33 +77,45 @@
                                 <!--遍历出收款群组所有收款人-->
                                 <div style="width: 100%" v-for="payee in payees">
                                     <li>
-                                        {{payee.payeeName}}，{{payee.bankName}}，{{payee.payeeBankCard}}
-                                        <button class="btn btn-danger btn-sm" @click="">删除</button>
+                                        {{payee.payeeName}}，{{payee.payeeBankIdentification}}，{{payee.payeeBankCard}}
+                                        <button class="btn btn-danger btn-sm"
+                                                @click.prevent="deletePayeeById(payee.payeeId)">
+                                            删除
+                                        </button>
                                     </li>
                                 </div>
 
                                 <div class="btn-group" v-show="showChange">
                                     <input type="text"
                                            style="margin-left: 2px;width: 70px;background-color: rgba(255,255,255,0)"
-                                           placeholder="收款人" v-model="payee.payeeName">
-                                    <select class="form-control form-selection-bank col-lg-3" style="margin-left: 10px"
-                                            v-model="payee.payeeBankIdentification">
-                                        <option disabled selected class="form-selection-option" value="">选择银行</option>
-                                        <option class="form-selection-option" value="">中国银行</option>
-                                        <option class="form-selection-option">招商银行</option>
-                                    </select>
-                                    <input type="text" style="width: 280px;margin-left: 10px" placeholder="收款账户"
-                                           v-model="payee.payeeBankCard"/>
+                                           placeholder="收款人" v-model="newPayee.payeeName">
 
+                                    <select class="form-control form-selection-bank col-lg-3" style="margin-left: 10px"
+                                            v-model="newPayee.payeeBankIdentification">
+                                        <option disabled class="form-selection-option" value="">选择银行</option>
+                                        <template v-for="sb in subordinateBank">
+                                            <option class="form-selection-option" :value="sb.bankIdentification">
+                                                {{sb.bankName}}
+                                            </option>
+                                        </template>
+                                    </select>
+
+                                    <input v-model="newPayee.payeeBankCard" type="text"
+                                           style="width: 280px;margin-left: 10px" placeholder="收款账户"
+                                           type="number" @blur="selectBankCard()"/>
                                 </div>
+                                <h6 style="color: red">{{this.msgforselectBankCard}}</h6>
 
                                 <div style="margin-left: 140px;margin-top: 16px;width: 300px;" v-show="showChange">
                                     <button class="btn btn-sm btn-warning" style="font-size: medium"
-                                            @click="showChangeOpen()">取消
+                                            @click.prevent="showChangeOpen()">取消
                                     </button>
-                                    <button class="btn btn-sm btn-success" style="font-size: medium">保存</button>
+                                    <button class="btn btn-sm btn-success" style="font-size: medium"
+                                            @click.prevent="addPayee()">保存
+                                    </button>
                                 </div>
-                                <button class="btn btn-blue btn-sm" @click="showChangeOpen()" v-show="!showChange"
+                                <button class="btn btn-blue btn-sm" @click.prevent="showChangeOpen()"
+                                        v-show="!showChange"
                                         style="margin-top: 20px;font-size: medium">
                                     添加
                                 </button>
@@ -152,52 +165,174 @@
     new Vue({
         el: "#app",
         data: {
-            //查询出来的该用户所有收款群组名字
-            payeeGroup: [],
+            //查询出来的该用户所有收款群组
+            payeeGroup: [{
+                payeeGroupId: "",
+                payeeGroupName: "",
+            }],
             //根据收款群组id查询出来的所有收款人
             payees: [{
+                payeeId: "1",
                 payeeName: "张三",
-                bankName: "垃圾银行",
-                payeeBankCard: "123456"
+                payeeBankIdentification: "垃圾银行",
+                payeeBankCard: "123456",
+                payeeGroupId: "",
             }],
-            showInput: false,
-            inputPayee: "",
-            showChange: false,
-            payee: {
-                payeeBankIdentification: "",
+            showAddPayeeGroupInput: false,
+            //收款群组名字
+            newPayeeGroup: {
+                userId: "",
+                inputPayeeGroup: "",
             },
+            showChange: false,
+            user: {
+                userId: "2",
+                userName: "啊啊啊啊啊",
+                userPhone: "235456",
+                userPassword: "123123",
+
+            },
+            //所有合作银行
+            subordinateBank: [{
+                // bankIdentification: "",
+                // bankName: "",
+            }],
+            //查询银行卡错误
+            msgforselectBankCard: "",
+            newPayee: {
+                payeeName: "张三",
+                payeeBankIdentification: "BOWR",
+                payeeBankCard: "123456",
+                payeeGroupId: "",
+            }
         },
         methods: {
             selectAllPayeeGroup: function () {
                 //查询该用户所有 收款群组显示
+                selectPayeeGroupByUid(this.user.userId).then(res => {
+                    if (res.data.data.errono == 1) {
+                        alert(res.data.data.errmsg);
+                    } else {
+                        this.payeeGroup = res.data.data.data;
+                    }
+                })
 
             },
+
             selectPayeeById: function (id) {
+                this.showChange = false;
                 //根据 收款群组id获取所有收款人
+                selectPayeeById(id).then(res => {
+                    this.newPayee.payeeGroupId = id;
+                    //
+                    if (res.data.data.errono == 1) {
+                        alert(res.data.data.errmsg);
+                    } else {
+                        this.payees = res.data.data.data;
+                    }
 
+                })
             },
+            oppenAddPayeeGroup: function () {
+                this.showAddPayeeGroupInput = true;
+            },
+
             addPayeeGroup: function () {
-                console.log("iiiii")
-                this.showInput = true;
-            },
-            addPayee: function () {
-                if (this.inputPayee != "") {
+                this.newPayeeGroup.userId = this.user.userId;
+                if (this.newPayeeGroup.userId == "") {
+                    return alert("操作异常请重新登录");
+                }
+                if (this.newPayeeGroup.inputPayeeGroup != "") {
                     //添加一条收款群组到
-                    var payyeGroup = {};
-                    this.payeeGroup.push(payyeGroup);
-                    this.inputPayee = "";
-                    this.showInput = false;
+                    addPayeeGroup(this.newPayeeGroup).then(res => {
+                        if (res.data.data.errono == 1) {
+                            alert(res.data.data.errmsg);
+                        } else {
+                            this.selectAllPayeeGroup();
+                            this.newPayeeGroup.inputPayeeGroup = "";
+                            this.showAddPayeeGroupInput = false;
+                        }
+                    })
                 }
             },
+            //切换添加Payee
             showChangeOpen: function () {
-                console.log(this.showChange)
                 if (this.showChange) {
+                    this.msgforselectBankCard = "";
                     this.showChange = false;
-                    console.log(this.showChange)
                 } else {
                     this.showChange = true;
                 }
             },
+            // 删除群组用户的方法
+            deletePayeeById: function (payeeId) {
+                deletePayeeById(payeeId).then(res => {
+                    if (res.data.data.errono == 1) {
+                        alert(res.data.data.errmsg);
+                    } else {
+                        for (var i = 0; i < this.payees.length; i++) {
+                            if (this.payees[i].payeeId == payeeId) {
+                                this.payees.splice(i, 1);
+                            }
+                        }
+                    }
+
+                })
+            },
+            // 查询银行卡所属银行的方法
+            selectBankCard: function () {
+                var str = /^\d{15,19}$/;
+                //当输入数值大于15并且光标离开和回车时调用
+                if (str.exec(this.newPayee.payeeBankCard)) {
+                    //调用查询银行卡归属银行
+                    this.msgforselectBankCard = "";
+                    if (this.newPayee.payeeBankCard.substring(0, 4) == "9999") {
+                        this.newPayee.payeeBankIdentification = "BOWR";
+                    } else {
+                        selectBankCardAttribution(this.newPayee.payeeBankCard).then(res => {
+                            if (res.data.data.errno == 0) {
+                                this.newPayee.payeeBankCard = res.data.data.data;
+                            } else {
+                                this.msgforselectBankCard = res.data.data.errmsg;
+                            }
+                        })
+                    }
+                } else {
+                    this.payees.payeeBankCard = "";
+                    this.msgforselectBankCard = "请按照格式输入银行卡号，15-19位纯数字 ";
+                }
+
+            },
+
+            // 添加收款组用户
+            addPayee: function () {
+
+                if (this.newPayee.payeeBankCard == "") {
+                    return alert("请输入银行卡号");
+                }
+                if (this.newPayee.payeeBankIdentification == "") {
+                    return alert("请重新输入银行卡号");
+                }
+                if (this.newPayee.payeeName == "") {
+                    return alert("请输入收款人姓名");
+                }
+                if (this.newPayee.payeeGroupId == "") {
+                    return alert("请重新选择群组后添加");
+                }
+                addPayee(this.newPayee).then(res => {
+                    if (res.data.data.errno == 0) {
+                        this.showChangeOpen();
+                        this.selectPayeeById(this.newPayee.payeeGroupId);
+                    } else {
+                        return alert(res.data.data.errmsg)
+                    }
+                })
+
+
+            },
+        },
+        created() {
+            this.selectAllPayeeGroup()
 
         }
     })

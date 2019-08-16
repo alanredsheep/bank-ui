@@ -60,16 +60,16 @@
                         <div class="font-bold form-div">
                             备注：{{active.transferRemarks}}
                         </div>
-                       <div class="font-bold form-div" v-show="active.activestate==110">
+                       <div class="font-bold form-div" v-show="active.activestate==100">
                             订单状态：处理中
                         </div>
-                        <div class="font-bold form-div" v-show="active.activestate==120">
+                        <div class="font-bold form-div" v-show="active.activestate==101">
                             订单状态：已完成
                         </div>
-                        <div class="font-bold form-div" v-show="active.activestate==130">
+                        <div class="font-bold form-div" v-show="active.activestate==102">
                             订单状态：已取消
                         </div>
-                        <div class="text-md-center" v-show="active.activestate==110">
+                        <div class="text-md-center" v-show="active.activestate==100">
                            <button @click="abolishGathering()">取消收款</button>
                         </div>
                     </form>
@@ -79,7 +79,7 @@
                                 选择收款银行卡：
                             </div>
                             <select class="form-control form-selection col-lg-11"
-                                    style="margin-left: 5px;margin-top: 10px"  v-model="userBankId">
+                                    style="margin-left: 5px;margin-top: 10px"   v-model="activeGathering.inBankId">
                                 <option  class="form-selection-option" v-for="banks in bankCards" :value="banks.bankCardId" >
                                     {{banks.bank}},{{banks.bankCardNumber}}
                                 </option>
@@ -94,7 +94,7 @@
                         <div class="font-bold form-div">
                             付款人手机号：
                             <input class="col-md-10 col-lg-10" type="text" style="margin-left: 8px"
-                                   placeholder="输入付款人的手机号" v-model="userPhone">
+                                   placeholder="输入付款人的手机号" v-model="activeGathering.userPhone">
                         </div>
                         <div class="font-bold form-div">
                             收款金额：
@@ -144,21 +144,22 @@
             /*历史主动收款记录*/
             activeGatherings:[
                     {
+                        //收款人id
                          inUserId:"A1",
                         //主动收款人姓名
                         inUserName:"A1",
                         //收款人银行卡归属行
                         inBank:"A1",
+                        //收款人卡号id
+                        inBankId:"",
                         //收款人卡号
                         inBankCard:"A1",
-                        //付款人id
-                        outUserId:"A1",
+
                         //付款人姓名
                         outUserName:"A1",
-                        //付款人银行卡归属行
-                        outBank:"A1",
-                        //付款人卡号
-                        outBankCard:"A1",
+                        //付款人手机号
+                        outUserPhone:"",
+
                         //订单id
                         activeId:"A1",
                         //订单金额
@@ -170,52 +171,59 @@
                         //订单状态
                         /**
                          * 交易状态
-                         * 110 交易中
-                         * 120 成功
-                         * 130 失败
+                         * 100 交易中
+                         * 101 成功
+                         * 102 失败
                          */
-                        activestate:"110"
+                        activestate:"100"
                 },
                 {
-                    inUserId:"b1",
+                    //收款人id
+                    inUserId:"A1",
                     //主动收款人姓名
-                    inUserName:"b1",
+                    inUserName:"A1",
                     //收款人银行卡归属行
-                    inBank:"b1",
+                    inBank:"A1",
+                    //收款人卡号id
+                    inBankId:"",
                     //收款人卡号
-                    inBankCard:"b1",
-                    //付款人id
-                    outUserId:"b1",
+                    inBankCard:"A1",
+
                     //付款人姓名
-                    outUserName:"b1",
-                    //付款人银行卡归属行
-                    outBank:"b1",
-                    //付款人卡号
-                    outBankCard:"b1",
+                    outUserName:"A1",
+                    //付款人手机号
+                    outUserPhone:"",
+
                     //订单id
-                    activeId:"b1",
+                    activeId:"A2",
                     //订单金额
-                    muchMoney:"b1",
+                    muchMoney:"A1",
                     //订单备注
-                    transferRemarks:"b1",
+                    transferRemarks:"A1",
                     //订单类型
-                    activeType:"b1",
+                    activeType:"A1",
                     //订单状态
                     /**
                      * 交易状态
-                     * 110 交易中
-                     * 120 成功
-                     * 130 失败
+                     * 100 交易中
+                     * 101 成功
+                     * 102 失败
                      */
-                    activestate:"120"
+                    activestate:"101"
                 }
             ],
             /*获取用户新增主动收款的信息*/
             activeGathering:{
-                //收款人卡号
-                inBankCard:"A1",
+
+                //收款人id
+                inUserId:"",
+                //收款人卡号id
+                inBankId:"",
+
                 //付款人姓名
                 outUserName:"A1",
+                //付款人手机号
+                outUserPhone:"",
                 //订单金额
                 muchMoney:"A1",
                 //订单备注
@@ -231,6 +239,7 @@
                     bankCardNumber:"11",
                     //银行卡所属银行
                     bank:"11"
+                    //
                 },
                 {
                     //银行卡id
@@ -241,10 +250,8 @@
                     bank:"22"
                 },
             ],
-            //付款人手机号
-            userPhone: "18100000",
-            //选择的收款银行卡id
-            userBankId:"",
+            /*当前登录用户id*/
+            userId:"",
             /*记录用户点击的是新增收款记录还是查询历史收款记录*/
             flag: "0",
             //根据用户点击展示历史记录的key
@@ -253,14 +260,29 @@
 
 
         methods: {
+            /*进入主动收款时执行的方法
+            * 根据用户id查询历史记录*/
+            getActiveGatherings:function () {
+                //刷新this作用域
+                    var _this = this
+                //this.userId
+                    getActiveCollectionList(25).then(res=>{
+                        _this.activeGatherings=res.data
+                    })
 
+                    getBankCardByUser(this.userId).then(res=>{
+                        _this.bankCards=res.data
+                    })
+
+                },
             /*点击了查看历史记录*/
             clickHistory: function(obj){
                 this.transferRecordId=obj
                      this.flag="0";
             },
-            /*根据id查询历史记录*/
+            /*根据订单id查询历史记录*/
             transferRecordsByID(){
+
                     return this.activeGatherings.filter(item =>{
                         if(item.activeId==this.transferRecordId){
                         return true
@@ -274,35 +296,38 @@
             /*取消主动收款执行的方法*/
             abolishGathering:function() {
                 //状态修改为取消的订单id
-                this.transferRecordId
+
+                updateGatheringStatus(this.transferRecordId).then(res=>{
+                   if (res.data!=true){
+                       alert("系统异常,请重试!")
+                   }
+                })
                 //修改状态为已取消此订单id发送到后台修改订单状态为取消
              },
             /*取消表单默认提交*/
             onSubmit:function(){return false;},
             /*提交主动收款*/
             upSubmit:function () {
-                //收款信息
-                   this.activeGathering
-                //付款人手机号
-                this.userPhone
-                //选择的收款银行卡id
-                this.userBankId
+                //this.activeGathering.inUserId=this.userId;
+                this.activeGathering.inUserId=25
+                addTransactionTecord(this.activeGathering).then(res=>{
+                    if (res.data) {
+                        alert("发起成功")
+                    }else {
+                        alert("信息有误,请重试")
+                    }
+                })
 
             },
-
+            getUser: function () {
+                var user = JSON.parse(sessionStorage.getItem("user"));
+                this.userId=user.userId;
+            }
         },
         created:function(){
-
+            //this.getUser()
+           // this.getActiveGatherings()
         }
 
     })
-    /*1.左侧通知栏显示历史收款发起记录或新增收款按钮
-    * 历史收款记录现在被收款人姓名,附带隐藏的订单流水
-    * 点击发起新的主动收款时,右侧显示收款银行卡,要求输入付款人手机或者身份证,要求输入付款金额,可选输入备注
-    * 用户点击确认时生成新的收款记录,同时将信息发送到被收款人的消息中心
-    *
-    * 用户点击历史记录时:右侧显示收款银行卡,要求输入付款人手机或者身份证,要求输入付款金额,可选输入备注
-    *   按钮处变更为处理中(处理中的记录可以选择主动取消)
-    * 或对方已付款或对方已拒绝
-    * */
 </script>
