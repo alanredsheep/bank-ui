@@ -413,6 +413,12 @@
 
         },
         created() {
+			//判断用户是否登录,没有登录则跳转到登录页面
+			var token = localStorage.getItem("token");
+			if (token == null) {
+				location.href = "login.html";
+			}
+			
             // 加载页面时从本地查询出所有所属银行
             this.subordinateBank = JSON.parse(sessionStorage.getItem("subordinateBank"));
             //根据用户查询他所拥有的银行卡

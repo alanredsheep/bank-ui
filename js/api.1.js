@@ -20,8 +20,6 @@ axios.interceptors.request.use(function (config) {
     return Promise.reject(error);
 });
 
-
-
 //--------------------- identity.html  start --------------------
 //实名认证----实名认证
 function verifyIndentity(params,config){
@@ -257,3 +255,7 @@ function  updateManagerTranscationStatus(transcationId) {
     return axios.post("/web-service/updateManagerTranscationStatus/"+transcationId)
 }
 
+//普通用户退出登录
+function logout(params){
+	return axios.get("/auth-service/logout/"+params);
+}

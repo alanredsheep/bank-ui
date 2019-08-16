@@ -8,7 +8,7 @@ Vue.component("topnav",{
 	                aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
 	        <div class="collapse navbar-collapse" id="navbarContent">
 	            <ul class="navbar-nav ml-auto">
-	                <li class="nav-item" style="margin-right: 10px"><a class="nav-link" href="#">登出</a></li>
+	                <li class="nav-item" style="margin-right: 10px"><a class="nav-link" @click.prevent="logout()" href="javaScript:;">登出</a></li>
 	                <li class="nav-item" style="margin-right: 10px"><a class="nav-link" href="personal_center.html">{{userName}}，欢迎您</a></li>
 	                <li class="nav-item"><a class="nav-link" href="message.html">消息 <span class="badge" style="font-size: 15px">112</span></a></li>
 	            </ul>
@@ -19,14 +19,25 @@ Vue.component("topnav",{
     data:function(){
         return{
             //userName:localStorage.getItem("userName")
-			userName:"pds"
+			userName:"pds",
+			user: JSON.parse(sessionStorage.getItem("user"))
         }
     },
     methods:{
         logout:function(){
-            localStorage.removeItem("phone");
-            localStorage.removeItem("username");
-            location.href="index.html";
+            var userId = 23;
+			logout(23).then(res => {
+				var result = res.data.data;
+				if (result.errno == 0) {
+					localStorage.removeItem("token");
+					sessionStorage.removeItem("user");
+					sessionStorage.removeItem("bankCards");
+					sessionStorage.removeItem("otherBankCards");
+					location.href = "login.html"
+				} else{
+					alert(result.errmsg)
+				}
+			})
         }
     }
 })

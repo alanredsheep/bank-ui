@@ -73,7 +73,7 @@
 	new Vue({
 		el: "#app",
 		data: {
-			
+			userId:""
 		},
 		methods: {
 			//根据用户id获取他行银行卡
@@ -99,11 +99,18 @@
 			}
 		},
 		created() {
+			//判断用户是否登录,没有登录则跳转到登录页面
+			var token = localStorage.getItem("token");
+			if (token == null) {
+				location.href = "login.html";
+			}
 			var user = JSON.parse(sessionStorage.getItem("user"));
 			if(user != null){
 				var userId = user.userId;
 				this.getOtherBankCard(userId);
 				this.getBankCards(userId);
+			}else {
+				location.href = "login.html";
 			}
 		}
 	})

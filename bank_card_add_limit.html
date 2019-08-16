@@ -209,6 +209,12 @@
             },
         },
         created() {
+			//判断用户是否登录,没有登录则跳转到登录页面
+			var token = localStorage.getItem("token");
+			if (token == null) {
+				location.href = "login.html";
+			}
+			
             this.getBankCardBybankCardId()
         },
     })

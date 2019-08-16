@@ -9,6 +9,13 @@
 		<link href="css/bootstrap.min.css" rel="stylesheet">
 		<link href="css/mdb.min.css" rel="stylesheet">
 		<link href="styles/main.css" rel="stylesheet">
+		<style type="text/css">
+			.form-div img{
+				width: 227px;
+				height: 141px;
+				border-radius: 10px;
+			}
+		</style>
 	</head>
 	<body id="top">
 		<div id="app" style="height: 100%">
@@ -181,6 +188,13 @@
 			},
 			closeModal: function(){
 				$("#reg-modal").hide()
+			}
+		},
+		created() {
+			//判断用户是否登录,没有登录则跳转到登录页面
+			var token = localStorage.getItem("token");
+			if (token == null) {
+				location.href = "login.html";
 			}
 		}
 	})
