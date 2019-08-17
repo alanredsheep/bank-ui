@@ -72,6 +72,11 @@ function loginByAuthCode(params) {
     return axios.post("/auth-service/loginBySendSms", params);
 }
 
+//普通用户退出登录
+function logout(params){
+	return axios.get("/auth-service/logout/"+params);
+}
+
 //--------------------- login.html  end --------------------
 
 
@@ -258,14 +263,6 @@ function findBankCardIdentification(bankCard) {
 
 //----------------bank_card_add_limit.html   end---------------
 
-
-//---------------- enterprise_login.html   start ---------------
-function enterpriseLoginTemp(params) {
-    return axios.post("/auth-service/bankEnterpriseLogin", params)
-}
-
-//---------------- enterprise_login.html   end   ---------------
-
 //gathering_manage.html ---- start  主动收款页面
 //查询历史主动收款记录
 function getActiveCollectionList(userId) {
@@ -278,12 +275,12 @@ function updateGatheringStatus(activeId) {
 }
 
 //提交主动收款
-function addTransactionTecord(params) {
-    return axios.post("/web-service/addTransactionTecord", activeId)
+function  addTransactionTecord(params){
+    return axios.post("/web-service/addTransactionTecord",params)
 }
 
 //查询用户名下所有银行卡
-function getBankCardByUser(userId) {
+function getbankCardByUser(userId) {
     return axios.get("/web-service/getBankCardByUser/" + userId)
 }
 
@@ -291,13 +288,13 @@ function getBankCardByUser(userId) {
 
 //message.html ---- start  消息中心页面
 //查询待付款订单和提额申请订单
-function getMessageCenter(userId, userName) {
-    return axios.get("/web-service/getMessageCenter/" + userId + "/" + userName)
+function  getMessageCenter(userId,userName) {
+    return axios.get("/web-service/getMessageCenter/"+userId+"/"+userName)
 }
 
 //用户同意付款执行
-function agreeGathering(agvo) {
-    return axios.post("/web-service/agreeGathering", activeId)
+function  agreeGathering(agvo) {
+    return axios.post("/web-service/agreeGathering",agvo)
 }
 
 //用户主动取消提额申请
@@ -355,7 +352,28 @@ function getFundCollectionRecordList(planId) {
 //-----------------fund_collection_plan.html   end--------------
 
 
-//普通用户退出登录
-function logout(params) {
-    return axios.get("/auth-service/logout/" + params);
+
+//------------------------- 企业 --------------------------------
+//---------------- enterprise_login.html   start ---------------
+//企业用户登录
+function enterpriseLoginTemp(params){
+	return axios.post("/auth-service/bankEnterpriseLogin",params)
 }
+//---------------- enterprise_login.html   end   ---------------
+
+//---------------- enterprise_login.html   start ---------------
+//excel批量导入
+function batchImport(params,config){
+	return axios.post("/web-service/batchImport",params,config);
+}
+//企业批量转账
+function enterpriseTransfer(params) {
+    return axios.post("/web-service/enterpriseTransfer", params)
+}
+//企业退出登录
+function enterpriseLogout(params) {
+	return axios.get("/auth-service/enterpriseLogout/"+params);
+}
+//---------------- enterprise_login.html   end   ---------------
+
+//------------------------- 企业 --------------------------------

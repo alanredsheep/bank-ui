@@ -33,7 +33,7 @@
                     <div class="panel-body scroll-panel"
                          style="height: 400px;width: 300px; overflow-y:scroll;float: left;margin-left: 200px">
                         <div class=" col col-lg-12">
-                            <ul class="navbar-nav ml-auto payee-group-list-ul" v-for="active in activeGatherings">
+                            <ul class="navbar-nav ml-auto payee-group-list-ul" v-for="active in activeGatherings" >
                                 <a @click="clickHistory(active.activeId)">
                                     <li>发往 {{active.outUserName}}的主动收款</li>
                                 </a>
@@ -94,18 +94,21 @@
                         <div class="font-bold form-div">
                             付款人手机号：
                             <input class="col-md-10 col-lg-10" type="text" style="margin-left: 8px"
-                                   placeholder="输入付款人的手机号" v-model="activeGathering.userPhone">
+                                   placeholder="输入付款人的手机号" @change="updatePasswordSms()" v-model="activeGathering.outUserPhone">
                         </div>
                         <div class="font-bold form-div">
                             收款金额：
-                            <input class="col-md-10 col-lg-3" type="text" v-model="activeGathering.muchMoney">元
+                            <input class="col-md-10 col-lg-3" type="text" v-model="activeGathering.muchMoney" @keyup="checkAmount()">元
+                        </div>
+                        <div class="font-bold form-div" v-show="msgAmount!=null" :key="msgAmount">
+                                {{msgAmount}}
                         </div>
                         <div class="font-bold form-div">
                             备注：
                             <input class="col-md-10 col-lg-8" type="text" v-model="activeGathering.transferRemarks">
                         </div>
                         <div class="text-md-center" >
-                            <button class="btn btn-blue btn-sm" style="font-size: medium" @click="upSubmit()">确认</button>
+                            <button class="btn btn-blue btn-sm" style="font-size: medium" @click="upSubmit">确认</button>
                         </div>
                     </form>
 
@@ -142,147 +145,52 @@
         el: "#app",
         data: {
             /*历史主动收款记录*/
-            activeGatherings:[
-                    {
-                        //收款人id
-                         inUserId:"A1",
-                        //主动收款人姓名
-                        inUserName:"A1",
-                        //收款人银行卡归属行
-                        inBank:"A1",
-                        //收款人卡号id
-                        inBankId:"",
-                        //收款人卡号
-                        inBankCard:"A1",
-
-                        //付款人姓名
-                        outUserName:"A1",
-                        //付款人手机号
-                        outUserPhone:"",
-
-                        //订单id
-                        activeId:"A1",
-                        //订单金额
-                        muchMoney:"A1",
-                        //订单备注
-                        transferRemarks:"A1",
-                        //订单类型
-                        activeType:"A1",
-                        //订单状态
-                        /**
-                         * 交易状态
-                         * 100 交易中
-                         * 101 成功
-                         * 102 失败
-                         */
-                        activestate:"100"
-                },
-                {
-                    //收款人id
-                    inUserId:"A1",
-                    //主动收款人姓名
-                    inUserName:"A1",
-                    //收款人银行卡归属行
-                    inBank:"A1",
-                    //收款人卡号id
-                    inBankId:"",
-                    //收款人卡号
-                    inBankCard:"A1",
-
-                    //付款人姓名
-                    outUserName:"A1",
-                    //付款人手机号
-                    outUserPhone:"",
-
-                    //订单id
-                    activeId:"A2",
-                    //订单金额
-                    muchMoney:"A1",
-                    //订单备注
-                    transferRemarks:"A1",
-                    //订单类型
-                    activeType:"A1",
-                    //订单状态
-                    /**
-                     * 交易状态
-                     * 100 交易中
-                     * 101 成功
-                     * 102 失败
-                     */
-                    activestate:"101"
-                }
-            ],
+            activeGatherings:[],
             /*获取用户新增主动收款的信息*/
             activeGathering:{
-
                 //收款人id
                 inUserId:"",
                 //收款人卡号id
                 inBankId:"",
-
                 //付款人姓名
-                outUserName:"A1",
+                outUserName:"",
                 //付款人手机号
                 outUserPhone:"",
                 //订单金额
-                muchMoney:"A1",
+                muchMoney:"",
                 //订单备注
-                transferRemarks:"A1",
-
+                transferRemarks:""
             },
             /*获取用户名下所有银行卡*/
-            bankCards:[
-                {
-                    //银行卡id
-                    bankCardId:"11",
-                    //银行卡号
-                    bankCardNumber:"11",
-                    //银行卡所属银行
-                    bank:"11"
-                    //
-                },
-                {
-                    //银行卡id
-                    bankCardId:"22",
-                    //银行卡号
-                    bankCardNumber:"22",
-                    //银行卡所属银行
-                    bank:"22"
-                },
-            ],
+            bankCards:[],
             /*当前登录用户id*/
             userId:"",
             /*记录用户点击的是新增收款记录还是查询历史收款记录*/
             flag: "0",
             //根据用户点击展示历史记录的key
-            transferRecordId:""
+            transferRecordId:"",
+            /*金额校验提醒*/
+            msgAmount :""
         },
-
-
         methods: {
             /*进入主动收款时执行的方法
             * 根据用户id查询历史记录*/
             getActiveGatherings:function () {
                 //刷新this作用域
                     var _this = this
-                //this.userId
-                    getActiveCollectionList(25).then(res=>{
-                        _this.activeGatherings=res.data
+                    getActiveCollectionList(this.userId).then(res=>{
+                        if(res.data.data.errno==0){
+                            _this.activeGatherings=res.data.data.data
+                        }
                     })
-
-                    getBankCardByUser(this.userId).then(res=>{
-                        _this.bankCards=res.data
-                    })
-
                 },
             /*点击了查看历史记录*/
             clickHistory: function(obj){
+                this.flag="0";
                 this.transferRecordId=obj
-                     this.flag="0";
             },
             /*根据订单id查询历史记录*/
             transferRecordsByID(){
-
                     return this.activeGatherings.filter(item =>{
                         if(item.activeId==this.transferRecordId){
                         return true
@@ -296,29 +204,53 @@
             /*取消主动收款执行的方法*/
             abolishGathering:function() {
                 //状态修改为取消的订单id
-
                 updateGatheringStatus(this.transferRecordId).then(res=>{
-                   if (res.data!=true){
-                       alert("系统异常,请重试!")
-                   }
+                    if(res.data.data.errno==0){
+                        alert("已取消")
+                        this.getActiveGatherings();
+                    }else{
+                        alert("请求超时")
+                     }
                 })
-                //修改状态为已取消此订单id发送到后台修改订单状态为取消
              },
             /*取消表单默认提交*/
             onSubmit:function(){return false;},
             /*提交主动收款*/
             upSubmit:function () {
-                //this.activeGathering.inUserId=this.userId;
-                this.activeGathering.inUserId=25
+                console.log(this.activeGathering.inBankId)
+                if(this.activeGathering.inBankId==""){
+                    alert("请选择收款卡")
+                }
+                this.activeGathering.inUserId=this.userId;
                 addTransactionTecord(this.activeGathering).then(res=>{
-                    if (res.data) {
+                    if(res.data.data.errno==0){
                         alert("发起成功")
-                    }else {
+                        this.getActiveGatherings();
+                        this.clickGathering();
+                    }else{
                         alert("信息有误,请重试")
                     }
                 })
-
             },
+            /*金额校验*/
+            checkAmount: function () {
+                var str = /^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/;
+                if (!str.exec(this.activeGathering.muchMoney)) {
+                    //this.activeGathering.muchMoney = " ";
+                    this.msgAmount = "请输入正确的转账金额 ，例如：100.11";
+                } else {
+                    this.msgAmount = "";
+                }
+            },
+            /*手机号码校验*/
+            updatePasswordSms:function(){
+                var patrn=/^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/;
+                if(!patrn.exec(this.activeGathering.outUserPhone)){
+                    alert("请输入正确的手机号码")
+                    return
+                }
+            },
+            /*获取当前登录用户*/
             getUser: function () {
                 var user = JSON.parse(sessionStorage.getItem("user"));
                 this.userId=user.userId;
@@ -330,9 +262,11 @@
 			if (token == null) {
 				location.href = "login.html";
 			}
-            //this.getUser()
-           // this.getActiveGatherings()
+               this.getUser()
+            this.getActiveGatherings()
+            getbankCardByUser(this.userId).then(res=>{
+                _this.bankCards=res.data.data.data
+            })
         }
-
     })
 </script>
