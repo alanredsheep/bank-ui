@@ -37,7 +37,7 @@
 			<header>
 				<!-- Navbar-->
 				<nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar" id="navbar">
-					<div class="container"><a class="navbar-brand" href="login.html"><strong>五仁银行</strong></a>
+					<div class="container"><a class="navbar-brand" href="javaScript:;"><strong>五仁银行</strong></a>
 						<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarContent"
 						 aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
 						<div class="collapse navbar-collapse" id="navbarContent">
@@ -133,12 +133,25 @@
 						var enterprise = result.enterprise;
 						localStorage.setItem("token", token);
 						sessionStorage.setItem("enterprise", JSON.stringify(enterprise))
-						window.location.href = "home.html"
+						window.location.href = "enterprise_transfer_bulk.html"
 					} else if(result.errno == 1){
 						alert(result.errmsg)
 					}
 				})
+			},
+			//获取所有的银行的基本信息
+			selectSubordinateBank: function() {
+				var subordinateBanks = sessionStorage.getItem("subordinateBank");
+				if(subordinateBanks == null){
+					selectSubordinateBank().then(res => {
+						var subordinateBank = res.data.data.data;
+						sessionStorage.setItem("subordinateBank",subordinateBank);
+					})
+				}				
 			}
+		},
+		created() {
+			this.selectSubordinateBank();
 		}
 	})
 </script>
