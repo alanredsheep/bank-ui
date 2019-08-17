@@ -141,6 +141,7 @@
                 userPassword: "123123",
 
             },
+
             token:""
 
         },
@@ -148,7 +149,7 @@
             //获取银行卡信息通过id
             getBankCardBybankCardId: function () {
                 //获取银行卡id
-                this.bankCard.bankCardId = 1
+                this.bankCard.bankCardId = sessionStorage.getItem("upgradeBankCard")
                 //调用方法
                 getBankCardBybankCardId(this.bankCard.bankCardId).then(res => {
                     if (res.data.data.errno == 0) {

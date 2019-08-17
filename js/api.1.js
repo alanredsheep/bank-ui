@@ -20,11 +20,27 @@ axios.interceptors.request.use(function (config) {
     return Promise.reject(error);
 });
 
+// 超时拦截器，超时提醒
+axios.interceptors.response.use(
+    response => {
+        return response;
+    },
+    error => {
+        if (error.message.includes('timeout')) {   // 判断请求异常信息中是否含有超时timeout字符串
+            // console.log("错误回调", error);
+            alert("网络超时");
+            return Promise.reject(error);          // reject这个错误信息
+        }
+        return Promise.reject(error);
+    });
+
+
 //--------------------- identity.html  start --------------------
 //实名认证----实名认证
-function verifyIndentity(params,config){
-	return axios.post("/web-service/verifiedIdentity",params,config);
+function verifyIndentity(params, config) {
+    return axios.post("/web-service/verifiedIdentity", params, config);
 }
+
 //--------------------- identity.html  end --------------------
 
 //--------------------- registry.html  start --------------------
@@ -146,6 +162,7 @@ function selectBankCardAttribution(params) {
 function submitTransfer(params) {
     return axios.post("/web-service/verifyBankCardForVo", params);
 }
+
 //----------------transfer.html   end---------------
 
 //----------------transfer_cross_border.html   start-------跨境转账页面--------
@@ -199,8 +216,9 @@ function deletePayeeById(params) {
 
 //添加一个群组收款人
 function addPayee(params) {
-    return axios.post("/web-service/addPayee",params)
+    return axios.post("/web-service/addPayee", params)
 }
+
 //----------------payee_group.html   end---------------
 
 //----------------bank_card_add_limit.html   start-------升级卡类型--------
@@ -218,13 +236,16 @@ function sendUpgradeCard(bankCardId) {
 function UpgradeCard(params) {
     return axios.post("/web-service/UpgradeCard", params)
 }
+
 // 根据用户id获取该用户的其他银行的银行卡
 function getOtherBankCardByUserId(params) {
     return axios.get("/web-service/getOtherBankCardByUserId/" + params)
 }
+
 function getBankCards(params) {
-    return axios.get("/web-service/getBankCardByUserId",{params:{"userId":params}});
+    return axios.get("/web-service/getBankCardByUserId", {params: {"userId": params}});
 }
+
 //----------------bank_card_add_limit.html   end---------------
 
 //----------------bank_card_add.html    start------------------
@@ -243,21 +264,25 @@ function findBankCardIdentification(bankCard) {
 
 //gathering_manage.html ---- start  主动收款页面
 //查询历史主动收款记录
-function getActiveCollectionList(userId){
-    return axios.get("/web-service/getActiveCollection/"+userId)
+function getActiveCollectionList(userId) {
+    return axios.get("/web-service/getActiveCollection/" + userId)
 }
+
 //取消主动收款请求执行
-function updateGatheringStatus(activeId){
-    return axios.post("/web-service/updateGatheringType/"+activeId)
+function updateGatheringStatus(activeId) {
+    return axios.post("/web-service/updateGatheringType/" + activeId)
 }
+
 //提交主动收款
 function  addTransactionTecord(params){
-    return axios.post("/web-service/addTransactionTecord",activeId)
+    return axios.post("/web-service/addTransactionTecord",params)
 }
+
 //查询用户名下所有银行卡
-function getBankCardByUser(userId){
-    return axios.get("/web-service/getBankCardByUser/"+userId)
+function getbankCardByUser(userId) {
+    return axios.get("/web-service/getBankCardByUser/" + userId)
 }
+
 //gathering_manage.html ---- end  主动收款页面
 
 //message.html ---- start  消息中心页面
@@ -265,18 +290,22 @@ function getBankCardByUser(userId){
 function  getMessageCenter(userId,userName) {
     return axios.get("/web-service/getMessageCenter/"+userId+"/"+userName)
 }
+
 //用户同意付款执行
 function  agreeGathering(agvo) {
-    return axios.post("/web-service/agreeGathering",activeId)
+    return axios.post("/web-service/agreeGathering",agvo)
 }
+
 //用户主动取消提额申请
-function  updateManagerTranscationStatus(transcationId) {
-    return axios.post("/web-service/updateManagerTranscationStatus/"+transcationId)
+function updateManagerTranscationStatus(transcationId) {
+    return axios.post("/web-service/updateManagerTranscationStatus/" + transcationId)
 }
+
 //消息通知(通用)
-function MessageNotification(userId){
-    return axios.get("/web-service/MessageNotification/"+userId)
+function MessageNotification(userId) {
+    return axios.get("/web-service/MessageNotification/" + userId)
 }
+
 
 //将数据放到redis(消息)
 function setRedisMessage(params){
@@ -287,13 +316,14 @@ function setRedisMessage(params){
 //-----------------bank_card_manage.html    start----------------
 // 解绑他行卡
 function untiedOtherBankCard(params) {
-    return axios.post("/web-service/untiedOtherBankCard", {params: params})
+    return axios.post("/web-service/untiedOtherBankCard", params)
 }
 
 // 挂失银行卡
 function reportBankCardLoss(params) {
-    return axios.post("/web-service/reportBankCardLoss", {params: params})
+    return axios.post("/web-service/reportBankCardLoss", params)
 }
+
 //-------------------bank_card_manage.html   end----------------
 
 
