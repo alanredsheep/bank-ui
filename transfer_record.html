@@ -223,9 +223,8 @@
             initDate: function () {
                 nowDate = new Date();
                 this.recordSelection.month = nowDate.getMonth() + 1;
-            }
+            },
 // 获取用户的银行卡列表
-            ,
             initBankCardList: function () {
                 var _this = this;
                 getBankCardsByUserId({
@@ -237,11 +236,11 @@
         },
         created() {
 			//判断用户是否登录,没有登录则跳转到登录页面
-			var token = localStorage.getItem("token");
-			if (token == null) {
-				location.href = "login.html";
-			}
-			
+			// var token = localStorage.getItem("token");
+			// if (token == null) {
+			// 	location.href = "login.html";
+			// }
+
             this.initDate();
             this.listTransferRecords();
             this.initBankCardList();

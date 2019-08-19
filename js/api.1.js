@@ -134,6 +134,7 @@ function getBankCardsByUserId(params) {
 function getFundCollectionRecordByInCardAndOutCard(params) {
     return axios.get("/web-service/getFundCollectionRecordByInCardAndOutCard", params);
 }
+
 //-----------------fund_collection.html    end----------------------
 
 
@@ -308,9 +309,10 @@ function MessageNotification(userId) {
 
 
 //将数据放到redis(消息)
-function setRedisMessage(params){
-    return axios.post("/web-service/setRedisMessage",params)
+function setRedisMessage(params) {
+    return axios.post("/web-service/setRedisMessage", params)
 }
+
 //-----------------message.html    end---------------------
 
 //-----------------bank_card_manage.html    start----------------
@@ -325,6 +327,29 @@ function reportBankCardLoss(params) {
 }
 
 //-------------------bank_card_manage.html   end----------------
+
+//-----------------fund_collection_plan.html   start--------------
+// 添加归集计划
+function addFundCollectionPlan(params) {
+    return axios.post("/web-service/addFundCollectionPlan", params)
+}
+
+// 获取归集计划列表
+function getFundCollectionPlanList(userId) {
+    return axios.get("/web-service/getFundCollectionPlanList/" + userId);
+}
+
+// 手动终止归集计划
+function shutdownFundCollectionPlan(params) {
+    return axios.post("/web-service/shutdownFundCollectionPlan", params);
+}
+
+// 获取归集计划记录
+function getFundCollectionRecordList(planId) {
+    return axios.get("/getFundCollectionRecordList/"+planId);
+}
+
+//-----------------fund_collection_plan.html   end--------------
 
 
 
