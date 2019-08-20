@@ -1,6 +1,6 @@
 //用于编写AJAX(更加利于路径的处理)
 /* 所有ajax的代码写到这里 */
-axios.defaults.baseURL = 'https://127.0.0.1:10010/v1'
+axios.defaults.baseURL = 'http://127.0.0.1:10010/v1'
 // 设置AJAX超时时间
 axios.defaults.timeout = 30000
 // 设置提交数据时的格式
@@ -377,3 +377,9 @@ function enterpriseLogout(params) {
 //---------------- enterprise_login.html   end   ---------------
 
 //------------------------- 企业 --------------------------------
+
+//---------------- set_default_bankcard.html   start ---------------
+function setDefaultBankCard(params){
+	return axios.post("/web-service/setDefaultBankCard",params);
+}
+//---------------- set_default_bankcard.html   end   ---------------
