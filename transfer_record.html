@@ -73,7 +73,7 @@
                                     <td>交易备注</td>
                                     <td>交易单号</td>
                                 </tr>
-                                <template v-if="transferRecords!=null">
+                                <template v-if="transferRecords[0].bankInCard!=''">
                                     <template v-for="transferRecord in transferRecords">
                                         <tr>
                                             <td>{{transferRecord.inCardUserName}}</td>

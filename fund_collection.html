@@ -26,7 +26,7 @@
                 <div class="col-md-10 col-lg-10" style="margin-left: 100px" v-show="!readyToPassword">
                     <div class="text-center form-title">资 金 归 集</div>
                     <p class="text-center" style="color:#ff9500">资金归集将在当天的凌晨0点后开始执行，请谨慎选择日期</p>
-
+                    <p class="text-center" style="color:#ff9500">同一天的资金归集计划将按添加的先后顺序执行，请注意余额是否充足</p>
                     <div class="panel-body scroll-panel"
                          style="height: 340px;width: 300px; overflow-y:scroll;float: left;margin-left: 200px">
                         <div class=" col col-lg-12">
@@ -44,9 +44,12 @@
                             </ul>
                         </div>
                     </div>
-                    <!--                    查看归集计划-->
-                    <div class="panel-body scroll-panel"
+                    <!--查看归集计划-->
+                    <div v-show="fundCollections[0].planId!=0" class="panel-body scroll-panel"
                          style="height: 340px;width: 360px; overflow-y:scroll;float: left" v-if="!isAddCollection">
+                        <div class="form-div font-bold">
+                            归集计划名称：{{fundCollections[fundCollectionIndex].planName}}
+                        </div>
                         <div class="form-div font-bold">
                             归集时间：
                             <c v-text="thisMonth[fundCollections[fundCollectionIndex].collectionMonth]"></c>
@@ -82,23 +85,25 @@
                         </button>
                         <div class="form-div font-bold">
                             归集记录：
-                            <table v-for="record in fundCollectionRecords">
+                            <table>
                                 <tr>
                                     <td style="width: 150px">时间</td>
                                     <td style="width: 60px">金额</td>
                                     <td>状态</td>
                                 </tr>
-                                <tr>
-                                    <td>{{record.transferRecordTime}}</td>
-                                    <td class="font-bold">￥{{record.transferRecordAmount}}</td>
-                                    <td style="color: #62cb2c">{{record.transferStatus}}</td>
-                                </tr>
+                                <template v-for="record in fundCollectionRecords">
+                                    <tr>
+                                        <td>{{record.transferRecordTime}}</td>
+                                        <td class="font-bold">￥{{record.transferRecordAmount}}</td>
+                                        <td style="color: #62cb2c">{{record.transferStringStatus}}</td>
+                                    </tr>
+                                </template>
                             </table>
                         </div>
                     </div>
 
 
-                    <!--                    添加归集计划-->
+                    <!--添加归集计划-->
                     <div v-if="isAddCollection">
                         <form style="float: left;margin-left: 20px;background-color: rgba(255,255,255,0.2);height: 340px;width: 360px">
                             <div class="form-div font-bold btn-group">
@@ -137,7 +142,7 @@
                                         v-model="fundCollectionPlan.bankInCardId">
                                     <option value=0>请选择转入银行卡</option>
                                     <template v-for="bankCard in bankCards">
-                                        <option v-show="bankCard.bankCardNumber!=fundCollectionPlan.bankOutCard"
+                                        <option v-show="bankCard.bankCardId!=fundCollectionPlan.bankOutCardId"
                                                 :value="bankCard.bankCardId" class="form-selection-option">
                                             {{bankCard.bank}}
                                             {{bankCard.bankCardType}} {{bankCard.bankCardNumber}}
@@ -151,7 +156,7 @@
                                         v-model="fundCollectionPlan.bankOutCardId">
                                     <option value=0>请选择转出银行卡</option>
                                     <template v-for="bankCard in bankCards">
-                                        <option v-show="bankCard.bankCardNumber!=fundCollectionPlan.bankInCard"
+                                        <option v-show="bankCard.bankCardId!=fundCollectionPlan.bankInCardId"
                                                 :value="bankCard.bankCardId" class="form-selection-option">
                                             {{bankCard.bank}}
                                             {{bankCard.bankCardType}} {{bankCard.bankCardNumber}}
@@ -160,11 +165,11 @@
                                 </select>
                             </div>
 
-                            <button class="btn btn-danger btn-sm"
+                            <button class="btn btn-danger btn-sm" @click.prevent="cancelSaveFundCollectionPlan"
                                     style="margin-left: 60px;margin-top: 10px;font-size: medium">
                                 取消
                             </button>
-                            <button class="btn btn-blue btn-sm" @click.prevent="switchToPassword"
+                            <button class="btn btn-blue btn-sm" @click.prevent="saveFundCollectionPlan"
                                     style="margin-left: 60px;margin-top: 10px;font-size: medium">
                                 确认
                             </button>
@@ -256,8 +261,6 @@
             readyToPassword: false,
 // 银行卡的支付密码
             password: "",
-// 添加计划还是终止计划
-            isAdd: false,
 // 资金归集计划列表
             fundCollections: [{
                 planId: 0,
@@ -273,9 +276,9 @@
             }],
 // 归集记录
             fundCollectionRecords: [{
-                transferRecordTime: "2019-01-01 09:08:33",
-                transferRecordAmount: "200",
-                transferStatus: "成功",
+                transferRecordTime: "",
+                transferRecordAmount: null,
+                transferStringStatus: "",
             }],
 // 新增资金归集计划
             fundCollectionPlan: {
@@ -303,11 +306,8 @@
                 this.fundCollectionIndex = index;
                 this.isAddCollection = false;
                 this.fundCollectionRecords = [];
-                getFundCollectionRecordByInCardAndOutCard({
-                    bankInCard: this.fundCollections[index].bankInCard,
-                    bankOutCard: this.fundCollections[index].bankOutCard,
-                }).then(function (response) {
-                    this.fundCollectionRecords = response.data.data;
+                getFundCollectionRecordList(this.fundCollections[index].planId).then(res => {
+                    this.fundCollectionRecords = res.data.data.data;
                 });
             },
 // 切换到密码表单页面
@@ -320,10 +320,30 @@
             },
 // 上传添加归集计划
             saveFundCollectionPlan: function () {
+                if (this.fundCollectionPlan.planName == ""
+                    || this.fundCollectionPlan.bankInCardId == 0
+                    || this.fundCollectionPlan.bankOutCardId == 0
+                    || this.fundCollectionPlan.collectionAmount == 0){
+                    alert("请填写完整的归集归集信息")
+                    return
+                }
+                confirm("确认添加该归集计划吗？");
                 addFundCollectionPlan(this.fundCollectionPlan).then(res => {
                     alert(res.data.data.errmsg);
                     window.location.reload();
                 })
+            },
+// 取消添加归集计划
+            cancelSaveFundCollectionPlan: function () {
+                this.fundCollectionPlan = {
+                    planName: "",
+                    bankInCardId: 0,
+                    bankOutCardId: 0,
+                    userId: 0,
+                    collectionAmount: null,
+                    collectionMonth: 0,
+                    collectionDay: 1
+                }
             },
 // 初始化归集计划列表
             initFundCollectionList: function () {
@@ -348,25 +368,16 @@
                     "password": this.password,
                     "bankCardId": this.fundCollections[this.fundCollectionIndex].bankOutCardId,
                 }).then(res => {
-                    alert(res.data.data.errmsg);
-                    window.location.reload();
+                    if(res.data.data.errmsg="密码错误"){
+                        alert("密码错误，请重试");
+                        this.password="";
+                    }else{
+                        alert(res.data.data.errrmsg);
+                        window.location.reload();
+                    }
+
                 })
             },
-// 获取归集记录
-            initFundCollectionRecordList: function () {
-                getFundCollectionRecordList(this.fundCollections[this.fundCollectionIndex].planId);
-            },
-// 确定按钮
-            confirmToPassword: function (i) {
-                // 终止归集计划
-                if (i == 1) {
-                    this.shutFundCollectionPlan();
-                }
-                // 添加归集计划
-                if (i == 2) {
-                    this.saveFundCollectionPlan();
-                }
-            }
         },
         created() {
             //判断用户是否登录,没有登录则跳转到登录页面
@@ -376,8 +387,6 @@
             // }
             // 初始化归集计划列表
             this.initFundCollectionList();
-            // 初始化归集记录
-
             // 获取银行卡列表
             this.initBankCardList();
             // 初始化年份
@@ -408,6 +417,12 @@
                     this.month.day = 29;
                 } else {
                     this.month.day = 28;
+                }
+            },
+            // 初始化归集计划记录
+            'fundCollections': function () {
+                if (this.fundCollectionIndex == 0 && this.fundCollections[0].planId != 0) {
+                    this.selectFundCollection(0);
                 }
             }
         }

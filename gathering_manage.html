@@ -94,11 +94,11 @@
                         <div class="font-bold form-div">
                             付款人手机号：
                             <input class="col-md-10 col-lg-10" type="text" style="margin-left: 8px"
-                                   placeholder="输入付款人的手机号" @change="updatePasswordSms()" v-model="activeGathering.outUserPhone">
+                                   placeholder="输入付款人的手机号" @change="updatePasswordSms()"  maxlength="11" v-model="activeGathering.outUserPhone"  onkeyup="this.value=this.value.replace(/[^\d]/g,'')">
                         </div>
                         <div class="font-bold form-div">
                             收款金额：
-                            <input class="col-md-10 col-lg-3" type="text" v-model="activeGathering.muchMoney" @keyup="checkAmount()">元
+                            <input class="col-md-10 col-lg-3" type="text" v-model="activeGathering.muchMoney" @keyup="checkAmount()" onkeyup="this.value=this.value.replace(/[^\d\.]/g,'')">元
                         </div>
                         <div class="font-bold form-div" v-show="msgAmount!=null" :key="msgAmount">
                                 {{msgAmount}}
