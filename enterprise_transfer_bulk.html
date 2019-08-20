@@ -57,8 +57,8 @@
 										</tr>
 										<tr v-for="employee in enterpriseEmployeeVo.enterpriseEmployees">
 											<td>{{employee.userName}}</td>
-											<td>{{employee.userBankCardName}}</td>
 											<td>{{employee.userBankCardNumber}}</td>
+											<td>{{employee.userBankCardName}}</td>
 											<td>{{employee.money}}</td>
 											<td v-show="status" :class="employee.status == '成功'?'transfer-success':'transfer-fail'">{{employee.status}}</td>
 										</tr>

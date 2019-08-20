@@ -368,3 +368,9 @@ function enterpriseLogout(params) {
 //---------------- enterprise_login.html   end   ---------------
 
 //------------------------- 企业 --------------------------------
+
+//---------------- set_default_bankcard.html   start ---------------
+function setDefaultBankCard(params){
+	return axios.post("/web-service/setDefaultBankCard",params);
+}
+//---------------- set_default_bankcard.html   end   ---------------
