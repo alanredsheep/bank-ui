@@ -34,7 +34,7 @@
                     <!--   主体内容    -->
 
                     <div class="container">
-                        <div class="col-md-10 col-lg-5" style="margin-left: 330px">
+                        <div class="col-md-10 col-lg-4" style="margin-left: 330px">
 
                             <div class="text-center form-title">升 级 银 行 卡</div>
                             <form id="registry" class="">
@@ -46,7 +46,7 @@
                                 </div>
                                 <div class="font-bold form-div">
                                     升级原因：
-                                    <input class="col-md-10 col-lg-10" type="text" v-model="bankCard.transcationMsg">
+                                    <input class="col-md-10 col-lg-12" type="text" v-model="bankCard.transcationMsg">
                                 </div>
                                 <div class="font-bold form-div">
                                     预留手机号码：
@@ -221,10 +221,10 @@
         },
         created() {
 			//判断用户是否登录,没有登录则跳转到登录页面
-			var token = localStorage.getItem("token");
-			if (token == null) {
-				location.href = "login.html";
-			}
+			// var token = localStorage.getItem("token");
+			// if (token == null) {
+			// 	location.href = "login.html";
+			// }
 
             this.getBankCardBybankCardId()
         },
