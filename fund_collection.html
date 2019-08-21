@@ -131,10 +131,15 @@
                                     </template>
                                 </select>
                             </div>
+<!--                            <p v-if="((!fundCollectionPlan.collectionMonth==0)&&(fundCollectionPlan.collectionMonth<date.month))||((fundCollectionPlan.collectionMonth==date.month)&&(fundCollectionPlan.collectionDay<=date.day))"-->
+<!--                               style="color: red;margin-left: 20px;margin-top: 5px" class="font-bold">-->
+<!--                                该归集计划将在明年执行，确认吗？-->
+<!--                            </p>-->
                             <div class="form-div font-bold">
                                 归集金额：￥
                                 <input v-model="fundCollectionPlan.collectionAmount" class="col-md-10 col-lg-3"
-                                       type="number">元
+                                       type="number"
+                                       onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))">元
                             </div>
                             <div class="form-div font-bold">
                                 中心账户：
@@ -167,7 +172,7 @@
 
                             <button class="btn btn-danger btn-sm" @click.prevent="cancelSaveFundCollectionPlan"
                                     style="margin-left: 60px;margin-top: 10px;font-size: medium">
-                                取消
+                                重置
                             </button>
                             <button class="btn btn-blue btn-sm" @click.prevent="saveFundCollectionPlan"
                                     style="margin-left: 60px;margin-top: 10px;font-size: medium">
@@ -185,7 +190,7 @@
                         <input type="password" class="col-lg-2" maxlength="6"
                                style="text-align:center;margin-left: 36%"
                                v-model="password"
-                               onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))"/>
+                               onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))"/>
                     </div>
                     <button class="btn btn-danger btn-sm" @click.prevent="cancelToPassword"
                             style="margin-left: 30px;margin-top: 20px;font-size: medium">
@@ -293,8 +298,15 @@
 // 月份的天数
             month: {
                 year: localStorage.getItem("year"),
-                day: 31,
-            }
+                day: 28,
+            },
+// 日期
+            date: {
+                month: 0,
+                day: 0,
+            },
+// 对用户的提示
+//             warming
         },
         methods: {
 // 点击添加归集计划
@@ -317,21 +329,27 @@
 // 取消支付密码
             cancelToPassword: function () {
                 this.readyToPassword = false;
+                this.password = ""
             },
 // 上传添加归集计划
             saveFundCollectionPlan: function () {
                 if (this.fundCollectionPlan.planName == ""
                     || this.fundCollectionPlan.bankInCardId == 0
                     || this.fundCollectionPlan.bankOutCardId == 0
-                    || this.fundCollectionPlan.collectionAmount == 0){
-                    alert("请填写完整的归集归集信息")
+                    || this.fundCollectionPlan.collectionAmount == 0) {
+                    alert("请填写正确的归集计划信息")
                     return
                 }
-                confirm("确认添加该归集计划吗？");
-                addFundCollectionPlan(this.fundCollectionPlan).then(res => {
-                    alert(res.data.data.errmsg);
-                    window.location.reload();
-                })
+                if (this.fundCollectionPlan.collectionMonth < this.date.month
+                    || (this.fundCollectionPlan.collectionMonth == this.date.month && this.fundCollectionPlan.collectionDay <= this.date.day)) {
+                    confirm("该计划将")
+                }
+                if (confirm("确认添加该归集计划吗？")) {
+                    addFundCollectionPlan(this.fundCollectionPlan).then(res => {
+                        alert(res.data.data.errmsg);
+                        window.location.reload();
+                    })
+                }
             },
 // 取消添加归集计划
             cancelSaveFundCollectionPlan: function () {
@@ -362,20 +380,23 @@
             },
 // 手动终止一个归集计划
             shutFundCollectionPlan: function () {
+                if (this.password.length < 6) {
+                    alert("请输入完整密码")
+                    return
+                }
                 shutdownFundCollectionPlan({
                     "userId": this.user.userId,
                     "data": this.fundCollections[this.fundCollectionIndex].planId,
                     "password": this.password,
                     "bankCardId": this.fundCollections[this.fundCollectionIndex].bankOutCardId,
                 }).then(res => {
-                    if(res.data.data.errmsg="密码错误"){
+                    if (res.data.data.errmsg == "密码错误") {
                         alert("密码错误，请重试");
-                        this.password="";
-                    }else{
-                        alert(res.data.data.errrmsg);
+                        this.password = "";
+                    } else {
+                        alert(res.data.data.errmsg);
                         window.location.reload();
                     }
-
                 })
             },
         },
@@ -392,6 +413,8 @@
             // 初始化年份
             nowDate = new Date();
             this.month.year = nowDate.getFullYear();
+            this.date.month = nowDate.getMonth() + 1;
+            this.date.day = nowDate.getDate();
             // 获得用户id
             this.fundCollectionPlan.userId = this.user.userId;
         },
@@ -415,8 +438,10 @@
                     this.month.day = 30;
                 } else if (this.month.year % 4 == 0 & (!this.month.year % 400 == 0) & this.fundCollectionPlan.month == 2) {
                     this.month.day = 29;
-                } else {
+                } else if (this.fundCollectionPlan.month == 0) {
                     this.month.day = 28;
+                } else {
+                    this.month.day = 31;
                 }
             },
             // 初始化归集计划记录
@@ -429,9 +454,9 @@
     })
 </script>
 
-<style>
-    input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-        -webkit-appearance: none !important;
-    }
-</style>
+<!--<style>-->
+<!--    input::-webkit-outer-spin-button,-->
+<!--    input::-webkit-inner-spin-button {-->
+<!--        -webkit-appearance: none !important;-->
+<!--    }-->
+<!--</style>-->

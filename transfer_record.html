@@ -158,8 +158,9 @@
                 cardId: 0,
                 month: 0,
             },
-            // 转账记录
+            // 还有更多的转账记录
             hasMoreRecord: false,
+            // 一条转账记录都没有
             transferRecords: [{
                 inCardUserName: "",
                 bankIn: "",
@@ -207,7 +208,20 @@
                     "month": _this.recordSelection.month,
                     "bankCardId": _this.recordSelection.cardId,
                 }).then(function (response) {
-                    if (response.data.data.data == "") {
+                    if (response.data.data.data == null) {
+                        _this.transferRecords = [{
+                            inCardUserName: "",
+                            bankIn: "",
+                            bankInCard: "",
+                            transferRecordAmount: "",
+                            bankOut: "",
+                            bankOutCard: "",
+                            transferStringType: "",
+                            transferRecordTime: "",
+                            transferStringStatus: "",
+                            transferRecordUuid: "",
+                            transferNote: "",
+                        }];
                         _this.hasMoreRecord = true;
                     } else {
                         _this.transferRecords = response.data.data.data;
@@ -216,6 +230,9 @@
                         }else{
                             _this.hasMoreRecord = false;
                         }
+                    }
+                    if(response.data.data.errno==1){
+                        alert(response.data.data.errmsg);
                     }
                 })
             },
