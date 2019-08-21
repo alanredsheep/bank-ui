@@ -129,15 +129,6 @@ function getBankCardsByUserId(params) {
 // -----------------transfer_record.html    end--------------
 
 
-//-----------------fund_collection.html    start----------------------
-// 根据归集计划id，返回归集记录
-function getFundCollectionRecordByInCardAndOutCard(params) {
-    return axios.get("/web-service/getFundCollectionRecordByInCardAndOutCard", params);
-}
-
-//-----------------fund_collection.html    end----------------------
-
-
 //----------------bank_card_manage.html   start---------------
 function upgradeBankCard() {
     return axios.post("/web-service/upgradeBankCard", params);
@@ -346,7 +337,7 @@ function shutdownFundCollectionPlan(params) {
 
 // 获取归集计划记录
 function getFundCollectionRecordList(planId) {
-    return axios.get("/getFundCollectionRecordList/"+planId);
+    return axios.get("/web-service/getFundCollectionRecordList/"+planId);
 }
 
 //-----------------fund_collection_plan.html   end--------------
@@ -377,3 +368,9 @@ function enterpriseLogout(params) {
 //---------------- enterprise_login.html   end   ---------------
 
 //------------------------- 企业 --------------------------------
+
+//---------------- set_default_bankcard.html   start ---------------
+function setDefaultBankCard(params){
+	return axios.post("/web-service/setDefaultBankCard",params);
+}
+//---------------- set_default_bankcard.html   end   ---------------
