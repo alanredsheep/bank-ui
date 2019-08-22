@@ -425,17 +425,10 @@
         },
         created() {
             // 判断用户是否登录,没有登录则跳转到登录页面
-<<<<<<< HEAD
             var token = localStorage.getItem("token");
             if (token == null) {
                 location.href = "login.html";
             }
-=======
-            // var token = sessionStorage.getItem("token");
-            // if (token == null) {
-            //     location.href = "login.html";
-            // }
->>>>>>> origin/master
             // 获取sessionStorage里的数据
             this.initSessionStorage();
             // 初始化归集计划列表
