@@ -289,7 +289,7 @@
         },
         /*页面加载完成事件*/
         created: function () {
-            var token = localStorage.getItem("token");
+            var token = sessionStorage.getItem("token");
             if (token == null) {
                 location.href = "login.html";
             }
