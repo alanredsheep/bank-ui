@@ -172,10 +172,10 @@
             }],
             //根据收款群组id查询出来的所有收款人
             payees: [{
-                payeeId: "1",
-                payeeName: "张三",
-                payeeBankIdentification: "垃圾银行",
-                payeeBankCard: "123456",
+                payeeId: "",
+                payeeName: "",
+                payeeBankIdentification: "",
+                payeeBankCard: "",
                 payeeGroupId: "",
             }],
             showAddPayeeGroupInput: false,
@@ -186,23 +186,23 @@
             },
             showChange: false,
             user: {
-                userId: "2",
-                userName: "啊啊啊啊啊",
-                userPhone: "235456",
-                userPassword: "123123",
+                userId: "",
+                userName: "",
+                userPhone: "",
+                userPassword: "",
 
             },
             //所有合作银行
             subordinateBank: [{
-                // bankIdentification: "",
-                // bankName: "",
+                bankIdentification: "",
+                bankName: "",
             }],
             //查询银行卡错误
             msgforselectBankCard: "",
             newPayee: {
-                payeeName: "张三",
-                payeeBankIdentification: "BOWR",
-                payeeBankCard: "123456",
+                payeeName: "",
+                payeeBankIdentification: "",
+                payeeBankCard: "",
                 payeeGroupId: "",
             }
         },
@@ -332,13 +332,19 @@
             },
         },
         created() {
-			//判断用户是否登录,没有登录则跳转到登录页面
-			var token = localStorage.getItem("token");
-			if (token == null) {
-				location.href = "login.html";
-			}
-
-            this.selectAllPayeeGroup()
+            //判断用户是否登录,没有登录则跳转到登录页面
+            var token = localStorage.getItem("token");
+            if (token == null) {
+                location.href = "login.html";
+            }
+            this.user = JSON.parse(sessionStorage.getItem("user"));
+            // 加载页面时从本地查询出所有所属银行
+            this.subordinateBank = JSON.parse(sessionStorage.getItem("subordinateBank"));
+            //根据用户查询他所拥有的银行卡
+            // this.getBankCardByUser();
+            this.bankCards = JSON.parse(sessionStorage.getItem("bankCards"));
+            //查询用户所有的收款群组
+            this.selectAllPayeeGroup();
 
         }
     })

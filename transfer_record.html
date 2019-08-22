@@ -143,16 +143,9 @@
         data: {
             // 用户信息
             user: {
-                userId: 1,
-                userName: "",
             },
             // 用户的银行卡
-            bankCards: [{
-                bankCardId: 0,
-                bank: "",
-                bankCardType: "",
-                bankCardNumber: "",
-            }],
+            bankCards: [],
             // 查询条件
             recordSelection: {
                 cardId: 0,
@@ -242,25 +235,42 @@
                 this.recordSelection.month = nowDate.getMonth() + 1;
             },
 // 获取用户的银行卡列表
-            initBankCardList: function () {
-                var _this = this;
-                getBankCardsByUserId({
-                    "userId": this.user.userId,
-                }).then(function (response) {
-                    _this.bankCards = response.data.data.data;
-                })
-            }
+//             initBankCardList: function () {
+//                 var _this = this;
+//                 getBankCardsByUserId({
+//                     "userId": this.user.userId,
+//                 }).then(function (response) {
+//                     _this.bankCards = response.data.data.data;
+//                 })
+//             },
+            initSessionStorage: function () {
+                // 根据页面需要获取sessionStorage里的数据
+                var user = JSON.parse(sessionStorage.getItem("user"));
+                var bankCards = JSON.parse(sessionStorage.getItem("bankCards"));
+                // var otherBankCards = JSON.parse(sessionStorage.getItem("otherBankCards"));
+                // var subordinateBank = JSON.parse(sessionStorage.getItem("subordinateBank"));
+                this.user = user;
+                for (let i = 0; i < bankCards.length; i++) {
+                    this.bankCards.push({
+                        bankCardId: bankCards[i].bankCardId,
+                        bank: "五仁银行",
+                        bankCardType: bankCards[i].bankCardType,
+                        bankCardNumber: bankCards[i].bankCardNumber,
+                    })
+                }
+                // console.log(this.bankCards)
+            },
         },
         created() {
-			//判断用户是否登录,没有登录则跳转到登录页面
-			// var token = localStorage.getItem("token");
-			// if (token == null) {
-			// 	location.href = "login.html";
-			// }
-
+			// 判断用户是否登录,没有登录则跳转到登录页面
+			var token = localStorage.getItem("token");
+			if (token == null) {
+				location.href = "login.html";
+			}
+            this.initSessionStorage();
             this.initDate();
             this.listTransferRecords();
-            this.initBankCardList();
+            // this.initBankCardList();
         },
     })
 </script>
