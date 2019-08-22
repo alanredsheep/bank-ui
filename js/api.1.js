@@ -1,8 +1,6 @@
 //用于编写AJAX(更加利于路径的处理)
 /* 所有ajax的代码写到这里 */
-// axios.defaults.baseURL = 'https://10.1.12.184:10010/v1'
 axios.defaults.baseURL = 'https://10.1.12.182:10010/v1'
-// axios.defaults.baseURL = 'https://127.0.0.1:10010/v1'
 // 设置AJAX超时时间
 axios.defaults.timeout = 30000
 // 设置提交数据时的格式

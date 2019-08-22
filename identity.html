@@ -73,7 +73,7 @@
 				<div class="modal-dialog" role="document">
 					<div class="modal-content">
 						<div class="modal-header">
-							<h5 class="modal-title">注册</h5>
+							<h5 class="modal-title">实名认证</h5>
 							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 								<span @click.prevent="closeModal()" aria-hidden="true">&times;</span>
 							</button>
@@ -160,6 +160,9 @@
 								location.href = "personal_center.html"
 							}
 						, 1000);
+					}else if(result.errno == 3){
+						_this.identityMsg = result.errmsg;
+						$("#identity-modal").show()
 					}else {
 						_this.errHidden = true;
 						_this.errMsg = result.errmsg;
@@ -187,7 +190,7 @@
 				reader.readAsDataURL(file)
 			},
 			closeModal: function(){
-				$("#reg-modal").hide()
+				$("#identity-modal").hide()
 			}
 		},
 		created() {
