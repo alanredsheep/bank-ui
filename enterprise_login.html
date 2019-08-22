@@ -131,7 +131,7 @@
 					if (result.errno == 0) {
 						var token = result.enterpriseToken;
 						var enterprise = result.enterprise;
-						localStorage.setItem("token", token);
+						sessionStorage.setItem("token", token);
 						sessionStorage.setItem("enterprise", JSON.stringify(enterprise))
 						window.location.href = "enterprise_transfer_bulk.html"
 					} else if(result.errno == 1){

@@ -297,7 +297,7 @@
 					if (result.errno == 0) {
 						var token = result.token;
 						var user = result.user;
-						localStorage.setItem("token", token);
+						sessionStorage.setItem("token", token);
 						sessionStorage.setItem("user", JSON.stringify(user))
 						window.location.href = "home.html"
 					} else if(result.errno == 1){
@@ -353,7 +353,7 @@
 					if (result.errno == 0) {
 						var token = result.token;
 						var user = result.user;
-						localStorage.setItem("token", token);
+						sessionStorage.setItem("token", token);
 						sessionStorage.setItem("user", JSON.stringify(user))
 						window.location.href = "home.html"
 					} else if(result.errno == 1 || result.errno == 3){

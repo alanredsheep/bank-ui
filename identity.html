@@ -176,24 +176,11 @@
 				var _this = this
 				_this.errHidden = true;
 				var file = obj.target.files[0];
-				var name = obj.target.name
-				
-				var isNull = "";
-				if (file == null && name == "fontFile") {
-					isNull = "font"
-				}else if (file == null && name == "backFile") {
-					
-				}
+				var name = obj.target.name;
 				var reader = new FileReader();
 				reader.onload = function(e) {
 					var img;
-					if (isNull == "font") {
-						_this.font = ""
-						img = _this.fontImg;
-					}else if (isNull == "back") {
-						_this.font = ""
-						img = _this.fontImg;
-					}else if (name == "fontFile") {
+					if (name == "fontFile") {
 						_this.font = file
 						img = document.getElementById("font");
 					}else if (name == "backFile") {
@@ -203,7 +190,9 @@
 					img.src = e.target.result;
 					//或者 img.src = this.result;  //e.target == this
 				}
-				reader.readAsDataURL(file)
+				if (file != null) {
+					reader.readAsDataURL(file)
+				}
 			},
 			closeModal: function(){
 				$("#identity-modal").hide()
