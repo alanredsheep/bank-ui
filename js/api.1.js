@@ -129,6 +129,14 @@ function getBankCardsByUserId(params) {
 // -----------------transfer_record.html    end--------------
 
 
+//-----------------fund_collection.html    start----------------------
+// 根据归集计划id，返回归集记录
+function getFundCollectionRecordByInCardAndOutCard(params) {
+    return axios.get("/web-service/getFundCollectionRecordByInCardAndOutCard", params);
+}
+//-----------------fund_collection.html    end----------------------
+
+
 //----------------bank_card_manage.html   start---------------
 function upgradeBankCard() {
     return axios.post("/web-service/upgradeBankCard", params);
@@ -154,7 +162,6 @@ function selectBankCardAttribution(params) {
 function submitTransfer(params) {
     return axios.post("/web-service/verifyBankCardForVo", params);
 }
-
 //----------------transfer.html   end---------------
 
 //----------------transfer_cross_border.html   start-------跨境转账页面--------
@@ -210,7 +217,6 @@ function deletePayeeById(params) {
 function addPayee(params) {
     return axios.post("/web-service/addPayee", params)
 }
-
 //----------------payee_group.html   end---------------
 
 //----------------bank_card_add_limit.html   start-------升级卡类型--------
