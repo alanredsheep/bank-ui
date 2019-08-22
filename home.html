@@ -28,8 +28,9 @@
 					<!-- 渐变色-->
 					<div class="full-bg-img d-flex align-items-center">
 						<div class="container main-container" style="margin-left: 100px">
-							<div class="jumbotron row">
-								<a href="transfer.html">单 次 转 账</a>
+							<div class="jumbotron row" >
+								<a href="transfer.html" style="margin-top:-30px;margin-bottom: 10px">单 次 转 账</a>
+								<a href="transfer_cross_border.html">跨 境 转 账</a>
 							</div>
 							<div class="jumbotron row ">
 								<a href="transfer_bulk.html">批 量 转 账</a>
@@ -45,7 +46,8 @@
 						</div>
 						<div class="container main-container">
 							<div class="jumbotron row">
-								<a href="transfer_record.html">转 账 记 录</a>
+								<a href="transfer_record.html" style="margin-top:-30px;margin-bottom: 10px">转 账 记 录</a>
+								<a href="cross_transfer_record.html">跨 境 记 	录</a>
 							</div>
 							<div class="jumbotron row">
 								<a href="bank_card_manage.html">银 行 卡 包</a>
@@ -113,7 +115,7 @@
 		},
 		created() {
 			//判断用户是否登录,没有登录则跳转到登录页面
-			var token = localStorage.getItem("token");
+			var token = sessionStorage.getItem("token");
 			if (token == null) {
 				location.href = "login.html";
 			}

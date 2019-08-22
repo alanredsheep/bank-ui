@@ -66,7 +66,7 @@
                                 <div>
                                     <input class="col-md-10 col-lg-7" type="text" v-model="authCode">
                                     <button class="btn btn-sm btn-default auth-code" style="font-size: 12px"
-                                            @click.prevent="getAuthCode" >获取验证码
+                                            @click.prevent="getAuthCode">获取验证码
                                     </button>
                                     <p v-if="noBankCard">请先输入正确的银行卡号</p>
                                 </div>
@@ -133,13 +133,7 @@
         el: "#app",
         data: {
             // 银行名称与标识符
-            subordinateBank: [{
-                bankIdentification: "BOC",
-                bankName: "中国银行",
-            }, {
-                bankIdentification: "BOWR",
-                bankName: "五仁银行",
-            }],
+            subordinateBank: [],
             // 用户输入的银行卡号
             otherBankCard: {
                 otherBankCardNumber: "",
@@ -148,11 +142,7 @@
                 payPassword: "",
             },
             // 用户信息
-            user: {
-                userId: 1,
-                userName: "卢*",
-                userPhone: "123****7647",
-            },
+            user: {},
             // 用户输入的验证码
             authCode: "",
             // 用户错误操作提醒
@@ -165,7 +155,7 @@
             // 还未输入正确的银行卡号
             noBankCard: false,
             //登录标识
-            token:""
+            token: ""
         },
         methods: {
             // 取消按钮，返回表单，清空密码字段
@@ -213,11 +203,24 @@
                     "userId": _this.user.userId,
                     "bankCardNumber": _this.otherBankCard.otherBankCardNumber,
                     "subordinateBanksIdentification": _this.otherBankCard.bankIdentification,
-                    "payPassword": _this.otherBankCard.payPassword,
                 }).then(function (response) {
                     alert(response.data.data.errmsg);
                     if (response.data.data.errno == 0) {
+                        //根据用户id获取他行银行卡
+                        getOtherBankCardByUserId(userId).then(res => {
+                            var result = res.data.data;
+                            if (result.errno == 0) {
+                                var otherBankCards = result.otherBankCards;
+                                sessionStorage.setItem("otherBankCards", JSON.stringify(otherBankCards));
+                            }
+                        })
                         window.location.href = "bank_card_manage.html";
+                    }
+                    if (response.data.data.errmsg == "该银行卡已被绑定") {
+                        _this.otherBankCard.otherBankCardNumber = "";
+                        _this.otherBankCard.payPassword = "";
+                        _this.otherBankCard.bankIdentification = "";
+                        _this.authCode = "";
                     }
                 })
             },
@@ -229,7 +232,6 @@
                         _this.hasHint = true;
                         _this.hint = response.data.data.errmsg;
                         _this.disableBankName = false;
-
                     } else {
                         _this.hasHint = false;
                         _this.otherBankCard.bankIdentification = response.data.data.data;
@@ -237,14 +239,24 @@
                         _this.noBankCard = false;
                     }
                 })
+            },
+            // 获取sessionStorage的数据
+            initSessionStorage: function () {
+                var user = JSON.parse(sessionStorage.getItem("user"));
+                // var bankCards = JSON.parse(sessionStorage.getItem("bankCards"));
+                // var otherBankCards = JSON.parse(sessionStorage.getItem("otherBankCards"));
+                var subordinateBank = JSON.parse(sessionStorage.getItem("subordinateBank"));
+                this.user = user;
+                this.subordinateBank = subordinateBank;
             }
         },
         created() {
-			//判断用户是否登录,没有登录则跳转到登录页面
-			// var token = localStorage.getItem("token");
-			// if (token == null) {
-			// 	location.href = "login.html";
-			// }
+            //判断用户是否登录,没有登录则跳转到登录页面
+            var token = sessionStorage.getItem("token");
+            if (token == null) {
+                location.href = "login.html";
+            }
+            this.initSessionStorage();
         }
     })
 </script>

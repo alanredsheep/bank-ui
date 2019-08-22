@@ -9,7 +9,7 @@ axios.defaults.headers['Content-Type'] = 'application/json'
 // 设置前置拦截器->以后所有的AJAX都会自动添加上 Authorization:token 的协议头
 axios.interceptors.request.use(function (config) {
     // 判断如果用户登录了就把 token 配置上 axios 的协议头中
-    var token = localStorage.getItem('token')
+    var token = sessionStorage.getItem('token')
     if (token) {
         config.headers['Authorization'] = token
     }
@@ -127,14 +127,6 @@ function getBankCardsByUserId(params) {
 }
 
 // -----------------transfer_record.html    end--------------
-
-
-//-----------------fund_collection.html    start----------------------
-// 根据归集计划id，返回归集记录
-function getFundCollectionRecordByInCardAndOutCard(params) {
-    return axios.get("/web-service/getFundCollectionRecordByInCardAndOutCard", params);
-}
-//-----------------fund_collection.html    end----------------------
 
 
 //----------------bank_card_manage.html   start---------------
@@ -285,8 +277,8 @@ function getbankCardByUser(userId) {
 
 //message.html ---- start  消息中心页面
 //查询待付款订单和提额申请订单
-function  getMessageCenter(userId,userName) {
-    return axios.get("/web-service/getMessageCenter/"+userId+"/"+userName)
+function  getMessage(userId) {
+    return axios.get("/web-service/getMessage/"+userId)
 }
 
 //用户同意付款执行
@@ -380,6 +372,15 @@ function setDefaultBankCard(params){
 	return axios.post("/web-service/setDefaultBankCard",params);
 }
 //---------------- set_default_bankcard.html   end   ---------------
+
+// -----------------cross_transfer_record.html    start--------------
+// 获取选定月份和银行卡的转账记录
+function getCrossTransferRecordList(params) {
+    return axios.get("/web-service/getCrossTransferRecordList", {params: params});
+}
+
+//------------------cross_transfer_record.html    end--------------
+
 
 
 //----------------transfer_bulk.html   start-------批量转账-----------

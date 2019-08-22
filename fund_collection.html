@@ -131,10 +131,10 @@
                                     </template>
                                 </select>
                             </div>
-<!--                            <p v-if="((!fundCollectionPlan.collectionMonth==0)&&(fundCollectionPlan.collectionMonth<date.month))||((fundCollectionPlan.collectionMonth==date.month)&&(fundCollectionPlan.collectionDay<=date.day))"-->
-<!--                               style="color: red;margin-left: 20px;margin-top: 5px" class="font-bold">-->
-<!--                                该归集计划将在明年执行，确认吗？-->
-<!--                            </p>-->
+                            <!--                            <p v-if="((!fundCollectionPlan.collectionMonth==0)&&(fundCollectionPlan.collectionMonth<date.month))||((fundCollectionPlan.collectionMonth==date.month)&&(fundCollectionPlan.collectionDay<=date.day))"-->
+                            <!--                               style="color: red;margin-left: 20px;margin-top: 5px" class="font-bold">-->
+                            <!--                                该归集计划将在明年执行，确认吗？-->
+                            <!--                            </p>-->
                             <div class="form-div font-bold">
                                 归集金额：￥
                                 <input v-model="fundCollectionPlan.collectionAmount" class="col-md-10 col-lg-3"
@@ -232,16 +232,9 @@
         el: "#app",
         data: {
             // 用户信息
-            user: {
-                userId: 1,
-            },
+            user: {},
             // 用户的银行卡
-            bankCards: [{
-                bankCardId: 0,
-                bank: "",
-                bankCardType: "",
-                bankCardNumber: "",
-            }],
+            bankCards: [],
 // 月份数组
             thisMonth: [
                 "每月",
@@ -297,11 +290,11 @@
             },
 // 月份的天数
             month: {
-                year: localStorage.getItem("year"),
                 day: 28,
             },
 // 日期
             date: {
+                year: 0,
                 month: 0,
                 day: 0,
             },
@@ -378,6 +371,36 @@
                     _this.bankCards = response.data.data.data;
                 })
             },
+            initSessionStorage: function () {
+// 根据页面需要获取sessionStorage里的数据
+                var user = JSON.parse(sessionStorage.getItem("user"));
+                var bankCards = JSON.parse(sessionStorage.getItem("bankCards"));
+                var otherBankCards = JSON.parse(sessionStorage.getItem("otherBankCards"));
+                // var subordinateBank = JSON.parse(sessionStorage.getItem("subordinateBank"));
+                this.user = user;
+                console.log(this.user);
+                if (bankCards != null) {
+                    for (let i = 0; i < bankCards.length; i++) {
+                        this.bankCards.push({
+                            bankCardId: bankCards[i].bankCardId,
+                            bank: "五仁银行",
+                            bankCardType: bankCards[i].bankCardType,
+                            bankCardNumber: bankCards[i].bankCardNumber,
+                        })
+                    }
+                }
+                if (otherBankCards != null) {
+                    for (let i = 0; i < otherBankCards.length; i++) {
+                        this.bankCards.push({
+                            bankCardId: otherBankCards[i].bankCardId,
+                            bank: otherBankCards[i].otherBankName,
+                            bankCardType: "",
+                            bankCardNumber: otherBankCards[i].bankCardNumber,
+                        })
+                    }
+                }
+                // console.log(this.bankCards)
+            },
 // 手动终止一个归集计划
             shutFundCollectionPlan: function () {
                 if (this.password.length < 6) {
@@ -401,18 +424,20 @@
             },
         },
         created() {
-            //判断用户是否登录,没有登录则跳转到登录页面
-            // var token = localStorage.getItem("token");
-            // if (token == null) {
-            // 	location.href = "login.html";
-            // }
+            // 判断用户是否登录,没有登录则跳转到登录页面
+            var token = sessionStorage.getItem("token");
+            if (token == null) {
+                location.href = "login.html";
+            }
+            // 获取sessionStorage里的数据
+            this.initSessionStorage();
             // 初始化归集计划列表
             this.initFundCollectionList();
             // 获取银行卡列表
-            this.initBankCardList();
+            // this.initBankCardList();
             // 初始化年份
             nowDate = new Date();
-            this.month.year = nowDate.getFullYear();
+            this.date.year = nowDate.getFullYear();
             this.date.month = nowDate.getMonth() + 1;
             this.date.day = nowDate.getDate();
             // 获得用户id
@@ -436,7 +461,7 @@
                     this.fundCollectionPlan.month == 11
                 ) {
                     this.month.day = 30;
-                } else if (this.month.year % 4 == 0 & (!this.month.year % 400 == 0) & this.fundCollectionPlan.month == 2) {
+                } else if (this.date.year % 4 == 0 & (!this.date.year % 400 == 0) & this.fundCollectionPlan.month == 2) {
                     this.month.day = 29;
                 } else if (this.fundCollectionPlan.month == 0) {
                     this.month.day = 28;
