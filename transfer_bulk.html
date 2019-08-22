@@ -36,7 +36,7 @@
                         <!--本地获取当前用户所有银行卡-->
                         <div class="font-bold form-div col-lg-12 btn-group">
                             <select class="form-control form-selection col-lg-9" v-model="payees.bankCard.bankCardId">
-                                <option disabled value="" class="form-selection-option">选择付款银行卡</option>
+                                <option disabled value="0" class="form-selection-option">选择付款银行卡</option>
                                 <template v-for="bc in bankCards">
                                     <option :value="bc.bankCardId" class="form-selection-option">
                                         {{bc.bank}}，{{bc.bankCardNumber}}
@@ -50,8 +50,8 @@
                         <div class="font-bold form-div col-lg-12 btn-group">
                             <select class="form-control form-selection col-lg-9" v-model="currentPayeeGroupid"
                                     @click.prevent="selectPayeeById(currentPayeeGroupid)">
-                                <option disabled selected class="form-selection-option" value="">选择收款群组</option>
-                                <option class="form-selection-option">发工资（10人）</option>
+                                <option disabled selected class="form-selection-option" value="0">选择收款群组</option>
+
                                 <template v-for="pg in payeeGroup">
                                     <option class="form-selection-option" :value="pg.payeeGroupId">
                                         {{pg.payeeGroupName}}
@@ -64,7 +64,7 @@
                         <div class="panel-body scroll-panel" style="height: 200px; overflow-y:scroll">
                             <!--根据群组遍历转账用户-->
                             <div class="scroll-panel-div" v-for="(p,index) in payees.payee">
-                                <div>
+                                <div v-show="p.payeeName != ''">
                                     <span> {{p.payeeName}}，{{p.payeeBankIdentification}}，{{p.payeeBankCard}}，转账：</span>
                                     <input
                                             type="number" class="col-md-10"
@@ -149,10 +149,10 @@
             currentPayeeGroupid: 0,
             payees: {
                 bankCard: {
-                    bankCardId: "",
+                    bankCardId: "0",
                     bankCardPassword: "",
                 },
-                payee:[{
+                payee: [{
                     payeeName: "",
                     payeeBankIdentification: "",
                     payeeBankCard: "",
@@ -162,17 +162,17 @@
             //查询出的银行卡
             bankCards: [{
                 //银行卡id，
-                bankCardId:"",
+                bankCardId: "",
                 //残缺卡号，
-                bankCardNumber:"",
+                bankCardNumber: "",
                 //银行卡类型，
-                bankCardType:""
+                bankCardType: ""
             }],
             user: {
-                userId: "2",
-                userName: "啊啊啊啊啊",
-                userPhone: "235456",
-                userPassword: "123123",
+                userId: "",
+                userName: "",
+                userPhone: "",
+                userPassword: "",
 
             },
             //金额错误提示
@@ -187,18 +187,18 @@
 
         },
         methods: {
-            //获取用户所持银行卡信息
-            getBankCardByUser: function () {
-                getBankCardByUser(this.user).then(res => {
-                    if (res.data.data.errno == 0) {
-                        this.bankCards = res.data.data.data;
-                    }
-                })
+            /*  //获取用户所持银行卡信息,从本地获取
+              getBankCardByUser: function () {
+                  getBankCardByUser(this.user).then(res => {
+                      if (res.data.data.errno == 0) {
+                          this.bankCards = res.data.data.data;
+                      }
+                  })
 
-            },
+              },*/
             //获取用户所有的转账群组
             selectPayeeGroupByUid: function () {
-                selectPayeeGroupByUid(this.user.userId).then(res => {
+                selectpayeeGroupByUid(this.user.userId).then(res => {
                     if (res.data.data.errono == 1) {
                         alert(res.data.data.errmsg);
                     } else {
@@ -212,8 +212,12 @@
                     if (this.payees.bankCard.bankCardId == "") {
                         return alert("请选择付款银行卡");
                     }
-                    this.payees.payee.forEach()
-                    if ()
+                    this.payees.payee.forEach(function (g) {
+                        if (g.muchMoney == "" || g.muchMoney == null) {
+                            return alert("请填写转账金额");
+                        }
+                    })
+
                     this.showpop = true;
                 } else {
                     this.showpop = false;
@@ -224,7 +228,7 @@
             //根据 收款群组id获取所有收款人
             selectPayeeById: function (id) {
                 this.showChange = false;
-                selectPayeeById(id).then(res => {
+                selectpayeeById(id).then(res => {
                     if (res.data.data.errono == 1) {
                         alert(res.data.data.errmsg);
                     } else {
@@ -244,18 +248,30 @@
                 }
             },
             submitTransferBulk: function () {
-                submitTransferBulk(this.payees).then(res => {
+                submittransferBulk(this.payees).then(res => {
                     if (res.data.data.errno == 1) {
+                        this.payees.bankCard.bankCardPassword = "";
                         return alert(res.data.data.errmsg);
                     }
-
+                    this.payees = "";
+                    return alert(res.data.data.errmsg);
                 })
             }
 
         },
         created() {
+            //判断用户是否登录,没有登录则跳转到登录页面
+            var token = localStorage.getItem("token");
+            if (token == null) {
+                location.href = "login.html";
+            }
+            this.user = JSON.parse(sessionStorage.getItem("user"));
+            // 加载页面时从本地查询出所有所属银行
+            this.subordinateBank = JSON.parse(sessionStorage.getItem("subordinateBank"));
             //根据用户查询他所拥有的银行卡
-            this.getBankCardByUser();
+            // this.getBankCardByUser();
+            this.bankCards = JSON.parse(sessionStorage.getItem("bankCards"));
+
             //获取用户所有的转账群组
             this.selectPayeeGroupByUid();
         }

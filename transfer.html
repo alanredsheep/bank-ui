@@ -123,6 +123,7 @@
                     <!--手机号转账表单-->
                     <form id="phoneTransfer" class="" v-show="transferMethod">
                         <div class="font-bold form-div col-lg-12 btn-group">
+
                             <select class="form-control form-selection col-lg-9"
                                     v-model="transferValue.outBankCardID">
                                 <option disabled value="" class="form-selection-option">选择付款银行卡</option>
@@ -132,6 +133,7 @@
                                     </option>
                                 </template>
                             </select>
+
                             <button class="form-selection-btn"><a href="bank_card_manage.html" style="color: #ffffff">管理银行卡</a>
                             </button>
                         </div>
@@ -242,7 +244,7 @@
                 //用户id
                 userId: "",
                 //付款银行卡id
-                outBankCardID: "1",
+                outBankCardID: "",
                 //收款的银行
                 inBank: "",
                 //收款的银行卡号
@@ -265,8 +267,8 @@
             transferMethod: false,
             //所有合作银行
             subordinateBank: [{
-                // bankIdentification: "",
-                // bankName: "",
+                bankIdentification: "",
+                bankName: "",
             }],
             //用户所有本行卡
             bankCards: [{
@@ -281,10 +283,10 @@
                 // 所属银行，otherBankName
             }],
             user: {
-                userId: "2",
-                userName: "啊啊啊啊啊",
-                userPhone: "235456",
-                userPassword: "123123",
+                userId: "",
+                userName: "",
+                userPhone: "",
+                userPassword: "",
 
             },
             //弹窗
@@ -321,26 +323,27 @@
                 }
 
             },
-            //获取用户所持银行卡信息
-            getBankCardByUser: function () {
-                getBankCardByUser(this.user).then(res => {
-                    if (res.data.data.errno == 0) {
-                        this.bankCards = res.data.data.data;
-                    }
-                })
+            //获取用户所持银行卡信息，从本地域里面拿
+            /* getBankCardByUser: function () {
+                 getBankCardByUser(this.user).then(res => {
+                     if (res.data.data.errno == 0) {
+                         this.bankCards = res.data.data.data;
+                     }
+                 })
 
-            },
+             },*/
             //切换成银行卡转账
             changeBankCardTransfer: function () {
                 if (this.transferMethod) {
                     this.transferMethod = false;
-                    this.transferValue.outBankCardID = "";
+                    this.transferValue = "";
+                    /*this.transferValue.outBankCardID = "";
                     this.transferValue.inBankName = "";
                     this.transferValue.muchMoney = "";
                     this.transferValue.transferTime = "0";
                     this.transferValue.transferRemarks = "";
                     this.transferValue.password = "";
-                    this.transferValue.bankPhone = "";
+                    this.transferValue.bankPhone = "";*/
                     this.msgPhone = "";
                     this.msgAmount = "";
                 }
@@ -349,14 +352,15 @@
             changePhoneTransfer: function () {
                 if (!this.transferMethod) {
                     this.transferMethod = true;
-                    this.transferValue.outBankCardID = "";
-                    this.transferValue.inBank = "";
-                    this.transferValue.inBankCard = "";
-                    this.transferValue.inBankName = "";
-                    this.transferValue.muchMoney = "";
-                    this.transferValue.transferTime = "0";
-                    this.transferValue.transferRemarks = "";
-                    this.transferValue.password = "";
+                    this.transferValue = "";
+                    /* this.transferValue.outBankCardID = "";
+                     this.transferValue.inBank = "";
+                     this.transferValue.inBankCard = "";
+                     this.transferValue.inBankName = "";
+                     this.transferValue.muchMoney = "";
+                     this.transferValue.transferTime = "0";
+                     this.transferValue.transferRemarks = "";
+                     this.transferValue.password = "";*/
                     this.msgforselectBankCard = "";
                     this.msgAmount = "";
                 }
@@ -366,9 +370,6 @@
                 if (!this.showpop) {
                     if (this.transferValue.outBankCardID == "") {
                         return alert("请选择银行卡");
-                    }
-                    if (this.transferValue.inBank == "") {
-                        return alert("请选择银行卡,无效请通知管理员");
                     }
                     if (this.transferValue.inBankCard == "" && this.transferValue.bankPhone == "") {
                         return alert("请输入收款银行卡号或输入收款手机号");
@@ -409,15 +410,31 @@
             },
             submitTransfer: function () {
                 this.transferValue.userId = this.user.userId;
-                submitTransfer(this.transferValue)
+                submitTransfer(this.transferValue).then(res => {
+                    if (res.data.data.errno == 1) {
+                        this.transferValue.password = "";
+                        return alert(res.data.data.errmsg);
+                    } else if (res.data.data.errno == 0) {
+                        //跳转页面
+                        this.transferValue = "";
+                        return alert(res.data.data.errmsg);
+                    }
+                })
             }
 
         },
         created() {
+            //判断用户是否登录,没有登录则跳转到登录页面
+            var token = localStorage.getItem("token");
+            if (token == null) {
+                location.href = "login.html";
+            }
+            this.user = JSON.parse(sessionStorage.getItem("user"));
             // 加载页面时从本地查询出所有所属银行
             this.subordinateBank = JSON.parse(sessionStorage.getItem("subordinateBank"));
             //根据用户查询他所拥有的银行卡
-            this.getBankCardByUser();
+            // this.getBankCardByUser();
+            this.bankCards = JSON.parse(sessionStorage.getItem("bankCards"));
 
 
         }
