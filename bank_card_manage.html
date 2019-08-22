@@ -39,7 +39,7 @@
                                         <p style="font-size: xx-large">五仁银行</p>
                                         <p style="font-size: large;margin-left: 20px;margin-top: 18px">
                                             {{bankCard.bankCardType}}</p>
-                                        <p >余额：￥{{bankCard.bankCardBalance}}</p>
+                                        <p>余额：￥{{bankCard.bankCardBalance}}</p>
                                         <p style="font-size: x-large">{{bankCard.bankCardNumber}}</p>
                                     </div>
                                 </a>
@@ -175,7 +175,7 @@
             // 确认按钮
             confirm: function () {
                 if (this.confirmToReport) {
-                    if(this.password.length<6){
+                    if (this.password.length < 6) {
                         alert("密码不足6位")
                         return
                     }
@@ -186,14 +186,14 @@
                     }).then(res => {
                         this.confirmToReport = false;
                         alert(res.data.data.errmsg);
-                        this.password="";
+                        this.password = "";
                         if (res.data.data.errno == 0) {
                             window.location.reload();
                         }
                     })
                 }
                 if (this.confirmToUntied) {
-                    if(this.password.length<6){
+                    if (this.password.length < 6) {
                         alert("密码不足6位")
                         return
                     }
@@ -230,14 +230,14 @@
             },
             // 解绑银行卡
             untiedBankCard: function () {
-                if(confirm("确认要解绑该银行卡吗？")){
+                if (confirm("确认要解绑该银行卡吗？")) {
                     this.confirmToUntied = true;
                     this.readyToPassword = true;
                 }
             },
             // 挂失银行卡
             reportBankCardLoss: function () {
-                if(confirm("确认要挂失该银行卡吗？")){
+                if (confirm("确认要挂失该银行卡吗？")) {
                     this.confirmToReport = true;
                     this.readyToPassword = true;
                 }
@@ -272,23 +272,25 @@
                 var otherBankCards = JSON.parse(sessionStorage.getItem("otherBankCards"));
                 // var subordinateBank = JSON.parse(sessionStorage.getItem("subordinateBank"));
                 this.user = user;
-                for(let i = 0; i < otherBankCards.length; i++){
-                    this.otherBankCards.push({
-                        bankCardId: otherBankCards[i].bankCardId,
-                        bank: otherBankCards[i].otherBankName,
-                        bankCardType: "",
-                        bankCardNumber: otherBankCards[i].bankCardNumber,
-                    })
+                if (otherBankCards != null) {
+                    for (let i = 0; i < otherBankCards.length; i++) {
+                        this.otherBankCards.push({
+                            bankCardId: otherBankCards[i].bankCardId,
+                            bank: otherBankCards[i].otherBankName,
+                            bankCardType: "",
+                            bankCardNumber: otherBankCards[i].bankCardNumber,
+                        })
+                    }
                 }
                 // console.log(this.bankCards)
             }
         },
         created: function () {
-            //判断用户是否登录,没有登录则跳转到登录页面
-            // var token = sessionStorage.getItem("token");
-            // if (token == null) {
-            //     location.href = "login.html";
-            // }
+            // 判断用户是否登录,没有登录则跳转到登录页面
+            var token = sessionStorage.getItem("token");
+            if (token == null) {
+                location.href = "login.html";
+            }
             this.initSessionStorage();
             this.initBankCardList();
             this.initOtherBankCardList();

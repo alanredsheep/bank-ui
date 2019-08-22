@@ -9,87 +9,90 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/mdb.min.css" rel="stylesheet">
     <link href="styles/main.css" rel="stylesheet">
-<!--可无视-->
-<link rel="stylesheet" type="text/css" href="css/bootstrap-grid.min.css" /><!--CSS RESET-->
-<link rel="stylesheet" type="text/css" href="css/demo.css"><!--演示页面样式，使用时可以不引用-->
+    <!--可无视-->
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-grid.min.css"/><!--CSS RESET-->
+    <link rel="stylesheet" type="text/css" href="css/demo.css"><!--演示页面样式，使用时可以不引用-->
 
-<!--必要样式-->
-<link rel="stylesheet" href="css/naranja.min.css">
+    <!--必要样式-->
+    <link rel="stylesheet" href="css/naranja.min.css">
 </head>
 
 <body id="top">
 
-    <div id="app" class="view  hm-gradient" style="height: 100%">
+<div id="app" class="view  hm-gradient" style="height: 100%">
 
-        <header>
-            <!-- Navbar-->
-            <topnav></topnav>
+    <header>
+        <!-- Navbar-->
+        <topnav></topnav>
 
-            <!-- 背景图-->
-            <div class="view hm-gradient" id="intro">
-                <!-- 渐变色-->
-                <div class="full-bg-img d-flex align-items-center">
+        <!-- 背景图-->
+        <div class="view hm-gradient" id="intro">
+            <!-- 渐变色-->
+            <div class="full-bg-img d-flex align-items-center">
 
 
-                    <!--   主体内容    -->
+                <!--   主体内容    -->
 
-                    <div class="container">
-                        <div class="col-md-10 col-lg-4" style="margin-left: 330px">
+                <div class="container">
+                    <div class="col-md-10 col-lg-4" style="margin-left: 330px">
 
-                            <div class="text-center form-title">升 级 银 行 卡</div>
-                            <form id="registry" class="">
-                                <div class="font-bold form-div">
-                                    银行卡号：{{bankCard.bankCardNumber}}
+                        <div class="text-center form-title">升 级 银 行 卡</div>
+                        <form id="registry" class="">
+                            <div class="font-bold form-div">
+                                银行卡号：{{bankCard.bankCardNumber}}
+                            </div>
+                            <div class="font-bold form-div">
+                                升级为: <span disabled="disabled">{{bankCard.bankCardType}}</span>
+                            </div>
+                            <div class="font-bold form-div">
+                                每日交易上限为：<span v-if="bankCard.bankCardType=='钻石卡'">￥1,000,000</span>
+                                <span v-if="bankCard.bankCardType=='黑卡'">￥10,000,000</span>
+                            </div>
+                            <div class="font-bold form-div">
+                                升级原因：
+                                <input class="col-md-10 col-lg-12" type="text" v-model="bankCard.transcationMsg">
+                            </div>
+                            <div class="font-bold form-div">
+                                预留手机号码：
+                                <div>
+                                    <span class="input-group-addon" style="margin: 2px">+86</span>
+                                    {{bankCard.bankCardPhone}}
                                 </div>
-                                <div class="font-bold form-div">
-                                    升级为: <span disabled="disabled">{{bankCard.bankCardType}}</span>
+                            </div>
+                            <!--银行预留手机号码，自动填上-->
+                            <div class="font-bold form-auth-code">
+                                验证码：
+                                <div>
+                                    <input class="col-md-10 col-lg-6" type="text" v-model="bankCard.code">
+                                    <input type="button" @click="sendUpgradeCard()" v-model="codeMsg"
+                                           :disabled='disabled' class="btn btn-sm btn-default auth-code"
+                                           style="font-size: 12px"/>
                                 </div>
-                                <div class="font-bold form-div">
-                                    每日交易上限为：<span v-if="bankCard.bankCardType=='钻石卡'">￥1,000,000</span>
-                                    <span v-if="bankCard.bankCardType=='黑卡'">￥10,000,000</span>
-                                </div>
-                                <div class="font-bold form-div">
-                                    升级原因：
-                                    <input class="col-md-10 col-lg-12" type="text" v-model="bankCard.transcationMsg">
-                                </div>
-                                <div class="font-bold form-div">
-                                    预留手机号码：
-                                    <div>
-                                        <span class="input-group-addon" style="margin: 2px">+86</span>
-                                        {{bankCard.bankCardPhone}}
-                                    </div>
-                                </div>
-                                <!--银行预留手机号码，自动填上-->
-                                <div class="font-bold form-auth-code">
-                                    验证码：
-                                    <div>
-                                        <input class="col-md-10 col-lg-6" type="text" v-model="bankCard.code">
-                                        <input type="button" @click="sendUpgradeCard()" v-model="codeMsg" :disabled='disabled' class="btn btn-sm btn-default auth-code" style="font-size: 12px" />
-                                    </div>
-                                </div>
-                                <div class="text-md-center">
-                                    <button class="btn btn-blue btn-sm" style="font-size: medium" type="submit"
-                                        @click.prevent="UpgradeCard">确定</button>
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-
-
-                        <!--   主体内容结束    -->
+                            </div>
+                            <div class="text-md-center">
+                                <button class="btn btn-blue btn-sm" style="font-size: medium" type="submit"
+                                        @click.prevent="UpgradeCard">确定
+                                </button>
+                                </button>
+                            </div>
+                        </form>
                     </div>
+
+
+                    <!--   主体内容结束    -->
                 </div>
             </div>
-        </header>
-    </div>
-
-    <footer class="page-footer indigo darken-2 center-on-small-only pt-0 mt-0">
-        <div class="footer-copyright">
-            <div class="container-fluid">
-                <p>&copy; Five Bank</p>
-            </div>
         </div>
-    </footer>
+    </header>
+</div>
+
+<footer class="page-footer indigo darken-2 center-on-small-only pt-0 mt-0">
+    <div class="footer-copyright">
+        <div class="container-fluid">
+            <p>&copy; Five Bank</p>
+        </div>
+    </div>
+</footer>
 
 </body>
 
@@ -138,16 +141,7 @@
             timer: null,
             disabled: false,
             //用户
-            user: {
-                userId: "2",
-                userName: "啊啊啊啊啊",
-                userPhone: "235456",
-                userPassword: "123123",
-
-            },
-
-            token:""
-
+            user: {},
         },
         methods: {
             //获取银行卡信息通过id
@@ -160,10 +154,10 @@
                         //赋值
 
                         this.bankCard = res.data.data.data;
-                        if( this.bankCard.bankCardType == "普通卡"){
-                            this.bankCard.bankCardType ="钻石卡"
-                        }else if(this.bankCard.bankCardType == "钻石卡"){
-                            this.bankCard.bankCardType ="黑卡"
+                        if (this.bankCard.bankCardType == "普通卡") {
+                            this.bankCard.bankCardType = "钻石卡"
+                        } else if (this.bankCard.bankCardType == "钻石卡") {
+                            this.bankCard.bankCardType = "黑卡"
                         }
                     }
                 })
@@ -174,18 +168,22 @@
                 this.user = JSON.parse(sessionStorage.getItem("user"));
                 //赋值
                 this.bankCard.userId = this.user.userId;
-                UpgradeCard(this.bankCard).then(res =>{
-                    if(res.data.data.errno == 0){
-                       location.href="bank-card-add-limit-suss.html"
-                    }else{
+                this.bankCard.bankCardId = sessionStorage.getItem("upgradeBankCard")
+                console.log(this.bankCard)
+                UpgradeCard(this.bankCard).then(res => {
+                    if (res.data.data.errno == 0) {
+                        alert("银行卡升级申请审核中，请耐心等待")
+                        location.href="bank_card_manage.html"
+                    } else {
                         alert(res.data.data.errmsg)
                     }
                 })
+                sessionStorage.removeItem("upgradeBankCard")
             },
 
             //短信验证码
             sendUpgradeCard: function () {
-                sendUpgradeCard( this.bankCard.bankCardId).then(res => {
+                sendUpgradeCard(this.bankCard.bankCardId).then(res => {
                     var d = res.data.data;
                     if (d.errno == 0) {
                         alert("发送成功,请注意查收")
@@ -221,15 +219,20 @@
                 })
 
             },
+            initSessionStorage: function () {
+                var user = JSON.parse(sessionStorage.getItem("user"));
+                this.user = user;
+                console.log(this.user)
+            }
 
         },
         created() {
-			//判断用户是否登录,没有登录则跳转到登录页面
-			// var token = sessionStorage.getItem("token");
-			// if (token == null) {
-			// 	location.href = "login.html";
-			// }
-
+            //判断用户是否登录,没有登录则跳转到登录页面
+            var token = sessionStorage.getItem("token");
+            if (token == null) {
+                location.href = "login.html";
+            }
+            this.initSessionStorage();
             this.getBankCardBybankCardId()
         },
     })

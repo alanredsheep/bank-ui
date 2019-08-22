@@ -154,7 +154,6 @@ function selectBankCardAttribution(params) {
 function submitTransfer(params) {
     return axios.post("/web-service/verifyBankCardForVo", params);
 }
-
 //----------------transfer.html   end---------------
 
 //----------------transfer_cross_border.html   start-------跨境转账页面--------
@@ -210,7 +209,6 @@ function deletePayeeById(params) {
 function addPayee(params) {
     return axios.post("/web-service/addPayee", params)
 }
-
 //----------------payee_group.html   end---------------
 
 //----------------bank_card_add_limit.html   start-------升级卡类型--------
@@ -374,3 +372,22 @@ function setDefaultBankCard(params){
 	return axios.post("/web-service/setDefaultBankCard",params);
 }
 //---------------- set_default_bankcard.html   end   ---------------
+
+// -----------------cross_transfer_record.html    start--------------
+// 获取选定月份和银行卡的转账记录
+function getCrossTransferRecordList(params) {
+    return axios.get("/web-service/getCrossTransferRecordList", {params: params});
+}
+
+//------------------cross_transfer_record.html    end--------------
+
+
+
+//----------------transfer_bulk.html   start-------批量转账-----------
+//批量转账提交
+function submitTransferBulk(params) {
+    return axios.post("/web-service/submitTransferBulk", params);
+}
+
+
+//----------------transfer_bulk.html   end---------------
