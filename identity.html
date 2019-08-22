@@ -15,6 +15,10 @@
 				height: 141px;
 				border-radius: 10px;
 			}
+			.msg{
+				color: red;
+				font-size: 10px;
+			}
 		</style>
 	</head>
 	<body id="top">
@@ -55,13 +59,6 @@
 			</header>
 
 			<footer class="page-footer indigo darken-2 center-on-small-only pt-0 mt-0">
-				<!--      <div class="container">-->
-				<!--        <div class="row">-->
-				<!--          <div class="col-md-12">-->
-				<!--            <div class="mb-5 flex-center"><a class="px-3"><i class="fa fa-facebook fa-lg white-text"></i></a><a class="px-3"><i class="fa fa-twitter fa-lg white-text"></i></a><a class="px-3"><i class="fa fa-google-plus fa-lg white-text"></i></a><a class="px-3"><i class="fa fa-linkedin fa-lg white-text"></i></a></div>-->
-				<!--          </div>-->
-				<!--        </div>-->
-				<!--      </div>-->
 				<div class="footer-copyright">
 					<div class="container-fluid">
 						<p>&copy; Five Bank</p>
@@ -153,6 +150,12 @@
 					var result = res.data.data;
 					if(result.errno == 0){
 						_this.identityMsg = result.errmsg;
+						var userName = result.user.userName
+						var idCard = result.user.idCard;
+						var user = JSON.parse(sessionStorage.getItem("user"));
+						user.userName = userName;
+						user.idCard = idCard;
+						sessionStorage.setItem("user",JSON.stringify(user));
 						$("#identity-modal").show()
 						setTimeout(
 							function() {
@@ -174,13 +177,26 @@
 				_this.errHidden = true;
 				var file = obj.target.files[0];
 				var name = obj.target.name
+				
+				var isNull = "";
+				if (file == null && name == "fontFile") {
+					isNull = "font"
+				}else if (file == null && name == "backFile") {
+					
+				}
 				var reader = new FileReader();
 				reader.onload = function(e) {
 					var img;
-					if (name == "fontFile") {
+					if (isNull == "font") {
+						_this.font = ""
+						img = _this.fontImg;
+					}else if (isNull == "back") {
+						_this.font = ""
+						img = _this.fontImg;
+					}else if (name == "fontFile") {
 						_this.font = file
 						img = document.getElementById("font");
-					} else {
+					}else if (name == "backFile") {
 						_this.back = file
 						img = document.getElementById("back");
 					}
