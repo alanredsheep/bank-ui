@@ -374,3 +374,11 @@ function setDefaultBankCard(params){
 	return axios.post("/web-service/setDefaultBankCard",params);
 }
 //---------------- set_default_bankcard.html   end   ---------------
+
+// -----------------cross_transfer_record.html    start--------------
+// 获取选定月份和银行卡的转账记录
+function getCrossTransferRecordList(params) {
+    return axios.get("/web-service/getCrossTransferRecordList", {params: params});
+}
+
+//------------------cross_transfer_record.html    end--------------

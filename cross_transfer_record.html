@@ -23,7 +23,7 @@
                 <!--  主题内容-->
                 <div class="container">
                     <div style="margin: auto;width: 102%;">
-                        <div class="text-center form-title">转 账 记 录</div>
+                        <div class="text-center form-title">跨 境 转 账 记 录</div>
 
                         <div style="margin-left: -25px">
                             <nav style="top: auto;background-color: rgba(0,0,0,0)">
@@ -65,9 +65,10 @@
                                 <tr>
                                     <td>收款人</td>
                                     <td>收款卡</td>
-                                    <td>金额</td>
+                                    <td>人民币金额</td>
                                     <td>付款卡</td>
-                                    <td>转账类型</td>
+                                    <td>币种</td>
+                                    <td>外币金额</td>
                                     <td>订单时间</td>
                                     <td>订单状态</td>
                                     <td>交易备注</td>
@@ -77,10 +78,11 @@
                                     <template v-for="transferRecord in transferRecords">
                                         <tr>
                                             <td>{{transferRecord.inCardUserName}}</td>
-                                            <td>{{transferRecord.bankIn}} {{transferRecord.bankInCard}}</td>
-                                            <td class="font-bold">-￥{{transferRecord.transferRecordAmount}}</td>
+                                            <td>{{transferRecord.bankInCard}}</td>
+                                            <td class="font-bold">-￥{{transferRecord.transferRecordAmountFrom}}</td>
                                             <td>{{transferRecord.bankOut}} {{transferRecord.bankOutCard}}</td>
-                                            <td>{{transferRecord.transferStringType}}</td>
+                                            <td>{{transferRecord.currencyType}}</td>
+                                            <td>{{transferRecord.transferRecordAmountTo}}</td>
                                             <td>{{transferRecord.transferRecordTime}}</td>
                                             <td v-bind:style="transferRecord.transferStatus==102?{color:'red'}:
                                                               transferRecord.transferStatus==101?{color:'#00FF3B'}:{color:'#FFC70F'}"
@@ -142,8 +144,7 @@
         el: "#app",
         data: {
             // 用户信息
-            user: {
-            },
+            user: {},
             // 用户的银行卡
             bankCards: [],
             // 查询条件
@@ -156,14 +157,13 @@
             // 一条转账记录都没有
             transferRecords: [{
                 inCardUserName: "",
-                bankIn: "",
                 bankInCard: "",
-                transferRecordAmount: "",
-                bankOut: "",
+                transferRecordAmountFrom: "",
+                transferRecordAmountTo: "",
+                currencyType:"",
                 bankOutCard: "",
-                transferStringType: "",
-                transferRecordTime: "",
                 transferStringStatus: "",
+                transferRecordTime: "",
                 transferRecordUuid: "",
                 transferNote: "",
             }]
@@ -195,7 +195,7 @@
 // 转账记录的列表渲染
             listTransferRecords: function () {
                 var _this = this;
-                getTransferRecord({
+                getCrossTransferRecordList({
                     "userId": _this.user.userId,
                     "page": _this.page.pageNum,
                     "month": _this.recordSelection.month,
@@ -204,14 +204,13 @@
                     if (response.data.data.data == null) {
                         _this.transferRecords = [{
                             inCardUserName: "",
-                            bankIn: "",
                             bankInCard: "",
-                            transferRecordAmount: "",
-                            bankOut: "",
+                            transferRecordAmountFrom: "",
+                            transferRecordAmountTo: "",
+                            currencyType:"",
                             bankOutCard: "",
-                            transferStringType: "",
-                            transferRecordTime: "",
                             transferStringStatus: "",
+                            transferRecordTime: "",
                             transferRecordUuid: "",
                             transferNote: "",
                         }];
@@ -220,11 +219,11 @@
                         _this.transferRecords = response.data.data.data;
                         if (_this.transferRecords.length < 5) {
                             _this.hasMoreRecord = true;
-                        }else{
+                        } else {
                             _this.hasMoreRecord = false;
                         }
                     }
-                    if(response.data.data.errno==1){
+                    if (response.data.data.errno == 1) {
                         alert(response.data.data.errmsg);
                     }
                 })
@@ -250,25 +249,23 @@
                 // var otherBankCards = JSON.parse(sessionStorage.getItem("otherBankCards"));
                 // var subordinateBank = JSON.parse(sessionStorage.getItem("subordinateBank"));
                 this.user = user;
-                if(bankCards!=null){
-                    for (let i = 0; i < bankCards.length; i++) {
-                        this.bankCards.push({
-                            bankCardId: bankCards[i].bankCardId,
-                            bank: "五仁银行",
-                            bankCardType: bankCards[i].bankCardType,
-                            bankCardNumber: bankCards[i].bankCardNumber,
-                        })
-                    }
+                for (let i = 0; i < bankCards.length; i++) {
+                    this.bankCards.push({
+                        bankCardId: bankCards[i].bankCardId,
+                        bank: "五仁银行",
+                        bankCardType: bankCards[i].bankCardType,
+                        bankCardNumber: bankCards[i].bankCardNumber,
+                    })
                 }
                 // console.log(this.bankCards)
             },
         },
         created() {
-			// 判断用户是否登录,没有登录则跳转到登录页面
-			var token = localStorage.getItem("token");
-			if (token == null) {
-				location.href = "login.html";
-			}
+            // 判断用户是否登录,没有登录则跳转到登录页面
+            var token = localStorage.getItem("token");
+            if (token == null) {
+                location.href = "login.html";
+            }
             this.initSessionStorage();
             this.initDate();
             this.listTransferRecords();
