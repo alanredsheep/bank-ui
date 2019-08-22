@@ -279,8 +279,8 @@ function getbankCardByUser(userId) {
 
 //message.html ---- start  消息中心页面
 //查询待付款订单和提额申请订单
-function  getMessageCenter(userId,userName) {
-    return axios.get("/web-service/getMessageCenter/"+userId+"/"+userName)
+function  getMessage(userId) {
+    return axios.get("/web-service/getMessage/"+userId)
 }
 
 //用户同意付款执行
