@@ -161,7 +161,7 @@
 					param.append('file', file, file.name);
 					//添加form表单中其他数据
 					param.append('enterpriseId', _this.enterpriseEmployeeVo.enterpriseId);
-					var token = localStorage.getItem("token");
+					var token = sessionStorage.getItem("token");
 					//添加请求头
 					let config = {
 						headers: {
@@ -212,7 +212,7 @@
 		},
 		created() {
 			//判断用户是否登录,没有登录则跳转到登录页面
-			var token = localStorage.getItem("token");
+			var token = sessionStorage.getItem("token");
 			if (token == null) {
 				location.href = "enterprise_login.html";
 			}

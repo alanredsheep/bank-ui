@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html class="full-height" lang="en-US">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>设置默认银行卡</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/mdb.min.css" rel="stylesheet">
+		<link href="styles/main.css" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="styles/tablecloth.css" />
+		<style>
+			input::-webkit-outer-spin-button,
+			input::-webkit-inner-spin-button{
+				-webkit-appearance: none !important;
+			}
+			.msg{
+				color: red;
+				float: right;
+			}
+			.warn{
+				color: #C69500;
+				background-color: white;
+			}
+		</style>
+	</head>
+	<body id="top">
+		<div id="app" style="height: 100%">
+			<header>
+				<!-- Navbar-->
+				<topnav></topnav>
+				<!-- 背景图-->
+				<div class="view hm-gradient" id="intro">
+					<!-- 渐变色-->
+					<div class="full-bg-img d-flex align-items-center">
+						<!--   主体内容    -->
+						<div class="col-md-10 col-lg-7" style="margin-left: 300px">
+							<div class="text-center form-title">设置默认银行卡</div>
+							<div class="font-bold form-div" style="margin-left: 165px">
+								<label style="font-size: 18px; margin-top: 8px;">当前默认银行卡：</label>
+								<span v-if="user.defaultBankCard != '' && user.defaultBankCard != null">{{user.defaultBankCard}}</span>
+								<span v-else>未设置默认银行卡</span>
+							</div>
+							<div class="font-bold form-div col-lg-12 btn-group" style="margin-left: 150px">
+								<label style="font-size: 18px; margin-top: 8px;">设置默认银行卡：</label>
+								<select v-model="user.bankCardId" class="form-control form-selection col-lg-4" style="margin-left: 10px">
+									<option value="" class="form-selection-option">设置默认银行卡</option>
+									<template v-for="bankCard in myBankCards">
+										<option :value="bankCard.bankCardId" class="form-selection-option">
+											{{bankCard.bankCardName}} {{bankCard.bankCardNumber}}
+										</option>
+									</template>
+								</select>
+							</div>
+							<div class="font-bold form-div col-lg-7 warn" style="margin-left: 155px">
+								<span>{{errorMsg}}</span>
+							</div>
+							<div class="text-md-center">
+								<button @click="inputPassword()" class="btn btn-blue btn-sm" style="margin-top: 20px; font-size: medium"
+								 type="button">确认设置</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</header>
+			<footer class="page-footer indigo darken-2 center-on-small-only pt-0 mt-0">
+				<div class="footer-copyright">
+					<div class="container-fluid">
+						<p>&copy; Five Bank</p>
+					</div>
+				</div>
+			</footer>
+
+			<div class="modal" id="exampleModal" tabindex="-1" role="dialog">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">请输入该银行卡的密码</h5>
+							<button @click="cancel()" type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<div v-show="status">
+								密码：
+								<input v-model="user.password" type="password" maxlength="6" style="text-align:center;"
+								onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))" />
+							</div>
+							<div v-show="!status">{{sucessMsg}}</div>
+						</div>
+						<div class="modal-footer">
+							<button @click.prevent="cancel()" data-dismiss="modal" class="btn btn-danger btn-sm" style="margin-left: 30px;margin-top: 20px;font-size: medium">
+								取消
+							</button>
+							<button @click.prevent="setDefaultBankCard()" data-dismiss="modal" class="btn btn-success btn-sm" style="margin-left: 60px;margin-top: 20px;font-size: medium">
+								确认
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
+
+<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="js/popper.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/mdb.min.js"></script>
+<script type="text/javascript" src="scripts/main.js"></script>
+
+<script type="text/javascript" src="js/axios-0.18.0.js"></script>
+<script type="text/javascript" src="js/vuejs-2.5.16.js"></script>
+<script type="text/javascript" src="js/api.1.js"></script>
+<script type="text/javascript" src="components/topNav.js"></script>
+<script>
+	new Vue({
+		el: "#app",
+		data: {
+			myBankCards: [],
+			user:{},
+			errorMsg: "说明：该功能是用于设置默认银行卡，设置之后，其他人就可以通过你的手机号来转账到默认银行卡中，如果不设置，则不能通过手机号转账",
+			status: true,
+			sucessMsg: ""
+		},
+		methods: {
+			inputPassword: function(){
+				if (this.user.bankCardId == null || this.user.bankCardId == "") {
+					alert("请选择银行卡")
+					return
+				}
+				$("#exampleModal").show()
+			},
+			cancel: function(){
+				this.user.password = ""
+				$("#exampleModal").hide();
+			},
+			setDefaultBankCard: function(){
+				var _this = this
+				if (_this.user.password == null || _this.user.password == '') {
+					alert("请输入密码")
+					return
+				}
+				console.log(_this.user)
+				setDefaultBankCard(_this.user).then(res => {
+					var result = res.data.data;
+					if (result.errno == 0) {
+						var defaultBankCard = result.user.defaultBankCard;
+						var user = JSON.parse(sessionStorage.getItem("user"));
+						user.defaultBankCard = defaultBankCard;
+						sessionStorage.setItem("user", JSON.stringify(user))
+						_this.sucessMsg = result.errmsg;
+						_this.status = false;
+						$("#exampleModal").show()
+						setTimeout(
+							function() {
+								$("#exampleModal").hide()
+								location.href = "personal_center.html"
+							}
+						, 1000);
+					}else {
+						alert(result.errmsg)
+					}
+				})
+			}
+		},
+		created() {
+			var _this = this
+			//判断用户是否登录,没有登录则跳转到登录页面
+			var token = sessionStorage.getItem("token");
+			if (token == null) {
+				location.href = "login.html";
+			}
+			var user = JSON.parse(sessionStorage.getItem("user"));
+			_this.user = user;
+			_this.user.bankCardId = "";
+			var bankcards = JSON.parse(sessionStorage.getItem("bankCards"));
+			$.each(bankcards,function(index,value){
+				var bankcard = {
+					"bankCardId": value.bankCardId,
+					"bankCardNumber": value.bankCardNumber
+				}
+				_this.myBankCards.push(bankcard)
+			})
+		}
+	})
+</script>

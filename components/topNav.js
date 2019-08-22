@@ -11,7 +11,7 @@ Vue.component("topnav",{
 	                <li class="nav-item" style="margin-right: 10px"><a class="nav-link" @click.prevent="logout()" href="javaScript:;">登出</a></li>
 	                <li class="nav-item" style="margin-right: 10px">
 						<a v-if="user == null" class="nav-link" href="personal_center.html">{{userName}}，欢迎您</a>
-						<a v-else-if="user.userName != ''" class="nav-link" href="personal_center.html">{{user.userName}}，欢迎您</a>
+						<a v-else-if="user.userName != null && user.userName != ''" class="nav-link" href="personal_center.html">{{user.userName}}，欢迎您</a>
 						<a v-else class="nav-link" href="personal_center.html">{{user.userPhone}}，欢迎您</a>
 					</li>
 	                <li class="nav-item"><a class="nav-link" href="message.html">消息</a></li>
