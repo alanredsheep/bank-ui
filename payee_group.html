@@ -59,7 +59,10 @@
                                     <button class="btn btn-blue btn-sm" @click.prevent="addPayeeGroup()"
                                             style="margin-top: 20px;font-size: medium">
                                         添加
-                                    </button>
+                                    </button><button class="btn btn-blue btn-sm" @click.prevent="closeAddPayeeGroup()"
+                                                     style="margin-top: 20px;font-size: medium">
+                                    取消
+                                </button>
                                 </li>
 
                                 <!--添加群组-->
@@ -75,9 +78,9 @@
                             <ul class="navbar-nav ml-auto payee-group-list-ul">
 
                                 <!--遍历出收款群组所有收款人-->
-                                <div style="width: 100%" v-for="payee in payees">
+                                <div style="width: 100%" v-if="!payees[0].payeeName == ''" v-for="payee in payees">
                                     <li>
-                                        {{payee.payeeName}}，{{payee.payeeBankIdentification}}，{{payee.payeeBankCard}}
+                                        {{payee.payeeName}}  {{payee.bankCardName}}  {{payee.payeeBankCard}}
                                         <button class="btn btn-danger btn-sm"
                                                 @click.prevent="deletePayeeById(payee.payeeId)">
                                             删除
@@ -177,6 +180,7 @@
                 payeeBankIdentification: "",
                 payeeBankCard: "",
                 payeeGroupId: "",
+                bankCardName:"",
             }],
             showAddPayeeGroupInput: false,
             //收款群组名字
@@ -220,6 +224,7 @@
             },
 
             selectPayeeById: function (id) {
+                this.msgforselectBankCard="";
                 this.showChange = false;
                 //根据 收款群组id获取所有收款人
                 selectPayeeById(id).then(res => {
@@ -228,6 +233,7 @@
                     if (res.data.data.errono == 1) {
                         alert(res.data.data.errmsg);
                     } else {
+                        console.log(res);
                         this.payees = res.data.data.data;
                     }
 
@@ -254,6 +260,9 @@
                         }
                     })
                 }
+            },
+            closeAddPayeeGroup:function(){
+                this.showAddPayeeGroupInput = false;
             },
             //切换添加Payee
             showChangeOpen: function () {
