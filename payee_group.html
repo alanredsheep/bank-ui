@@ -94,7 +94,7 @@
                                             v-model="newPayee.payeeBankIdentification">
                                         <option disabled class="form-selection-option" value="">选择银行</option>
                                         <template v-for="sb in subordinateBank">
-                                            <option class="form-selection-option" :value="sb.bankName">
+                                            <option class="form-selection-option" :value="sb.bankIdentification">
                                                 {{sb.bankName}}
                                             </option>
                                         </template>
@@ -209,7 +209,7 @@
         methods: {
             selectAllPayeeGroup: function () {
                 //查询该用户所有 收款群组显示
-                selectpayeeGroupByUid(this.user.userId).then(res => {
+                selectPayeeGroupByUid(this.user.userId).then(res => {
                     if (res.data.data.errono == 1) {
                         alert(res.data.data.errmsg);
                     } else {
@@ -222,7 +222,7 @@
             selectPayeeById: function (id) {
                 this.showChange = false;
                 //根据 收款群组id获取所有收款人
-                selectpayeeById(id).then(res => {
+                selectPayeeById(id).then(res => {
                     this.newPayee.payeeGroupId = id;
                     //
                     if (res.data.data.errono == 1) {
@@ -244,7 +244,7 @@
                 }
                 if (this.newPayeeGroup.inputPayeeGroup != "") {
                     //添加一条收款群组到
-                    addpayeeGroup(this.newPayeeGroup).then(res => {
+                    addPayeeGroup(this.newPayeeGroup).then(res => {
                         if (res.data.data.errono == 1) {
                             alert(res.data.data.errmsg);
                         } else {
@@ -266,7 +266,7 @@
             },
             // 删除群组用户的方法
             deletePayeeById: function (payeeId) {
-                deletepayeeById(payeeId).then(res => {
+                deletePayeeById(payeeId).then(res => {
                     if (res.data.data.errono == 1) {
                         alert(res.data.data.errmsg);
                     } else {
@@ -319,7 +319,7 @@
                 if (this.newPayee.payeeGroupId == "") {
                     return alert("请重新选择群组后添加");
                 }
-                addpayee(this.newPayee).then(res => {
+                addPayee(this.newPayee).then(res => {
                     if (res.data.data.errno == 0) {
                         this.showChangeOpen();
                         this.selectPayeeById(this.newPayee.payeeGroupId);

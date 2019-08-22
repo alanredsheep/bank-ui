@@ -23,10 +23,10 @@
 
                 <!--   主体内容    -->
 
-                <div class="col-md-10 col-lg-10" style="margin-left: 100px">
+                <div class="col-md-10 col-lg-10" style="margin-left: 100px" v-show="!readyToPassword">
                     <div class="text-center form-title">资 金 归 集</div>
-
-
+                    <p class="text-center" style="color:#ff9500">资金归集将在当天的凌晨0点后开始执行，请谨慎选择日期</p>
+                    <p class="text-center" style="color:#ff9500">同一天的资金归集计划将按添加的先后顺序执行，请注意余额是否充足</p>
                     <div class="panel-body scroll-panel"
                          style="height: 340px;width: 300px; overflow-y:scroll;float: left;margin-left: 200px">
                         <div class=" col col-lg-12">
@@ -36,23 +36,28 @@
                                         <li>{{fundCollection.planName}}</li>
                                     </a>
                                 </template>
+                                <input v-show="isAddCollection" type="text" v-model="fundCollectionPlan.planName"
+                                       placeholder="请输入归集计划名称">
                                 <a @click="selectAddCollection()">
                                     <li>➕ 添加资金归集计划</li>
                                 </a>
                             </ul>
                         </div>
                     </div>
-                    <!--                    查看归集计划-->
-                    <div class="panel-body scroll-panel"
-                         style="height: 340px;width: 300px; overflow-y:scroll;float: left" v-if="!isAddCollection">
+                    <!--查看归集计划-->
+                    <div v-show="fundCollections[0].planId!=0" class="panel-body scroll-panel"
+                         style="height: 340px;width: 360px; overflow-y:scroll;float: left" v-if="!isAddCollection">
+                        <div class="form-div font-bold">
+                            归集计划名称：{{fundCollections[fundCollectionIndex].planName}}
+                        </div>
                         <div class="form-div font-bold">
                             归集时间：
-                            <c>{{fundCollections[fundCollectionIndex].month}}月</c>
-                            <c>{{fundCollections[fundCollectionIndex].day}}</c>
+                            <c v-text="thisMonth[fundCollections[fundCollectionIndex].collectionMonth]"></c>
+                            <c>{{fundCollections[fundCollectionIndex].collectionDay}} 号</c>
                         </div>
                         <div class="form-div font-bold">
                             归集金额：￥
-                            <c>{{fundCollections[fundCollectionIndex].day}}</c>
+                            <c>{{fundCollections[fundCollectionIndex].collectionAmount}}</c>
                         </div>
                         <div class="form-div font-bold">
                             中心账户：
@@ -62,90 +67,139 @@
                             关联账户：
                             <c>{{fundCollections[fundCollectionIndex].bankOutCard}}</c>
                         </div>
-                        <button v-if="fundCollections[fundCollectionIndex].planStatus==0" class="btn btn-danger"
-                                style="margin-left: 25%">
-                            终止归集计划
+                        <button v-if="fundCollections[fundCollectionIndex].planStatus==100" class="btn btn-danger"
+                                style="margin-left: 25%" @click.prevent="switchToPassword">
+                            进行中，终止归集计划
                         </button>
-                        <button v-if="fundCollections[fundCollectionIndex].planStatus==1" disabled
-                                class="btn btn-danger" style="margin-left: 31%">
-                            已终止
-                        </button>
-                        <button v-if="fundCollections[fundCollectionIndex].planStatus==2" disabled
+                        <button v-if="fundCollections[fundCollectionIndex].planStatus==102" disabled
                                 class="btn btn-warning" style="margin-left: 31%">
-                            已取消
+                            {{fundCollections[fundCollectionIndex].statusName}}
+                        </button>
+                        <button v-if="fundCollections[fundCollectionIndex].planStatus==101" disabled
+                                class="btn btn-warning" style="margin-left: 31%">
+                            {{fundCollections[fundCollectionIndex].statusName}}
+                        </button>
+                        <button v-if="fundCollections[fundCollectionIndex].planStatus==103" disabled
+                                class="btn btn-success" style="margin-left: 31%">
+                            {{fundCollections[fundCollectionIndex].statusName}}
                         </button>
                         <div class="form-div font-bold">
                             归集记录：
-                            <table v-for="record in fundCollectionRecords">
+                            <table>
                                 <tr>
                                     <td style="width: 150px">时间</td>
                                     <td style="width: 60px">金额</td>
                                     <td>状态</td>
                                 </tr>
-                                <tr>
-                                    <td>{{record.transferRecordTime}}</td>
-                                    <td class="font-bold">￥{{record.transferRecordAmount}}</td>
-                                    <td style="color: #62cb2c">{{record.transferStatus}}</td>
-                                </tr>
+                                <template v-for="record in fundCollectionRecords">
+                                    <tr>
+                                        <td>{{record.transferRecordTime}}</td>
+                                        <td class="font-bold">￥{{record.transferRecordAmount}}</td>
+                                        <td style="color: #62cb2c">{{record.transferStringStatus}}</td>
+                                    </tr>
+                                </template>
                             </table>
                         </div>
                     </div>
 
 
-                    <!--                    添加归集计划-->
+                    <!--添加归集计划-->
                     <div v-if="isAddCollection">
-                        <form style="float: left;margin-left: 20px;background-color: rgba(255,255,255,0.2);height: 340px;width: 300px">
+                        <form style="float: left;margin-left: 20px;background-color: rgba(255,255,255,0.2);height: 340px;width: 360px">
                             <div class="form-div font-bold btn-group">
                                 <div style="margin-top: 8px;width:90px">归集时间：</div>
                                 <select class="form-control form-selection-bank col-lg-3" style="margin-left: 10px"
-                                        v-model="fundCollectionPlan.month">
-                                    <option value="0" class="form-selection-option">每月</option>
-                                    <option value="1" class="form-selection-option">1月</option>
-                                    <option value="2" class="form-selection-option">2月</option>
-                                    <option value="3" class="form-selection-option">3月</option>
-                                    <option value="4" class="form-selection-option">4月</option>
-                                    <option value="5" class="form-selection-option">5月</option>
-                                    <option value="6" class="form-selection-option">6月</option>
-                                    <option value="7" class="form-selection-option">7月</option>
-                                    <option value="8" class="form-selection-option">8月</option>
-                                    <option value="9" class="form-selection-option">9月</option>
-                                    <option value="10" class="form-selection-option">10月</option>
-                                    <option value="11" class="form-selection-option">11月</option>
-                                    <option value="12" class="form-selection-option">12月</option>
+                                        v-model="fundCollectionPlan.collectionMonth">
+                                    <option value=0 class="form-selection-option">每月</option>
+                                    <option value=1 class="form-selection-option">1月</option>
+                                    <option value=2 class="form-selection-option">2月</option>
+                                    <option value=3 class="form-selection-option">3月</option>
+                                    <option value=4 class="form-selection-option">4月</option>
+                                    <option value=5 class="form-selection-option">5月</option>
+                                    <option value=6 class="form-selection-option">6月</option>
+                                    <option value=7 class="form-selection-option">7月</option>
+                                    <option value=8 class="form-selection-option">8月</option>
+                                    <option value=9 class="form-selection-option">9月</option>
+                                    <option value=10 class="form-selection-option">10月</option>
+                                    <option value=11 class="form-selection-option">11月</option>
+                                    <option value=12 class="form-selection-option">12月</option>
                                 </select>
                                 <select class="form-control form-selection-bank col-lg-3" style="margin-left: 20px"
-                                        v-model="fundCollectionPlan.day">
+                                        v-model="fundCollectionPlan.collectionDay">
                                     <template v-for="day in month.day">
                                         <option v-bind:value=day class="form-selection-option">{{day}}号</option>
                                     </template>
                                 </select>
                             </div>
+<!--                            <p v-if="((!fundCollectionPlan.collectionMonth==0)&&(fundCollectionPlan.collectionMonth<date.month))||((fundCollectionPlan.collectionMonth==date.month)&&(fundCollectionPlan.collectionDay<=date.day))"-->
+<!--                               style="color: red;margin-left: 20px;margin-top: 5px" class="font-bold">-->
+<!--                                该归集计划将在明年执行，确认吗？-->
+<!--                            </p>-->
                             <div class="form-div font-bold">
                                 归集金额：￥
-                                <input class="col-md-10 col-lg-3" type="number">元
+                                <input v-model="fundCollectionPlan.collectionAmount" class="col-md-10 col-lg-3"
+                                       type="number"
+                                       onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))">元
                             </div>
                             <div class="form-div font-bold">
                                 中心账户：
-                                <select class="form-control form-selection col-lg-11" style="margin: 10px">
-                                    <template v-for>
-                                        <option class="form-selection-option">中国银行，1234***********6789</option>
+                                <select class="form-control form-selection col-lg-11" style="margin: 10px"
+                                        v-model="fundCollectionPlan.bankInCardId">
+                                    <option value=0>请选择转入银行卡</option>
+                                    <template v-for="bankCard in bankCards">
+                                        <option v-show="bankCard.bankCardId!=fundCollectionPlan.bankOutCardId"
+                                                :value="bankCard.bankCardId" class="form-selection-option">
+                                            {{bankCard.bank}}
+                                            {{bankCard.bankCardType}} {{bankCard.bankCardNumber}}
+                                        </option>
                                     </template>
                                 </select>
                             </div>
                             <div class="form-div font-bold">
                                 关联账户：
-                                <select class="form-control form-selection col-lg-11" style="margin: 10px">
-                                    <template v-for>
-                                        <option class="form-selection-option">中国银行，1234***********6789</option>
+                                <select class="form-control form-selection col-lg-11" style="margin: 10px"
+                                        v-model="fundCollectionPlan.bankOutCardId">
+                                    <option value=0>请选择转出银行卡</option>
+                                    <template v-for="bankCard in bankCards">
+                                        <option v-show="bankCard.bankCardId!=fundCollectionPlan.bankInCardId"
+                                                :value="bankCard.bankCardId" class="form-selection-option">
+                                            {{bankCard.bank}}
+                                            {{bankCard.bankCardType}} {{bankCard.bankCardNumber}}
+                                        </option>
                                     </template>
                                 </select>
                             </div>
-                            <button class="btn-sm btn btn-blue" style="font-size: medium;margin-left: 34%"
-                                    @click="addfundCollectionPlan()">确认
+
+                            <button class="btn btn-danger btn-sm" @click.prevent="cancelSaveFundCollectionPlan"
+                                    style="margin-left: 60px;margin-top: 10px;font-size: medium">
+                                重置
                             </button>
+                            <button class="btn btn-blue btn-sm" @click.prevent="saveFundCollectionPlan"
+                                    style="margin-left: 60px;margin-top: 10px;font-size: medium">
+                                确认
+                            </button>
+
                         </form>
                     </div>
                     <!--主体内容结束-->
+                </div>
+
+                <div class="col-md-10 col-lg-3" style="margin: auto" v-show="readyToPassword">
+                    <div class="text-center form-title">支 付 密 码</div>
+                    <div style="margin-bottom: 40px">
+                        <input type="password" class="col-lg-2" maxlength="6"
+                               style="text-align:center;margin-left: 36%"
+                               v-model="password"
+                               onKeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))"/>
+                    </div>
+                    <button class="btn btn-danger btn-sm" @click.prevent="cancelToPassword"
+                            style="margin-left: 30px;margin-top: 20px;font-size: medium">
+                        取消
+                    </button>
+                    <button class="btn btn-success btn-sm" @click.prevent="shutFundCollectionPlan"
+                            style="margin-left: 60px;margin-top: 20px;font-size: medium">
+                        确认
+                    </button>
                 </div>
             </div>
         </div>
@@ -177,45 +231,82 @@
     new Vue({
         el: "#app",
         data: {
+            // 用户信息
+            user: {
+                userId: 1,
+            },
+            // 用户的银行卡
+            bankCards: [{
+                bankCardId: 0,
+                bank: "",
+                bankCardType: "",
+                bankCardNumber: "",
+            }],
+// 月份数组
+            thisMonth: [
+                "每月",
+                "1月",
+                "2月",
+                "3月",
+                "4月",
+                "5月",
+                "6月",
+                "7月",
+                "8月",
+                "9月",
+                "10月",
+                "11月",
+                "12月",
+            ],
+// 是否选中添加归集计划
             isAddCollection: false,
 // 当前选中的资金归集计划
             fundCollectionIndex: 0,
+// 准备支付表单
+            readyToPassword: false,
+// 银行卡的支付密码
+            password: "",
 // 资金归集计划列表
             fundCollections: [{
-                planId: "1",
-                planName: "零花钱",
-                planStatus: "0",
-                bankOutCard: "123",
-                bankInCard: "123123",
-                month: "每",
-                day: "4",
-            }, {
-                planId: "2",
-                planName: "哈哈",
-                planStatus: "1",
-                bankOutCard: "123",
-                bankInCard: "123123",
-                month: "6",
-                day: "9",
+                planId: 0,
+                planName: "",
+                planStatus: "",
+                bankOutCardId: 0,
+                bankInCardId: 0,
+                bankOutCard: "",
+                bankInCard: "",
+                collectionMonth: 1,
+                collectionDay: 0,
+                collectionAmount: 0,
             }],
 // 归集记录
             fundCollectionRecords: [{
-                transferRecordTime: "2019-01-01 09:08:33",
-                transferRecordAmount: "200",
-                transferStatus: "成功",
+                transferRecordTime: "",
+                transferRecordAmount: null,
+                transferStringStatus: "",
             }],
-
 // 新增资金归集计划
             fundCollectionPlan: {
-                month: "0",
-                day: "1",
-                amount: "",
+                planName: "",
+                bankInCardId: 0,
+                bankOutCardId: 0,
+                userId: 0,
+                collectionAmount: null,
+                collectionMonth: 0,
+                collectionDay: 1
             },
-            // 月份的天数
+// 月份的天数
             month: {
-                year: 2008,
-                day: 31,
-            }
+                year: localStorage.getItem("year"),
+                day: 28,
+            },
+// 日期
+            date: {
+                month: 0,
+                day: 0,
+            },
+// 对用户的提示
+//             warming
         },
         methods: {
 // 点击添加归集计划
@@ -227,25 +318,109 @@
                 this.fundCollectionIndex = index;
                 this.isAddCollection = false;
                 this.fundCollectionRecords = [];
-                getFundCollectionRecordByInCardAndOutCard({
-                    bankInCard: this.fundCollections[index].bankInCard,
-                    bankOutCard: this.fundCollections[index].bankOutCard,
-                }).then(function (response) {
-                    this.fundCollectionRecords = response.data.data;
+                getFundCollectionRecordList(this.fundCollections[index].planId).then(res => {
+                    this.fundCollectionRecords = res.data.data.data;
                 });
             },
+// 切换到密码表单页面
+            switchToPassword: function () {
+                this.readyToPassword = true;
+            },
+// 取消支付密码
+            cancelToPassword: function () {
+                this.readyToPassword = false;
+                this.password = ""
+            },
 // 上传添加归集计划
-            addfundCollectionPlan: function () {
-
-            }
-
+            saveFundCollectionPlan: function () {
+                if (this.fundCollectionPlan.planName == ""
+                    || this.fundCollectionPlan.bankInCardId == 0
+                    || this.fundCollectionPlan.bankOutCardId == 0
+                    || this.fundCollectionPlan.collectionAmount == 0) {
+                    alert("请填写正确的归集计划信息")
+                    return
+                }
+                if (this.fundCollectionPlan.collectionMonth < this.date.month
+                    || (this.fundCollectionPlan.collectionMonth == this.date.month && this.fundCollectionPlan.collectionDay <= this.date.day)) {
+                    confirm("该计划将")
+                }
+                if (confirm("确认添加该归集计划吗？")) {
+                    addFundCollectionPlan(this.fundCollectionPlan).then(res => {
+                        alert(res.data.data.errmsg);
+                        window.location.reload();
+                    })
+                }
+            },
+// 取消添加归集计划
+            cancelSaveFundCollectionPlan: function () {
+                this.fundCollectionPlan = {
+                    planName: "",
+                    bankInCardId: 0,
+                    bankOutCardId: 0,
+                    userId: 0,
+                    collectionAmount: null,
+                    collectionMonth: 0,
+                    collectionDay: 1
+                }
+            },
+// 初始化归集计划列表
+            initFundCollectionList: function () {
+                getFundCollectionPlanList(this.user.userId).then(res => {
+                    this.fundCollections = res.data.data.data;
+                })
+            },
+// 获取用户的银行卡列表
+            initBankCardList: function () {
+                var _this = this;
+                getBankCardsByUserId({
+                    "userId": this.user.userId,
+                }).then(function (response) {
+                    _this.bankCards = response.data.data.data;
+                })
+            },
+// 手动终止一个归集计划
+            shutFundCollectionPlan: function () {
+                if (this.password.length < 6) {
+                    alert("请输入完整密码")
+                    return
+                }
+                shutdownFundCollectionPlan({
+                    "userId": this.user.userId,
+                    "data": this.fundCollections[this.fundCollectionIndex].planId,
+                    "password": this.password,
+                    "bankCardId": this.fundCollections[this.fundCollectionIndex].bankOutCardId,
+                }).then(res => {
+                    if (res.data.data.errmsg == "密码错误") {
+                        alert("密码错误，请重试");
+                        this.password = "";
+                    } else {
+                        alert(res.data.data.errmsg);
+                        window.location.reload();
+                    }
+                })
+            },
         },
         created() {
-
+            //判断用户是否登录,没有登录则跳转到登录页面
+            // var token = localStorage.getItem("token");
+            // if (token == null) {
+            // 	location.href = "login.html";
+            // }
+            // 初始化归集计划列表
+            this.initFundCollectionList();
+            // 获取银行卡列表
+            this.initBankCardList();
+            // 初始化年份
+            nowDate = new Date();
+            this.month.year = nowDate.getFullYear();
+            this.date.month = nowDate.getMonth() + 1;
+            this.date.day = nowDate.getDate();
+            // 获得用户id
+            this.fundCollectionPlan.userId = this.user.userId;
         },
         watch: {
             // 根据选择的月份改变可选择的day
-            'fundCollectionPlan.month': function () {
+            'fundCollectionPlan.collectionMonth': function () {
                 if (this.fundCollectionPlan.month == 1 ||
                     this.fundCollectionPlan.month == 3 ||
                     this.fundCollectionPlan.month == 5 ||
@@ -263,17 +438,25 @@
                     this.month.day = 30;
                 } else if (this.month.year % 4 == 0 & (!this.month.year % 400 == 0) & this.fundCollectionPlan.month == 2) {
                     this.month.day = 29;
-                } else {
+                } else if (this.fundCollectionPlan.month == 0) {
                     this.month.day = 28;
+                } else {
+                    this.month.day = 31;
+                }
+            },
+            // 初始化归集计划记录
+            'fundCollections': function () {
+                if (this.fundCollectionIndex == 0 && this.fundCollections[0].planId != 0) {
+                    this.selectFundCollection(0);
                 }
             }
         }
     })
 </script>
 
-<style>
-    input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-        -webkit-appearance: none !important;
-    }
-</style>
+<!--<style>-->
+<!--    input::-webkit-outer-spin-button,-->
+<!--    input::-webkit-inner-spin-button {-->
+<!--        -webkit-appearance: none !important;-->
+<!--    }-->
+<!--</style>-->

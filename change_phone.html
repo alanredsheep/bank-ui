@@ -40,6 +40,7 @@
 											</div>
 										</div>
 										<div class="text-md-center">
+											<a @click="showDetail()" href="javaScript:;" style="font-size: 0.5rem;float: left;margin-top: 15px;color: #bdaf07;">原手机不再使用</a>
 											<button class="btn btn-blue btn-sm" style="font-size: medium" @click="updatePhoneVerify()">下一步</button>
 										</div>
 									</div>
@@ -72,6 +73,25 @@
 					</div>
 				</div>
 			</footer>
+			
+			<div id="changePhone-modal" class="modal" tabindex="-1" role="dialog">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">修改手机</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span @click.prevent="closeModal()" aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<p>如果您原手机已不再使用，请您到银行柜台进行解绑业务或其他相关业务</p>
+						</div>
+						<div class="modal-footer">
+							<button @click.prevent="closeModal()" type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</body>
 </html>
@@ -222,10 +242,16 @@
 					if(result.errno == 0){
 						alert(result.errmsg)
 						window.location.href = "personal_center.html"
-					}else if(errno == 1){
+					}else {
 						alert(result.errmsg)
 					}
 				})
+			},
+			showDetail: function(){
+				$("#changePhone-modal").show()
+			},
+			closeModal: function(){
+				$("#changePhone-modal").hide()
 			}
 		}
 	})

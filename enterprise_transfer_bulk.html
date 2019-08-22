@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html class="full-height" lang="en-US">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>企业批量转账</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="css/mdb.min.css" rel="stylesheet">
+		<link href="styles/main.css" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="styles/tablecloth.css" />
+		<style>
+			input::-webkit-outer-spin-button,
+			input::-webkit-inner-spin-button{
+				-webkit-appearance: none !important;
+			}
+			.msg{
+				color: red;
+				float: right;
+			}
+			.transfer-success{
+				color: green;
+			}
+			.transfer-fail{
+				color: red;
+			}
+		</style>
+	</head>
+	<body id="top">
+		<div id="app" style="height: 100%">
+			<header>
+				<!-- Navbar-->
+				<topnav></topnav>
+				<!-- 背景图-->
+				<div class="view hm-gradient" id="intro">
+					<!-- 渐变色-->
+					<div class="full-bg-img d-flex align-items-center">
+						<!--   主体内容    -->
+						<div class="col-md-10 col-lg-7" style="margin-left: 300px">
+							<div class="text-center form-title">批 量 转 账</div>
+							<form>
+								<div class="font-bold form-div col-lg-12 btn-group">
+									<input type="file" @change.prevent="uploadExcel($event)" accept="application/msexcel" />
+									<div class="col-lg-6">
+										<span class="msg" v-show="errorMsgHidden">{{errorMsg}}</span>
+									</div>
+								</div>
+								<div class="panel-body scroll-panel" style="height: 350px; overflow-y:scroll">
+									<table cellspacing="0" cellpadding="0">
+										<tr>
+											<th>收款人</th>
+											<th>银行卡号</th>
+											<th>所属银行</th>
+											<th>金额</th>
+											<th v-show="status">情况</th>
+										</tr>
+										<tr v-for="employee in enterpriseEmployeeVo.enterpriseEmployees">
+											<td>{{employee.userName}}</td>
+											<td>{{employee.userBankCardNumber}}</td>
+											<td>{{employee.userBankCardName}}</td>
+											<td>{{employee.money}}</td>
+											<td v-show="status" :class="employee.status == '成功'?'transfer-success':'transfer-fail'">{{employee.status}}</td>
+										</tr>
+									</table>
+								</div>
+
+								<div class="text-md-center">
+									<button data-toggle="modal" data-target="#exampleModal" class="btn btn-blue btn-sm" style="margin-top: 20px; font-size: medium"
+									 type="button">确认转账</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</header>
+
+			<footer class="page-footer indigo darken-2 center-on-small-only pt-0 mt-0">
+				<div class="footer-copyright">
+					<div class="container-fluid">
+						<p>&copy; Five Bank</p>
+					</div>
+				</div>
+			</footer>
+
+			<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+			 aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLabel">请输入六位支付密码</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<div class="col-8" style="text-align:center;">
+								密码：
+								<input v-model="enterpriseEmployeeVo.password" type="password" class="col-lg-3" maxlength="6" style="text-align:center;"
+								 onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))" />
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button @click.prevent="cancel()" data-dismiss="modal" class="btn btn-danger btn-sm" style="margin-left: 30px;margin-top: 20px;font-size: medium">
+								取消
+							</button>
+							<button @click.prevent="transfer()" data-dismiss="modal" class="btn btn-success btn-sm" style="margin-left: 60px;margin-top: 20px;font-size: medium">
+								确认
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
+
+<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="js/popper.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/mdb.min.js"></script>
+<script type="text/javascript" src="scripts/main.js"></script>
+
+<script type="text/javascript" src="js/axios-0.18.0.js"></script>
+<script type="text/javascript" src="js/vuejs-2.5.16.js"></script>
+<script type="text/javascript" src="js/api.1.js"></script>
+<script type="text/javascript" src="components/enterprise_topNav.js"></script>
+<script>
+	new Vue({
+		el: "#app",
+		data: {
+			enterpriseEmployeeVo: {
+				enterpriseEmployees: [{
+					userName: "",
+					userBankCardName: "",
+					userBankCardNumber: "",
+					money: ""
+				}],
+				enterpriseId: 1,
+				password: ""
+			},
+			employeesExcel: "",
+			errorMsgHidden: false,
+			errorMsg: "",
+			status: false
+		},
+		methods: {
+			uploadExcel: function(e) {
+				var _this = this;
+				var file = e.target.files[0];
+				_this.errorMsgHidden = false;
+				_this.status = false;
+				if (file != null) {
+					var enterprise = JSON.parse(sessionStorage.getItem("enterprise"));
+					if (enterprise != null) {
+						_this.enterpriseEmployeeVo.enterpriseId = enterprise.enterpriseId;
+					}
+
+					let param = new FormData();
+					//通过append向form对象添加数据
+					param.append('file', file, file.name);
+					//添加form表单中其他数据
+					param.append('enterpriseId', _this.enterpriseEmployeeVo.enterpriseId);
+					var token = localStorage.getItem("token");
+					//添加请求头
+					let config = {
+						headers: {
+							'Content-Type': 'multipart/form-data',
+							'Authorization': token
+						}
+					};
+					batchImport(param, config).then(res => {
+						var result = res.data.data;
+						if (result.errno == 0) {
+							_this.enterpriseEmployeeVo.enterpriseEmployees = result.data;
+						} else {
+							_this.errorMsgHidden = true;
+							_this.errorMsg = result.errmsg;
+							_this.enterpriseEmployeeVo.enterpriseEmployees = [{
+								userName: "",
+								userBankCardName: "",
+								userBankCardNumber: "",
+								money: ""
+							}];
+						}
+					})
+				}
+			},
+			transfer: function() {
+				var _this = this
+				if(_this.enterpriseEmployeeVo.password == ""){
+					alert("密码不能为空")
+					return;
+				}
+				enterpriseTransfer(_this.enterpriseEmployeeVo).then(res => {
+					var result = res.data.data
+					console.log(result)
+					if (result.errno == 0) {
+						_this.enterpriseEmployeeVo.enterpriseEmployees = result.data;
+						_this.errorMsgHidden = true;
+						_this.errorMsg = result.errmsg;
+						_this.status = true
+					} else {
+						_this.errorMsgHidden = true;
+						_this.errorMsg = result.errmsg;
+					}
+				})
+			},
+			cancel: function(){
+				this.enterpriseEmployeeVo.password = "";
+			}
+		},
+		created() {
+			//判断用户是否登录,没有登录则跳转到登录页面
+			var token = localStorage.getItem("token");
+			if (token == null) {
+				location.href = "enterprise_login.html";
+			}
+		}
+	})
+</script>
