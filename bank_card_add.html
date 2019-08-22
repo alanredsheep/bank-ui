@@ -206,6 +206,14 @@
                 }).then(function (response) {
                     alert(response.data.data.errmsg);
                     if (response.data.data.errno == 0) {
+                        //根据用户id获取他行银行卡
+                        getOtherBankCardByUserId(userId).then(res => {
+                            var result = res.data.data;
+                            if (result.errno == 0) {
+                                var otherBankCards = result.otherBankCards;
+                                sessionStorage.setItem("otherBankCards", JSON.stringify(otherBankCards));
+                            }
+                        })
                         window.location.href = "bank_card_manage.html";
                     }
                     if (response.data.data.errmsg == "该银行卡已被绑定") {
@@ -244,7 +252,7 @@
         },
         created() {
             //判断用户是否登录,没有登录则跳转到登录页面
-            var token = localStorage.getItem("token");
+            var token = sessionStorage.getItem("token");
             if (token == null) {
                 location.href = "login.html";
             }
