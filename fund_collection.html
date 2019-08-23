@@ -132,14 +132,15 @@
                                 </select>
                             </div>
                             <!--                            <p v-if="((!fundCollectionPlan.collectionMonth==0)&&(fundCollectionPlan.collectionMonth<date.month))||((fundCollectionPlan.collectionMonth==date.month)&&(fundCollectionPlan.collectionDay<=date.day))"-->
-                            <!--                               style="color: red;margin-left: 20px;margin-top: 5px" class="font-bold">-->
+                            <!--                               style="color: red;margin-left: 20px;margin-top: 5px"-->
+                            <!--                               class="font-bold">-->
                             <!--                                该归集计划将在明年执行，确认吗？-->
                             <!--                            </p>-->
                             <div class="form-div font-bold">
                                 归集金额：￥
                                 <input v-model="fundCollectionPlan.collectionAmount" class="col-md-10 col-lg-3"
-                                       type="number"
-                                       onKeypress="return (/[\d\.]/.test(String.fromCharCode(event.keyCode)))">元
+                                       type="number" @keyup="checkAmount()">元
+                                <p>{{msgAmount}}</p>
                             </div>
                             <div class="form-div font-bold">
                                 中心账户：
@@ -299,7 +300,7 @@
                 day: 0,
             },
 // 对用户的提示
-//             warming
+            msgAmount: "",
         },
         methods: {
 // 点击添加归集计划
@@ -333,9 +334,11 @@
                     alert("请填写正确的归集计划信息")
                     return
                 }
-                if (this.fundCollectionPlan.collectionMonth < this.date.month
+                if ((this.fundCollectionPlan.collectionMonth < this.date.month && this.fundCollectionPlan.collectionMonth != 0)
                     || (this.fundCollectionPlan.collectionMonth == this.date.month && this.fundCollectionPlan.collectionDay <= this.date.day)) {
-                    confirm("该计划将")
+                    if (!confirm("该计划将在明年执行，确认吗？")) {
+                        return
+                    }
                 }
                 if (confirm("确认添加该归集计划吗？")) {
                     addFundCollectionPlan(this.fundCollectionPlan).then(res => {
@@ -360,6 +363,7 @@
             initFundCollectionList: function () {
                 getFundCollectionPlanList(this.user.userId).then(res => {
                     this.fundCollections = res.data.data.data;
+                    console.log(res)
                 })
             },
 // 获取用户的银行卡列表
@@ -378,7 +382,7 @@
                 var otherBankCards = JSON.parse(sessionStorage.getItem("otherBankCards"));
                 // var subordinateBank = JSON.parse(sessionStorage.getItem("subordinateBank"));
                 this.user = user;
-                console.log(this.user);
+                // console.log(this.user);
                 if (bankCards != null) {
                     for (let i = 0; i < bankCards.length; i++) {
                         this.bankCards.push({
@@ -393,13 +397,23 @@
                     for (let i = 0; i < otherBankCards.length; i++) {
                         this.bankCards.push({
                             bankCardId: otherBankCards[i].bankCardId,
-                            bank: otherBankCards[i].otherBankName,
+                            bank: otherBankCards[i].bankCardName,
                             bankCardType: "",
                             bankCardNumber: otherBankCards[i].bankCardNumber,
                         })
                     }
                 }
-                // console.log(this.bankCards)
+                console.log(this.bankCards)
+            },
+            //金额校验
+            checkAmount: function () {
+                var str = /^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/;
+                if (!str.exec(this.transferValue.muchMoney)) {
+                    this.fundCollectionPlan.collectionAmount = " ";
+                    this.msgAmount = "请输入正确的转账金额";
+                } else {
+                    this.msgAmount = "";
+                }
             },
 // 手动终止一个归集计划
             shutFundCollectionPlan: function () {

@@ -31,10 +31,10 @@
                     <form id="bankCardTransfer" class="">
                         <div class="font-bold form-div col-lg-12 btn-group">
                             <select class="form-control form-selection col-lg-9"
-                                    v-model="crossBorderTransferForm.bankOutCard">
+                                    v-model="crossBorderTransferForm.bankCardId">
                                 <option disabled value="" class="form-selection-option">选择付款银行卡</option>
                                 <template v-for="bankCard in bankCards">
-                                    <option :value="bankCard.bankCardNumber" class="form-selection-option">
+                                    <option :value="bankCard.bankCardId" class="form-selection-option">
                                         {{bankCard.bank}}，{{bankCard.bankCardNumber}}
                                     </option>
                                 </template>
@@ -161,6 +161,7 @@
                 // 实时汇率
                 rate: 0.00,
                 userId: "2",
+                bankCardId:""
             },
             // 用户所有的本行卡
             bankCards: [],
@@ -289,7 +290,7 @@
                 location.href = "login.html";
             }
             //根据用户信息查询银行卡
-            this.getBankCardByUser()
+          this.bankCards = JSON.parse(sessionStorage.getItem("bankCards"))
         },
 
     })

@@ -82,7 +82,7 @@
                                             <td class="font-bold">-￥{{transferRecord.transferRecordAmountFrom}}</td>
                                             <td>{{transferRecord.bankOut}} {{transferRecord.bankOutCard}}</td>
                                             <td>{{transferRecord.currencyType}}</td>
-                                            <td>{{transferRecord.transferRecordAmountTo}}</td>
+                                            <td class="font-bold">{{transferRecord.transferRecordAmountTo}}</td>
                                             <td>{{transferRecord.transferRecordTime}}</td>
                                             <td v-bind:style="transferRecord.transferStatus==102?{color:'red'}:
                                                               transferRecord.transferStatus==101?{color:'#00FF3B'}:{color:'#FFC70F'}"
