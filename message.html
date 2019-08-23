@@ -37,7 +37,7 @@
                             </ul>
                             <ul class="navbar-nav ml-auto payee-group-list-ul" v-for="mt in managerTranscations">
                                 <a @click="manager(mt.transcationId)">
-                                    <li>提额申请通知</li>
+                                    <li>升级卡申请通知</li>
                                 </a>
                             </ul>
                         </div>
@@ -57,7 +57,7 @@
                         <div class="font-bold form-div">
                             备注: {{active.transferRemarks}}
                         </div>
-                        <div class="font-bold form-div">
+                        <div class="font-bold form-div"  v-show="active.activestate==100">
                             <select class="form-control form-selection col-lg-11"
                                     style="margin-left: 5px;margin-top: 10px"  v-model="activeGathering.outBankId">
                                 <option  class="form-selection-option" v-for="banks in bankCards" :value="banks.bankCardId" >
@@ -68,8 +68,22 @@
                         <div class="font-bold form-div" v-for="banks in bankById()" :key="userBankId">
                             单笔限额:{{banks.bankCardType}}
                         </div>
-                        <button style="margin-left: 8%;margin-top: 20px" class="btn btn-danger" @click="userfalse(active.activeId)" >拒绝</button>
-                        <button style="margin-left: 8%;margin-top: 20px" class="btn btn-success"  @click="usertrue(active.activeId)">确认付款</button>
+                        <div class="font-bold form-div"  v-show="active.activestate==101 || active.activestate==101">
+                            付款卡: {{active.outBankCard}}
+                        </div>
+                        <div class="font-bold form-div"  v-show="active.activestate==100">
+                            订单状态: 进行中
+                        </div>
+                        <div class="font-bold form-div"  v-show="active.activestate==101">
+                            订单状态: 已完成
+                        </div>
+                        <div class="font-bold form-div"  v-show="active.activestate==102">
+                            订单状态: 已取消
+                        </div>
+
+
+                        <button style="margin-left: 8%;margin-top: 20px" class="btn btn-danger" v-show="active.activestate==100" @click="userfalse(active.activeId)" >拒绝</button>
+                        <button style="margin-left: 8%;margin-top: 20px" class="btn btn-success"  v-show="active.activestate==100" @click="usertrue(active.activeId)">确认付款</button>
 
                     </form>
                     <!--展示提额通知-->
