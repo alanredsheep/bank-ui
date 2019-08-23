@@ -183,9 +183,6 @@
                         if(res.data.data.errno==0){
                             _this.activeGatherings= res.data.data.data;
                             _this.managerTranscations=res.data.data.mtList;
-                    console.log(res.data.data)
-                    console.log(_this.activeGatherings)
-                    console.log(_this.managerTranscations)
                         }
                 })
             },
@@ -252,6 +249,7 @@
                         alert("已取消付款")
                         this.getMessageCenters();
                     }else {
+                        this.activeGathering.outBankPassword=""
                         alert("订单异常,请重试")
                     }
                 })
@@ -272,6 +270,7 @@
                         this.bodyFlag=true;
                         this.getMessageCenters()
                     }else {
+
                         alert("支付密码错误")
                     }
                 })

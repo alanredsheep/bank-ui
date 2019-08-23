@@ -142,7 +142,9 @@
                 payPassword: "",
             },
             // 用户信息
-            user: {},
+            user: {
+                userId: ""
+            },
             // 用户输入的验证码
             authCode: "",
             // 用户错误操作提醒
@@ -207,14 +209,14 @@
                     alert(response.data.data.errmsg);
                     if (response.data.data.errno == 0) {
                         //根据用户id获取他行银行卡
-                        getOtherBankCardByUserId(userId).then(res => {
+                        getOtherBankCardByUserId(_this.user.userId).then(res => {
                             var result = res.data.data;
                             if (result.errno == 0) {
                                 var otherBankCards = result.otherBankCards;
                                 sessionStorage.setItem("otherBankCards", JSON.stringify(otherBankCards));
+                                window.location.href = "bank_card_manage.html";
                             }
                         })
-                        window.location.href = "bank_card_manage.html";
                     }
                     if (response.data.data.errmsg == "该银行卡已被绑定") {
                         _this.otherBankCard.otherBankCardNumber = "";

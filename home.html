@@ -130,6 +130,11 @@
 				this.getOtherBankCard(userId);
 				this.getBankCards(userId);
 			}
+			console.log(user)
+			if(user.userStatus == 100){
+				alert("请先实名认证")
+				location.href = "identity.html";
+			}
 		}
 	})
 </script>

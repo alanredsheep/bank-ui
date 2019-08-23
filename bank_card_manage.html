@@ -184,11 +184,11 @@
                         "bankCardPassword": this.password,
                         "bankCardId": this.bankCardSelected.bankCardId
                     }).then(res => {
-                        this.confirmToReport = false;
                         alert(res.data.data.errmsg);
                         this.password = "";
                         if (res.data.data.errno == 0) {
                             window.location.reload();
+                            this.confirmToReport = false;
                         }
                     })
                 }

@@ -95,7 +95,8 @@
 											<span class="msg">{{loginPasswordErrMsg}}</span>
 										</div>
 										<div class="text-center">
-											<a href="registry.html" style="font-size: 0.5rem;float: left;margin-top: 15px;color: #bdaf07;">立即注册</a>
+											<a href="registry.html" style="font-size: 0.5rem;float: left;margin-top: 15px;color: #bdaf07">立即注册</a>
+											<a href="change_password.html.html" style="font-size: 0.5rem;float: left;margin-top: 15px;color: #bdaf07;margin-left: 10px">忘记密码</a>
 											<button @click.prevent="loginByPassword()" class="btn btn-blue btn-sm" style="font-size: medium">登录</button>
 										</div>
 									</form>
@@ -125,6 +126,7 @@
 										</div>
 										<div class="text-center">
 											<a href="registry.html" style="font-size: 0.5rem;float: left;margin-top: 15px;color: #bdaf07;">立即注册</a>
+											<a href="change_password.html.html" style="font-size: 0.5rem;float: left;margin-top: 15px;color: #bdaf07;margin-left: 10px">忘记密码</a>
 											<button @click.prevent="loginByAuthCode()" class="btn btn-blue btn-sm" style="font-size: medium" type="submit">登录</button>
 										</div>
 									</form>
@@ -248,7 +250,7 @@
 								}
 							}, 1000)
 						}
-					} 
+					}
 					else {
 						//失败
 						alert(d.errmsg)
@@ -283,13 +285,13 @@
 					alert("输入的账号不正确")
 					return;
 				}
-				
+
 				var patrn = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$/;
 				if(!patrn.exec(_this.user.userPassword)){
 					alert("输入的密码不正确")
 					return;
 				}
-				
+
 				//执行使用密码登录的方法
 				loginByPassword(_this.user).then(res => {
 					var result = res.data.data;
@@ -341,12 +343,12 @@
 					alert("手机号不正确")
 					return
 				}
-				
+
 				if(_this.user.code.length != 6){
 					alert("验证码不正确")
 					return
 				}
-				
+
 				loginByAuthCode(_this.user).then(res => {
 					var result = res.data.data;
 					console.log(result)
@@ -379,7 +381,7 @@
 						var subordinateBank = res.data.data.data;
 						sessionStorage.setItem("subordinateBank",subordinateBank);
 					})
-				}				
+				}
 			},
 			setFalse: function(){
 				this.errMsgHidden = true;
