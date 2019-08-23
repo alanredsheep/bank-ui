@@ -32,7 +32,7 @@ Vue.component("topnav",{
 			logout(userId).then(res => {
 				var result = res.data.data;
 				if (result.errno == 0) {
-					localStorage.removeItem("token");
+					sessionStorage.removeItem("token");
 					sessionStorage.removeItem("user");
 					sessionStorage.removeItem("bankCards");
 					sessionStorage.removeItem("otherBankCards");
