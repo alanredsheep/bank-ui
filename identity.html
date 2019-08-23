@@ -152,9 +152,11 @@
 						_this.identityMsg = result.errmsg;
 						var userName = result.user.userName
 						var idCard = result.user.idCard;
+						var status = result.user.userStatus;
 						var user = JSON.parse(sessionStorage.getItem("user"));
 						user.userName = userName;
 						user.idCard = idCard;
+						user.userStatus = status;
 						sessionStorage.setItem("user",JSON.stringify(user));
 						$("#identity-modal").show()
 						setTimeout(
