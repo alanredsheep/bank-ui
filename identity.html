@@ -198,6 +198,26 @@
 			},
 			closeModal: function(){
 				$("#identity-modal").hide()
+			},
+			//根据用户id获取他行银行卡
+			getOtherBankCard: function(userId) {
+				getOtherBankCardByUserId(userId).then(res => {
+					var result = res.data.data;
+					if (result.errno == 0) {
+						var otherBankCards = result.otherBankCards;
+						sessionStorage.setItem("otherBankCards", JSON.stringify(otherBankCards));
+					}
+				})
+			},
+			//根据用户id获取本行银行卡
+			getBankCards: function(userId) {
+				getBankCards(userId).then(res => {
+					var result = res.data.data;
+					if (result.errno == 0) {
+						var bankCards = result.data;
+						sessionStorage.setItem("bankCards", JSON.stringify(bankCards));
+					}
+				})
 			}
 		},
 		created() {
@@ -205,6 +225,12 @@
 			var token = sessionStorage.getItem("token");
 			if (token == null) {
 				location.href = "login.html";
+			}
+			var user = JSON.parse(sessionStorage.getItem("user"));
+			if (user != null) {
+				var userId = user.userId;
+				this.getOtherBankCard(userId);
+				this.getBankCards(userId);
 			}
 		}
 	})
