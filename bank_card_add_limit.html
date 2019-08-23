@@ -71,7 +71,7 @@
                             </div>
                             <div class="text-md-center">
                                 <button class="btn btn-blue btn-sm" style="font-size: medium" type="submit"
-                                        @click.prevent="UpgradeCard">确定
+                                        @click.prevent="upgradeCard">确定
                                 </button>
                                 </button>
                             </div>
@@ -152,7 +152,6 @@
                 getBankCardBybankCardId(this.bankCard.bankCardId).then(res => {
                     if (res.data.data.errno == 0) {
                         //赋值
-
                         this.bankCard = res.data.data.data;
                         if (this.bankCard.bankCardType == "普通卡") {
                             this.bankCard.bankCardType = "钻石卡"
@@ -163,7 +162,15 @@
                 })
             },
             //申请升级卡
-            UpgradeCard: function () {
+            upgradeCard: function () {
+                if (this.bankCard.transcationMsg == "" || this.bankCard.transcationMsg ==null) {
+                    alert("请输入升级银行卡原因")
+                    return
+                }
+                if (this.bankCard.code == "" || this.bankCard.code ==null) {
+                    alert("请输入验证码")
+                    return
+                }
                 //获取当前用户
                 this.user = JSON.parse(sessionStorage.getItem("user"));
                 //赋值
@@ -173,12 +180,13 @@
                 UpgradeCard(this.bankCard).then(res => {
                     if (res.data.data.errno == 0) {
                         alert("银行卡升级申请审核中，请耐心等待")
-                        location.href="bank_card_manage.html"
+                        sessionStorage.removeItem("upgradeBankCard")
+                        location.href = "bank_card_manage.html"
                     } else {
                         alert(res.data.data.errmsg)
                     }
                 })
-                sessionStorage.removeItem("upgradeBankCard")
+
             },
 
             //短信验证码

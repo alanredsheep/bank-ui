@@ -207,7 +207,7 @@
                 updateGatheringStatus(this.transferRecordId).then(res=>{
                     if(res.data.data.errno==0){
                         alert("已取消")
-                        this.getActiveGatherings();
+                        window.location.reload();
                     }else{
                         alert("请求超时")
                      }
@@ -221,12 +221,16 @@
                 if(this.activeGathering.inBankId==""){
                     alert("请选择收款卡")
                 }
+                if(this.activeGathering.outUserName==""||this.activeGathering.outUserName==null
+                    ||this.activeGathering.outUserPhone==""||this.activeGathering.outUserPhone==null
+                    ||this.activeGathering.muchMoney==""||this.activeGathering.muchMoney==null){
+                    alert("请填写完整的信息")
+                }
                 this.activeGathering.inUserId=this.userId;
                 addTransactionTecord(this.activeGathering).then(res=>{
                     if(res.data.data.errno==0){
                         alert("发起成功")
-                        this.getActiveGatherings();
-                        this.clickGathering();
+                        window.location.reload();
                     }else{
                         alert("信息有误,请重试")
                     }

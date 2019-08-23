@@ -78,7 +78,7 @@
                                         <tr>
                                             <td>{{transferRecord.inCardUserName}}</td>
                                             <td>{{transferRecord.bankIn}} {{transferRecord.bankInCard}}</td>
-                                            <td class="font-bold">-￥{{transferRecord.transferRecordAmount}}</td>
+                                            <td class="font-bold">￥{{transferRecord.transferRecordAmount}}</td>
                                             <td>{{transferRecord.bankOut}} {{transferRecord.bankOutCard}}</td>
                                             <td>{{transferRecord.transferStringType}}</td>
                                             <td>{{transferRecord.transferRecordTime}}</td>
@@ -142,8 +142,7 @@
         el: "#app",
         data: {
             // 用户信息
-            user: {
-            },
+            user: {},
             // 用户的银行卡
             bankCards: [],
             // 查询条件
@@ -220,11 +219,11 @@
                         _this.transferRecords = response.data.data.data;
                         if (_this.transferRecords.length < 5) {
                             _this.hasMoreRecord = true;
-                        }else{
+                        } else {
                             _this.hasMoreRecord = false;
                         }
                     }
-                    if(response.data.data.errno==1){
+                    if (response.data.data.errno == 1) {
                         alert(response.data.data.errmsg);
                     }
                 })
@@ -250,7 +249,7 @@
                 // var otherBankCards = JSON.parse(sessionStorage.getItem("otherBankCards"));
                 // var subordinateBank = JSON.parse(sessionStorage.getItem("subordinateBank"));
                 this.user = user;
-                if(bankCards!=null){
+                if (bankCards != null) {
                     for (let i = 0; i < bankCards.length; i++) {
                         this.bankCards.push({
                             bankCardId: bankCards[i].bankCardId,
@@ -264,11 +263,11 @@
             },
         },
         created() {
-			// 判断用户是否登录,没有登录则跳转到登录页面
-			var token = sessionStorage.getItem("token");
-			if (token == null) {
-				location.href = "login.html";
-			}
+            // 判断用户是否登录,没有登录则跳转到登录页面
+            var token = sessionStorage.getItem("token");
+            if (token == null) {
+                location.href = "login.html";
+            }
             this.initSessionStorage();
             this.initDate();
             this.listTransferRecords();

@@ -68,9 +68,6 @@
                         <div class="font-bold form-div" v-for="banks in bankById()" :key="userBankId">
                             单笔限额:{{banks.bankCardType}}
                         </div>
-                        <div class="font-bold form-div">
-                            支付密码: <input class="col-md-10 col-lg-10" type="text" style="margin-left: 8px" >
-                        </div>
                         <button style="margin-left: 8%;margin-top: 20px" class="btn btn-danger" @click="userfalse(active.activeId)" >拒绝</button>
                         <button style="margin-left: 8%;margin-top: 20px" class="btn btn-success"  @click="usertrue(active.activeId)">确认付款</button>
 
